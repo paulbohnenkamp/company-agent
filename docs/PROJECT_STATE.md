@@ -55,7 +55,7 @@ interpretation, authorization, persistence, or agent orchestration.
 | AgentSchema YAML artifacts | Validated locally | `results/039`, `npm run validate:agent-artifacts` |
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
 | Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
-| Teams adapter and human actions | Verified local vertical slice | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md` |
+| Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md` |
 
 ## Record quality
 
@@ -70,20 +70,19 @@ unpaired or malformed execution records.
 
 ## Unfinished work and continuation backlog
 
-### Next approved slice: record reconciliation
+### Next approved slice: Teams activation
 
-Work from [spec 042](../specs/042-project-state-reconciliation.md) if record
-maintenance is needed. The retained record tree is currently normalized and
-`npm run validate:records` passes.
+The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md)
+and its result. The remaining production activation is externally blocked until
+the tenant, bot registration, credentials, consent, public endpoint, and Teams
+channel configuration are supplied.
 
-### After reconciliation: Teams activation
+Local evidence now includes the adapter receive-path smoke test, all four
+append-only action contracts, and an Entra-style wrong-role denial. The next
+activation work must use the same API boundary and record endpoint smoke,
+evaluation, immutable version, rollback, and deployment evidence.
 
-- Connect the existing adapter to a registered Microsoft Teams bot and tenant.
-- Validate Entra claims, bot permissions, channel routing, and message replies.
-- Add adaptive-card review actions over the existing append-only action API.
-- Record endpoint smoke, evaluation, version, rollback, and deployment evidence.
-
-### After reconciliation: product workflow depth
+### After Teams activation: product workflow depth
 
 - Implement the highest-value Legal ↔ Land/Title readiness scenario end to end.
 - Add lease analyst and division-order analyst workflows using the shared case,

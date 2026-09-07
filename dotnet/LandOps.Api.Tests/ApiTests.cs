@@ -7,10 +7,15 @@ using LandOps.Api;
 using LandOps.Application;
 using LandOps.Domain;
 using LandOps.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Text.Encodings.Web;
 
 namespace LandOps.Api.Tests;
 
@@ -242,8 +247,12 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         Assert.Contains("br-lease-001", packet.RecordIds);
     }
 
-    [Fact]
-    public async Task Records_and_lists_a_human_workroom_action()
+    [Theory]
+    [InlineData("approve-next-step")]
+    [InlineData("request-evidence")]
+    [InlineData("reject-recommendation")]
+    [InlineData("assign-task")]
+    public async Task Records_each_allowed_human_workroom_action(string actionKind)
     {
         var createResponse = await client.PostAsJsonAsync("/api/v1/workroom/threads", new
         {
@@ -259,14 +268,14 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
 
         var actionResponse = await client.PostAsJsonAsync($"/api/v1/workroom/threads/{thread!.ThreadId}/actions", new
         {
-            action = "request-evidence",
+            action = actionKind,
             reason = "Request the lease amendment before the development gate.",
             assignee = "land-analyst"
         });
 
         Assert.Equal(HttpStatusCode.Created, actionResponse.StatusCode);
         var action = await actionResponse.Content.ReadFromJsonAsync<JsonElement>();
-        Assert.Equal("request-evidence", action.GetProperty("action").GetString());
+        Assert.Equal(actionKind, action.GetProperty("action").GetString());
         Assert.Equal("land-analyst", action.GetProperty("assignee").GetString());
 
         var listResponse = await client.GetAsync($"/api/v1/workroom/threads/{thread.ThreadId}/actions");
@@ -319,6 +328,50 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         Assert.False(identity.IsAuthenticated);
         Assert.Empty(identity.Roles);
         Assert.Empty(identity.Groups);
+    }
+}
+
+public sealed class EntraAuthorizationApiTests : IClassFixture<EntraApiFactory>
+{
+    private readonly HttpClient client;
+
+    public EntraAuthorizationApiTests(EntraApiFactory factory) => client = factory.CreateClient();
+
+    [Fact]
+    public async Task Rejects_a_valid_authenticated_identity_with_the_wrong_workroom_role()
+    {
+        using var createRequest = new HttpRequestMessage(HttpMethod.Post, "/api/v1/workroom/threads")
+        {
+            Content = JsonContent.Create(new
+            {
+                caseId = "synthetic-blue-ridge-lease-001",
+                scenarioId = "lease-development-obligations",
+                question = "Can the lease move to the next review step?",
+                requestedBy = "spoofed-user",
+                roleId = "spoofed-role",
+                groups = new[] { "spoofed-group" }
+            })
+        };
+        createRequest.Headers.Add("x-test-user", "entra-user-001");
+        createRequest.Headers.Add("x-test-role", "lease-analyst");
+        createRequest.Headers.Add("x-test-group", "lease-compliance-review");
+
+        var createResponse = await client.SendAsync(createRequest);
+        Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+        var thread = await createResponse.Content.ReadFromJsonAsync<WorkroomThread>();
+        Assert.NotNull(thread);
+
+        using var actionRequest = new HttpRequestMessage(HttpMethod.Post, $"/api/v1/workroom/threads/{thread!.ThreadId}/actions")
+        {
+            Content = JsonContent.Create(new { action = "request-evidence", reason = "Need the amendment." })
+        };
+        actionRequest.Headers.Add("x-test-user", "entra-user-001");
+        actionRequest.Headers.Add("x-test-role", "compliance-reviewer");
+        actionRequest.Headers.Add("x-test-group", "lease-compliance-review");
+
+        var actionResponse = await client.SendAsync(actionRequest);
+
+        Assert.Equal(HttpStatusCode.Forbidden, actionResponse.StatusCode);
     }
 }
 
@@ -443,5 +496,53 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
             result.SubmittedEvidence.Add(new SubmittedEvidence("evidence-1", result.Id, "synthetic-land-package", "Synthetic submitted package", true));
             return result;
         }
+    }
+}
+
+public sealed class EntraApiFactory : WebApplicationFactory<Program>
+{
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseSetting("LandOps:IdentityMode", "entra");
+        builder.UseSetting("Entra:Authority", "https://login.example.test/tenant/v2.0");
+        builder.UseSetting("Entra:Audience", "landops-test");
+        builder.UseSetting("LandOps:ApplyMigrations", "true");
+        builder.ConfigureTestServices(services =>
+        {
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = TestAuthenticationHandler.TestScheme;
+                    options.DefaultChallengeScheme = TestAuthenticationHandler.TestScheme;
+                })
+                .AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>(TestAuthenticationHandler.TestScheme, _ => { });
+        });
+    }
+}
+
+public sealed class TestAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+{
+    public const string TestScheme = "LandOpsTest";
+
+    public TestAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder)
+        : base(options, logger, encoder)
+    {
+    }
+
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
+        var userId = Request.Headers["x-test-user"].FirstOrDefault();
+        var role = Request.Headers["x-test-role"].FirstOrDefault();
+        var group = Request.Headers["x-test-group"].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(role) || string.IsNullOrWhiteSpace(group))
+            return Task.FromResult(AuthenticateResult.NoResult());
+
+        var claims = new[]
+        {
+            new Claim("oid", userId),
+            new Claim("roles", role),
+            new Claim("groups", group),
+        };
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, TestScheme));
+        return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, TestScheme)));
     }
 }

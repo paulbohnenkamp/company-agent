@@ -45,6 +45,12 @@ LANDOPS_API_URL=http://127.0.0.1:5006 npm run teams:dev
 
 The adapter listens on port `3978` for the Microsoft Teams/Bot Framework endpoint. Real tenant registration, Bot configuration, Entra credentials, and Teams sideloading are deployment steps; the pure adapter tests run without those credentials.
 
+For a local receive-path smoke test without a Teams tenant, run the API and
+adapter with deterministic lease settings, then post a Bot Framework-shaped
+activity to `/api/messages`. The activity must include a local `serviceUrl`
+that accepts the adapter's typing and reply activities. A successful HTTP 200
+proves local adapter-to-Workroom wiring only; it is not a Teams tenant test.
+
 ## What the demo proves
 
 - A fictional company portfolio with Land, Land Administration, Legal, Compliance, Accounting, Operations, and IT/Platform departments.
