@@ -62,6 +62,11 @@ Teams app management was still provisioning.
 Bot registration, a public endpoint, consent, identity mapping, and a real
 Teams mention smoke test remain incomplete.
 
+Teams admin center currently shows **Upload new app** and **Org-wide app
+settings** disabled at `Teams apps -> Manage apps`. Microsoft states that the
+new app-management experience is still being set up. Custom app upload is
+therefore externally blocked until that provisioning completes.
+
 ## Important decisions
 
 - Real Teams users are needed for the human side of the demo; agents remain

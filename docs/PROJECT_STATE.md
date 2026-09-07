@@ -83,6 +83,8 @@ Basic trial tenant is `DecisionForge` at `landopsdemo.onmicrosoft.com` with
 Entra tenant ID `ec4b8411-d158-44e0-a8cf-6f71e2d8b96b`. Teams is enabled, the
 two licensed demo users exist, and the `LandOps Demo` Team with its
 `landops-demo` channel exists. Custom app sideloading remains unverified.
+Teams admin center currently shows app upload and org-wide app settings
+disabled while Microsoft's unified app-management experience provisions.
 
 Local evidence includes the adapter receive-path smoke test, all four
 append-only action contracts, an Entra-style wrong-role denial, and a typed

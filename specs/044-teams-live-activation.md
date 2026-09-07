@@ -134,6 +134,9 @@ adapter endpoint health → Bot Service endpoint → Teams channel delivery
   tenant, Entra tenant ID, Teams status, two licensed demo users, the
   `LandOps Demo` Team, and the `landops-demo` standard channel. Custom app
   sideloading remains unverified.
+- 2026-09-07: Tenant-side verification found custom app upload unavailable in
+  Teams admin center while Microsoft's unified app-management experience is
+  still provisioning. Bot and live mention work remain blocked on this gate.
 
 ## Decision log
 
