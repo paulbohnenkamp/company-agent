@@ -2,11 +2,11 @@
 id: 005-wv-land-phase-2-fixtures
 title: West Virginia land Phase 2 evidence fixtures
 status: completed
-created: 2026-09-03
-updated: 2026-09-03
 completed: 2026-09-03
 spec: specs/005-wv-land-phase-2-fixtures.md
 ---
+
+
 
 ## What changed
 

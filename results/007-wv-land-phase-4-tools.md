@@ -6,6 +6,8 @@ completed: 2026-09-03
 spec: specs/007-wv-land-phase-4-tools.md
 ---
 
+
+
 ## What changed
 
 Added cohesive pure WV-land tools for strict API and permit normalization,

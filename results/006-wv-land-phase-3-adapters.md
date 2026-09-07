@@ -6,6 +6,8 @@ completed: 2026-09-03
 spec: specs/006-wv-land-phase-3-adapters.md
 ---
 
+
+
 ## What changed
 
 Implemented the deterministic source-adapter slice for the WV flagship. A

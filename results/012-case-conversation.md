@@ -2,9 +2,11 @@
 id: 012-case-conversation
 title: Case-scoped Ask Business Agent conversation
 status: completed
-spec: specs/012-case-conversation.md
 completed: 2026-09-04
+spec: specs/012-case-conversation.md
 ---
+
+
 
 ## What changed
 

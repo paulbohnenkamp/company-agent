@@ -66,7 +66,7 @@ describe("domain-oriented agent architecture", () => {
     }
   });
 
-  it("loads the canonical Phase 5 Markdown agents and flow", async () => {
+  it("loads the canonical Phase 5 YAML agents and flow", async () => {
     const root = join(process.cwd(), "domains", "land-administration");
     const agents = await loadAgents(root);
     const flows = await loadFlows(root);

@@ -6,13 +6,13 @@ description: "Evidence-bounded land, lease, ownership, and production-interest o
 # product owner and can later become a Microsoft Foundry/Azure DevOps manifest.
 agents:
   - id: land-case-intake
-    file: agents/land-case-intake.agent.md
+    file: agents/land-case-intake.agent.yaml
     purpose: "Assess submitted clues and identify evidence gaps without inventing identifiers."
   - id: land-well-reconciler
-    file: agents/land-well-reconciler.agent.md
+    file: agents/land-well-reconciler.agent.yaml
     purpose: "Compare independent normalized well and production evidence with submitted clues."
   - id: case-synthesizer
-    file: agents/case-synthesizer.agent.md
+    file: agents/case-synthesizer.agent.yaml
     purpose: "Synthesize structured findings and propose one human route without taking action."
 
 skills:

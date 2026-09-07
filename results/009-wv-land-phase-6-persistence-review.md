@@ -2,11 +2,11 @@
 id: 009-wv-land-phase-6-persistence-review
 title: West Virginia land Phase 6 persistence and human review
 status: completed
-created: 2026-09-03
-updated: 2026-09-03
 completed: 2026-09-03
 spec: specs/009-wv-land-phase-6-persistence-review.md
 ---
+
+
 
 ## What changed
 

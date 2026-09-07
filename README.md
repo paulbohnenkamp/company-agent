@@ -1,148 +1,129 @@
-# Business Agent
+# LandOps Workbench
 
-Business Agent is a reusable, jurisdiction-neutral TypeScript runtime for
-enterprise AI workflows. Business behavior lives in reviewable Markdown/YAML
-artifacts; TypeScript provides loading, orchestration, tools, evaluation,
-provenance, audit records, and provider boundaries. West Virginia oil-and-gas
-land is the current flagship application and domain demonstration built on that
-runtime.
+LandOps Workbench is a portfolio-quality enterprise oil-and-gas land operations application. It lets a fictional energy company ask evidence-bounded questions about leases, title, ownership, division orders, OCR documents, and regulatory records. Specialized agents collaborate, preserve uncertainty, and route consequential decisions to a person.
 
-## Start here
+The application is centered on C#/.NET, ASP.NET Core, EF Core, SQL Server, React, Next.js, Microsoft Entra ID, Azure, and Microsoft Foundry. The older TypeScript Business Agent runtime remains a temporary behavioral reference and offline fallback; it is not the product’s long-term application boundary.
 
-New to Business Agent? Follow [the five-minute quickstart](docs/quickstart.md).
-It installs the project, runs the included example, and shows where the
-results are saved. You do not need a model provider or cloud account for this
-first run.
+For continuation in a new Codex or VS Code session, read [the canonical project state](docs/PROJECT_STATE.md) first. It separates verified work from unfinished slices and identifies the next approved spec.
 
-The shortest path is:
+## See the product
 
-```sh
-npm install
-npm run cli -- domain list
-npm run cli -- flow list --domain land-administration
-```
+The portfolio view shows the fictional company, departments, roles, agents, workflows, and case data room.
 
-The repository contains the generic `land-administration` domain and its
-demonstration flows. The completed portability migration keeps neutral runtime,
-evidence, review, evaluation, and storage mechanics separate from the WV
-flagship under `src/domains/wv-land` and its jurisdiction composition boundary.
-The source adapters and flagship workflow are implemented offline; Ohio and
-Pennsylvania remain design-only extensions.
+![LandOps portfolio view showing the fictional energy company, departments, agents, workflows, and case data room](docs/images/landops-portfolio.png)
 
-## Run the demo
+The Teams view shows the intended collaboration story: a legal user asks a question in a channel, LandOps delegates to specialized agents, and the final response stays inside a human-review boundary.
 
-The fastest demonstration is the local West Virginia case workspace. It uses
-the checked-in synthetic Braxton County package and frozen WVDEP/WVGES and
-production evidence; it does not need Azure credentials or live government
-endpoints.
+![LandOps Teams channel view showing a legal user handing work to ownership, title-chain, and synthesis agents](docs/images/landops-teams.png)
+
+The focused integration view makes the transport boundary explicit: Teams SDK activity enters the adapter, reaches the ASP.NET Core Workroom API, and returns a safe human-review outcome.
+
+![LandOps Teams integration view showing the Microsoft Teams SDK adapter connected to the ASP.NET Core Workroom API](docs/images/landops-teams-integration.png)
+
+The web view is a local portfolio/demo surface. The repository also contains a separate Microsoft Teams SDK entrypoint under `src/teams/server.ts`, which forwards real Teams messages to the same ASP.NET Core Workroom API.
+
+Open [the focused Teams integration preview](http://localhost:3001/teams) when you want to inspect the channel shell and adapter boundary without scrolling through the full case workspace.
+
+## Run the local application
+
+Prerequisites: Node.js, the .NET SDK selected in `dotnet/global.json`, and Docker Desktop if you want SQL Server persistence.
 
 ```sh
 npm install
-npm run dev
+docker compose up -d sqlserver
+dotnet run --project dotnet/LandOps.Api --urls http://127.0.0.1:5006
+LANDOPS_API_URL=http://127.0.0.1:5006 NEXT_PUBLIC_LANDOPS_MODE=true npm run dev -- --port 3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000), select **Run Land-Well
-Reconciliation**, and walk through the three agents, independent evidence,
-preserved operator conflict, production no-match, synthesis, human review, and
-the **Ask Business Agent** panel. After a run, ask about the operator conflict,
-ask what evidence supports it, test the no-match-versus-zero distinction, and
-ask what remains unknown or who owns the mineral rights. The conversation is
-case-scoped and cites the same structured state shown in the workspace.
-The local executor produces validated structured artifacts deterministically so
-the demo is repeatable. It is an explicit provider seam, not a claim of live
-LLM execution. The later Azure milestone can replace that executor with the
-existing Foundry adapter while retaining the same flow, evidence, persistence,
-and review boundaries.
+Open [http://localhost:3001](http://localhost:3001). The seeded Braxton County case is synthetic. The frozen WVDEP/WVGES evidence is included for repeatable local review and does not require live government endpoints.
 
-The local demo writes file-backed run data to `/tmp/business-agent-demo` by
-default. Set `BUSINESS_AGENT_WORKSPACE` to use another directory. Azure hosting
-will need a web runtime, durable shared persistence instead of local files,
-model execution configuration and secrets, and fixture data packaged as an
-immutable application asset or stored in object storage. No live endpoint is
-required for this demo. The local conversation responder is deterministic too:
-it recognizes a bounded set of case questions and constructs answers from the
-persisted findings, conflicts, unknowns, evidence, provenance, synthesis, and
-production state. It is deliberately not presented as an LLM. A future
-Foundry-backed conversation port must receive a controlled case-state
-projection, return the same structured response shape, and pass evidence
-reference validation before an answer is displayed.
+To run the separate Teams channel adapter locally, keep the API running and start another terminal:
 
-Then run the complete example in the [quickstart](docs/quickstart.md).
+```sh
+LANDOPS_API_URL=http://127.0.0.1:5006 npm run teams:dev
+```
 
-Then read [the documentation map](docs/README.md). The recommended order is:
+The adapter listens on port `3978` for the Microsoft Teams/Bot Framework endpoint. Real tenant registration, Bot configuration, Entra credentials, and Teams sideloading are deployment steps; the pure adapter tests run without those credentials.
 
-1. [How the architecture fits together](docs/architecture.md)
-2. [The data model](docs/data-model.md)
-3. [How flows execute](docs/flow-runtime.md)
-4. [How evaluations work](docs/evaluations.md)
-5. [Safety and control model](docs/safety.md)
-6. [How to author a new domain](docs/domain-authoring.md)
+## What the demo proves
 
-For the West Virginia flagship, read the [architecture specification](docs/WV_LAND_ARCHITECTURE.md)
-and [implementation plan](docs/WV_LAND_IMPLEMENTATION_PLAN.md) before changing
-the land domain or evidence model.
+- A fictional company portfolio with Land, Land Administration, Legal, Compliance, Accounting, Operations, and IT/Platform departments.
+- Role-aware scenarios for land analysts, lease analysts, division-order analysts, legal reviewers, compliance reviewers, accounting reviewers, operations reviewers, and case managers.
+- A private Case Copilot and a collaborative Workroom with explicit agent-to-agent delegation.
+- Lease, title, division-order, ownership, and OCR sample records alongside frozen public WV evidence.
+- Evidence-linked findings, preserved conflicts, explicit unknowns, provenance, production no-match semantics, and a human review decision.
+- Local deterministic execution and a replaceable Microsoft Foundry provider boundary.
+- A real Teams channel adapter that accepts personal chat, group chat, and channel messages and forwards them to the bounded Workroom API.
 
-## Architecture
+## Architecture in one picture
 
 ```text
-Domain → Flow → Agents → Skills → Runtime artifacts
-             ↘ any agent may request human review
+Microsoft Teams channel / personal chat
+          │  Teams SDK activity
+          ▼
+src/teams/server.ts
+  mention parsing · identity context · idempotency
+          │  Workroom HTTP contract
+          ▼
+Next.js web surface ──► ASP.NET Core API
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+        Application      Domain    Infrastructure
+        workflows       contracts  EF Core + SQL Server
+              │
+              ▼
+       deterministic or Foundry agents
+              │
+              ▼
+       findings · conflicts · unknowns · human review
 ```
 
-- **Domain** — vocabulary, policies, schemas, and workflows.
-- **Agent** — one specialized responsibility in `.agent.md`.
-- **Skill** — reusable procedural guidance in `SKILL.md`.
-- **Flow** — sequencing and routing in `.flow.md`.
-- **Orchestrator** — selects and runs a flow.
-- **Runtime** — loads definitions, executes agents, validates references, and
-  persists run artifacts.
-- **Human review** — a control gate for uncertainty, conflicts, and
-  consequential actions. Any agent can request it; completed runs currently
-  remain pending until a human approves or rejects them.
+The Teams adapter owns transport concerns only. The C# application owns authorization, role scenarios, evidence, persistence, agent plans, and review boundaries. This prevents the Teams shell and the web shell from developing different business rules.
 
-The short version: configuration describes the work; the TypeScript runtime
-runs, checks, evaluates, and records it. The default executor is deterministic
-and offline, while Microsoft Foundry is available behind an explicit adapter.
+## Learn the codebase
 
-## Current status
+Start with the [LandOps learner path](docs/landops-learning-path.md), then read:
 
-Implemented and tested locally:
+1. [Architecture](docs/landops-architecture.md)
+2. [Data and evidence](docs/landops-data-and-evidence.md)
+3. [Code tour](docs/landops-code-tour.md)
+4. [Development workflow](docs/landops-development-workflow.md)
+5. [Glossary](docs/landops-glossary.md)
+6. [V1 product specification](docs/LANDOPS_WORKBENCH_V1.md)
+7. [Documentation gap report](docs/landops-documentation-gap-report.md)
+8. [Microsoft Foundry standards](docs/microsoft-foundry-standards.md)
 
-- Markdown agent and flow loading;
-- deterministic mock execution;
-- persisted run records and agent outputs;
-- prior-agent handoffs and explicit human-review transitions;
-- cohesive `RunService` and `FoundryClient` boundaries;
-- domain-aware listing, run, and inspect commands;
-- the current generic `land-administration` demonstration domain and the WV
-  flagship workflow;
-- West Virginia Phase 1 evidence, finding, conflict, unknown, well, and
-  production contracts with validated JSON serialization;
-- structured and adversarial evaluation cases;
-- local retrieval with provenance;
-- permissioned tools and MCP catalog seam;
-- Microsoft Foundry adapter with fake-provider tests;
-- safe local telemetry and consequential-action ports.
+The original reusable TypeScript runtime is documented in the [documentation map](docs/README.md). Read it as a behavioral reference while learning the newer .NET-centered application.
 
-Requires credentials or additional service integration:
+For the reference runtime’s deeper concepts, see [architecture](docs/architecture.md), [data model](docs/data-model.md), [flow runtime](docs/flow-runtime.md), [evaluations](docs/evaluations.md), and [safety](docs/safety.md). The original command-line example also remains available through `npm run eval` and the [quickstart](docs/quickstart.md).
 
-- live Foundry model execution;
-- Azure AI Search and Blob Storage;
-- Entra ID authentication and production telemetry;
-- network MCP server/transport;
-- true parallel dependency-graph scheduling;
-- production-grade structured output schemas.
-
-## Development
+## Verify changes
 
 ```sh
-node --version
-npm install
 npm run typecheck
 npm test
 npm run build
-npm run eval -- case-synthesizer
+dotnet test dotnet/LandOps.sln
+git diff --check
 ```
 
-The installed Node runtime is the compatibility baseline. Check it with
-`node --version` before changing dependency versions.
+The default local mode is deterministic and offline. Foundry, Entra ID, Azure SQL, Blob Storage, Application Insights, and production Teams registration are explicit provider/deployment boundaries rather than hidden assumptions.
+
+The local identity catalog is [`config/identity/personas.json`](config/identity/personas.json). It is synthetic demo data, not a list of real tenant users. The UI loads it through `/api/landops/personas`; `npm run validate:identity-personas` checks it, and `npm run provision:entra-personas` produces a dry-run Azure CLI plan. Real creation additionally requires `--apply`, a tenant ID, a verified `--upn-domain`, and `LANDOPS_TEMP_PASSWORD`.
+
+## Repository map
+
+- `dotnet/LandOps.Domain` — business contracts and invariants.
+- `dotnet/LandOps.Application` — use cases, role scenarios, Workroom, and execution boundaries.
+- `dotnet/LandOps.Infrastructure` — EF Core, SQL Server, fixtures, and Foundry integration.
+- `dotnet/LandOps.Api` — ASP.NET Core HTTP boundary.
+- `app/` — Next.js App Router and same-origin browser routes.
+- `src/landops/` — React view components and C# response adapters.
+- `src/teams/` — Microsoft Teams SDK channel adapter.
+- `src/` and `domains/` — older TypeScript reference runtime and WV source implementation.
+- `specs/` and `results/` — checkpoint specifications and verification records.
+
+## Current limits
+
+The local Teams adapter is runnable and tested, but production still needs a registered Azure Bot/Teams app, Entra app credentials, durable distributed idempotency, and Azure hosting. OCR extraction, live source ingestion, and consequential actions such as filing, payment changes, and owner contact remain intentionally outside the autonomous boundary.

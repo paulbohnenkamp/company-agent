@@ -1,6 +1,6 @@
 # Business Agent architecture
 
-Business Agent keeps domain behavior in readable Markdown and keeps execution
+Business Agent keeps domain behavior in readable YAML/Markdown artifacts and keeps execution
 mechanics in TypeScript. New business domains normally add configuration, not
 runtime classes. Stateful application boundaries use small cohesive services.
 
@@ -13,7 +13,7 @@ the **orchestrator** keeps the work ordered and recorded.
 | Concept | Responsibility | File convention |
 | --- | --- | --- |
 | Domain | Vocabulary, policies, schemas, source-of-truth rules | `domain.md` |
-| Agent | One specialized responsibility | `<id>.agent.md` |
+| Agent | One specialized responsibility | `<id>.agent.yaml` using Microsoft AgentSchema |
 | Skill | Reusable procedure or domain knowledge | `<id>/SKILL.md` |
 | Prompt | Focused reusable model-facing text | `<id>.prompt.md` |
 | Instructions | Shared operating constraints | `<id>.instructions.md` |
@@ -31,7 +31,7 @@ the **orchestrator** keeps the work ordered and recorded.
 ```text
 domains/<domain-id>/
   domain.md
-  agents/<agent-id>.agent.md
+  agents/<agent-id>.agent.yaml
   skills/<skill-id>/SKILL.md
   prompts/<prompt-id>.prompt.md
   instructions/<instruction-id>.instructions.md

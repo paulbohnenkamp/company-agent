@@ -6,6 +6,8 @@ completed: 2026-09-04
 spec: specs/010-wv-land-phase-7-evaluations.md
 ---
 
+
+
 ## What changed
 
 Implemented a provider-neutral WV evaluation path around the existing typed

@@ -2,9 +2,11 @@
 id: 002-platform-completion
 title: Complete the local enterprise-agent platform foundation
 status: completed
-spec: specs/002-platform-completion.md
 completed: 2026-08-26
+spec: specs/002-platform-completion.md
 ---
+
+
 
 # Platform completion result
 
@@ -36,3 +38,15 @@ See `git diff` or the repository tree for the complete set. Important areas are
 Live Foundry evaluation, Azure AI Search/Blob integration, Entra identity,
 network MCP transport, production telemetry, structured model output schemas,
 and true parallel graph scheduling remain separate implementation slices.
+
+## Checks run and results
+
+Verification evidence is preserved in the original result content; unresolved limits are called out in docs/PROJECT_STATE.md.
+
+## Deviations from the spec
+
+No deviation is inferred by this metadata normalization. Review the original result content for slice-specific deviations.
+
+## Important decisions
+
+This slice remains first-class project history. The current product direction is recorded in docs/PROJECT_STATE.md.

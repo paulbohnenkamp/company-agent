@@ -6,7 +6,7 @@ Use pstack to understand this repository before changing it.
 Use /poteto-mode to orient on this repository.
 
 Intent: Business Agent is a TypeScript runtime for configurable enterprise
-workflows. Domain behavior is expressed through Markdown agents, reusable
+workflows. Domain behavior is expressed through AgentSchema YAML agents, reusable
 SKILL.md files, and flow definitions. The land-administration domain is the
 reference application. We will later connect it to Microsoft Foundry, Azure AI
 Search, MCP, evaluations, and human approval.

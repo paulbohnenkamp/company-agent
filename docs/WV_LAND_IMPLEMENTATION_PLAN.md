@@ -243,9 +243,9 @@ FlowResult {
 ```
 
 The canonical definition paths are
-`domains/land-administration/agents/land-case-intake.agent.md`,
-`domains/land-administration/agents/land-well-reconciler.agent.md`,
-`domains/land-administration/agents/case-synthesizer.agent.md`, and
+`domains/land-administration/agents/land-case-intake.agent.yaml`,
+`domains/land-administration/agents/land-well-reconciler.agent.yaml`,
+`domains/land-administration/agents/case-synthesizer.agent.yaml`, and
 `domains/land-administration/flows/wv-land-well-reconciliation.flow.md`.
 
 The ordered required steps are intake, reconciliation, and synthesis. Required

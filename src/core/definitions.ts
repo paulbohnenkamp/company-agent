@@ -1,9 +1,17 @@
 import { readFile, readdir } from "node:fs/promises";
 import { extname, join, relative, resolve } from "node:path";
+import { parse as parseYaml } from "yaml";
 
 export class DefinitionError extends Error {}
 
 export interface MarkdownDefinition {
+  path: string;
+  frontMatter: Record<string, string | string[]>;
+  body: string;
+}
+
+/** A Microsoft AgentSchema YAML definition projected into the runtime shape. */
+export interface YamlDefinition {
   path: string;
   frontMatter: Record<string, string | string[]>;
   body: string;
@@ -47,7 +55,40 @@ export async function readDefinition(path: string): Promise<MarkdownDefinition> 
   return parseMarkdownDefinition(path, await readFile(path, "utf8"));
 }
 
+/** Reads a canonical prompt-agent YAML file without inventing schema fields. */
+export async function readYamlDefinition(path: string): Promise<YamlDefinition> {
+  const document = parseYaml(await readFile(path, "utf8")) as Record<string, unknown>;
+  const metadata = (document.metadata as Record<string, unknown> | undefined)?.businessAgent as Record<string, unknown> | undefined;
+  const list = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : typeof value === "string" ? [value] : [];
+  const scalar = (value: unknown): string => typeof value === "string" ? value : "";
+  const frontMatter: Record<string, string | string[]> = {
+    id: scalar(document.name),
+    version: scalar(metadata?.version),
+    description: scalar(document.description),
+    inputs: list(metadata?.inputs),
+    outputs: list(metadata?.outputs),
+    "referenced-skills": list(metadata?.referencedSkills),
+    "permitted-tools": list(metadata?.permittedTools),
+  };
+  if (document.kind !== "prompt" || !frontMatter.id || !frontMatter.version || !scalar(document.model) || !scalar(document.instructions)) throw new DefinitionError(`Invalid Microsoft AgentSchema prompt agent: ${path}`);
+  return { path, frontMatter, body: scalar(document.instructions) };
+}
+
 export async function markdownFiles(root: string, suffix: string): Promise<string[]> {
+  const results: string[] = [];
+  async function visit(directory: string): Promise<void> {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) await visit(path);
+      else if (entry.name.endsWith(suffix)) results.push(path);
+    }
+  }
+  await visit(resolve(root));
+  return results.sort();
+}
+
+/** Finds canonical YAML artifacts with the requested suffix. */
+export async function yamlFiles(root: string, suffix: string): Promise<string[]> {
   const results: string[] = [];
   async function visit(directory: string): Promise<void> {
     for (const entry of await readdir(directory, { withFileTypes: true })) {

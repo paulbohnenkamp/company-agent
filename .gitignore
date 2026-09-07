@@ -6,3 +6,6 @@ coverage/
 .env
 workspace/private/
 .copilot-azure/
+dotnet/**/bin/
+dotnet/**/obj/
+test-results/

@@ -3,9 +3,11 @@ id: 011-local-wv-demo
 title: Local West Virginia flagship demo
 status: completed
 created: 2026-09-04
-updated: 2026-09-04
+updated: 2026-09-07
 result: results/011-local-wv-demo.md
 ---
+
+
 
 ## Goal
 

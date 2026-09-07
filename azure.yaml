@@ -1,0 +1,20 @@
+name: landops-workbench
+metadata:
+  template: landops-workbench@1.0.0
+
+services:
+  web:
+    project: .
+    language: docker
+    host: appservice
+    docker:
+      path: ./Dockerfile
+      remoteBuild: true
+  api:
+    project: ./dotnet
+    language: docker
+    host: appservice
+    docker:
+      path: ./Dockerfile
+      context: ..
+      remoteBuild: true

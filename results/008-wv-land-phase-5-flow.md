@@ -6,6 +6,8 @@ completed: 2026-09-03
 spec: specs/008-wv-land-phase-5-flow.md
 ---
 
+
+
 ## What changed
 
 Implemented the Phase 5 flagship surface without implementing agent judgment.

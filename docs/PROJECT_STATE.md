@@ -1,0 +1,125 @@
+# LandOps project state
+
+**Last reconciled:** 2026-09-07  
+**First read for a new Codex or VS Code session**  
+**Authoritative continuation record:** [specs/042-project-state-reconciliation.md](../specs/042-project-state-reconciliation.md)
+
+## What this project is
+
+LandOps is an evidence-centered oil-and-gas land-operations application. The
+primary user conversation is intended to happen in Microsoft Teams. A focused
+Next.js review surface lets a person inspect a case, evidence, findings,
+unknowns, and human decisions. ASP.NET Core/.NET owns the application boundary.
+
+The central flow is:
+
+```text
+Teams conversation → Workroom → bounded agent route → evidence-backed result
+→ focused review → human action
+```
+
+Teams and the web app are front ends. They do not own land rules, evidence
+interpretation, authorization, persistence, or agent orchestration.
+
+## Current architecture
+
+- **Application:** C#/.NET 10, ASP.NET Core minimal API, EF Core, SQL Server or
+  Azure SQL.
+- **Web:** Next.js with React. The web surface is for focused case review,
+  administration, and local demonstration.
+- **Agents:** Microsoft AgentSchema-compatible `agent.yaml` artifacts; the
+  TypeScript loader projects them into a runtime contract.
+- **Skills:** `SKILL.md` bundles with YAML front matter.
+- **AI:** deterministic local providers by default; opt-in Microsoft Foundry
+  provider behind the C# boundary.
+- **Identity:** local synthetic personas for repeatable development; Entra roles
+  and groups in production.
+- **Evidence:** immutable source snapshots, provenance, findings, conflicts, and
+  explicit unknowns. Public WVDEP/WVGES data is never proof of mineral title.
+- **Teams:** `src/teams/` owns activity parsing, idempotency, channel mapping,
+  and transport. It calls the same Workroom API as the web app.
+
+## Verified implementation inventory
+
+| Area | Current state | Evidence |
+| --- | --- | --- |
+| WV source fixtures and adapters | Verified local reference | `results/005–010`, TypeScript test suite |
+| C#/.NET foundation and API | Verified | `results/013-landops-checkpoint-a.md` |
+| C# WV workflow and persistence | Implemented and tested | `results/014–017` |
+| C# Foundry/provider boundaries | Implemented; provider smoke is opt-in | `results/019`, `results/033` |
+| Local/Azure runtime configuration | Implemented | `results/018`, `results/021`, `results/036–037` |
+| Fictional Blue Ridge company/data room | Verified local seed/read paths | `results/022`, `results/028-fictional-company-data-room.md` |
+| Role scenarios and delegation plans | Verified local contracts | `results/024–027`, `results/035` |
+| Durable Workroom threads | Implemented and SQL-tested | `results/032` |
+| Entra identity boundary | Implemented; tenant activation remains external | `results/030`, `results/034` |
+| AgentSchema YAML artifacts | Validated locally | `results/039`, `npm run validate:agent-artifacts` |
+| Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
+| Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
+| Teams adapter and human actions | Verified local vertical slice | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md` |
+
+## Record quality
+
+The numbered records were created across more than one convention. The
+reconciliation pass preserved their prose and normalized their metadata,
+required sections, and spec/result links. A record’s completion still depends
+on its recorded verification evidence; this document provides the cross-record
+view so a new session does not have to infer status from prose alone.
+
+`npm run validate:records` is now the machine-checked guard against new
+unpaired or malformed execution records.
+
+## Unfinished work and continuation backlog
+
+### Next approved slice: record reconciliation
+
+Work from [spec 042](../specs/042-project-state-reconciliation.md) if record
+maintenance is needed. The retained record tree is currently normalized and
+`npm run validate:records` passes.
+
+### After reconciliation: Teams activation
+
+- Connect the existing adapter to a registered Microsoft Teams bot and tenant.
+- Validate Entra claims, bot permissions, channel routing, and message replies.
+- Add adaptive-card review actions over the existing append-only action API.
+- Record endpoint smoke, evaluation, version, rollback, and deployment evidence.
+
+### After reconciliation: product workflow depth
+
+- Implement the highest-value Legal ↔ Land/Title readiness scenario end to end.
+- Add lease analyst and division-order analyst workflows using the shared case,
+  document, evidence, and human-review contracts.
+- Add bounded agent-to-agent questions only where the originating agent names
+  the needed evidence and the human boundary remains explicit.
+
+### Deliberately deferred
+
+- Broad UI redesign until the information architecture is approved from role
+  workflows rather than from the current showcase page.
+- Generic agent-builder/configuration UI.
+- Autonomous title certification, payment changes, filings, or external owner
+  communication.
+- Treating a local adapter or provider seam as a hosted Foundry agent or network
+  MCP server.
+
+## How a new Codex session should continue
+
+1. Read `AGENTS.md`.
+2. Read this file.
+3. Read the active spec named above.
+4. Inspect `git status --short` and do not overwrite unrelated user work.
+5. Work only the next approved slice.
+6. Run the verification commands in that spec.
+7. Create/update the matching result and update this document’s inventory.
+
+Do not use the old chat transcript as the source of truth. If the repository and
+the transcript disagree, trust verified repository evidence and record the
+disagreement in the active spec.
+
+## Important external gates
+
+- A real Teams bot requires tenant registration, credentials, consent, and
+  channel configuration.
+- Azure SQL data-plane migration requires the configured Entra SQL administrator;
+  ARM RBAC alone is not database access.
+- Foundry activation requires a pinned model deployment, supported protocol,
+  endpoint smoke test, evaluation, and rollback record.

@@ -3,9 +3,11 @@ id: 012-case-conversation
 title: Case-scoped Ask Business Agent conversation
 status: completed
 created: 2026-09-04
-updated: 2026-09-04
+updated: 2026-09-07
 result: results/012-case-conversation.md
 ---
+
+
 
 ## Goal
 

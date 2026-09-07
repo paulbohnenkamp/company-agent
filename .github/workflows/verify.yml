@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  next:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,6 +14,17 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm run typecheck
+
+  dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore dotnet/LandOps.sln
+      - run: dotnet build dotnet/LandOps.sln --no-restore
+      - run: dotnet test dotnet/LandOps.sln --no-build --no-restore

@@ -5,7 +5,7 @@ path.
 
 Implemented locally:
 
-- Markdown agent and skill loading;
+- Microsoft AgentSchema YAML agent and `SKILL.md` skill loading;
 - deterministic flow execution and persisted run records;
 - `RunService` lifecycle boundary for execution, handoffs, and approval;
 - permissioned typed tool registry;
