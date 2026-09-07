@@ -15,6 +15,8 @@ spec: specs/044-teams-live-activation.md
   optional Entra object ID, without moving authorization into the adapter.
 - Added `docs/teams-live-activation.md` with tenant setup, bot, endpoint,
   channel, verification, and production-boundary guidance.
+- Added `docs/chatgpt-work-teams-handoff.md` with a bounded browser setup
+  prompt and non-secret return contract.
 - Updated `docs/PROJECT_STATE.md` to distinguish demo preparation from the
   later production identity bridge.
 
@@ -25,6 +27,7 @@ spec: specs/044-teams-live-activation.md
 - `specs/044-teams-live-activation.md`
 - `results/044-teams-live-activation.md`
 - `docs/teams-live-activation.md`
+- `docs/chatgpt-work-teams-handoff.md`
 - `docs/PROJECT_STATE.md`
 
 ## Checks run and results

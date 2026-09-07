@@ -68,6 +68,7 @@ keeps production activation separate.
 - `tests/teams-adapter.test.ts`
 - `README.md` and `docs/teams-live-activation.md`
 - `docs/teams-live-activation.md`
+- `docs/chatgpt-work-teams-handoff.md`
 - `docs/PROJECT_STATE.md`
 
 ## Milestones
@@ -126,6 +127,8 @@ adapter endpoint health → Bot Service endpoint → Teams channel delivery
   path can be learned and verified before production identity work.
 - 2026-09-07: Preparation slice completed locally; tenant-dependent demo
   delivery remains the next external step.
+- 2026-09-07: Added a ChatGPT Work browser handoff for the external tenant
+  setup. It requires the user to enter credentials, MFA, and billing details.
 
 ## Decision log
 

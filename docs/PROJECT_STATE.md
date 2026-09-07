@@ -76,6 +76,7 @@ unpaired or malformed execution records.
 The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md).
 The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md)
 with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
+The browser-assisted tenant setup prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
 Tenant, bot registration, credentials, consent, public endpoint, and Teams
 channel configuration remain external prerequisites for the demo.
 

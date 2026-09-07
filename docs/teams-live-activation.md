@@ -4,6 +4,8 @@ This runbook connects the existing `src/teams/server.ts` transport to a small
 real Microsoft 365 test tenant for a labeled LandOps demo. It does not replace
 the ASP.NET Core Workroom API or authorize actions in the Teams adapter.
 
+For a browser-assisted tenant setup, use the [ChatGPT Work handoff](chatgpt-work-teams-handoff.md).
+
 ## Current status
 
 Local adapter readiness is verified in [result 043](../results/043-teams-activation-readiness.md).
