@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "eval": "tsx scripts/run-evals.ts",
     "teams:dev": "tsx src/teams/server.ts",
-    "teams:start": "node dist/teams/server.js"
+    "teams:start": "node dist/teams/server.js",
+    "teams:package": "tsx scripts/build-teams-app-package.ts"
   },
   "dependencies": {
     "@fluentui/react-components": "^9.74.7",
