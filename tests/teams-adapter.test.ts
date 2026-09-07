@@ -8,11 +8,12 @@ test("strips only the LandOps bot mention", () => {
 });
 
 test("maps a channel message into a bounded Workroom request", () => {
-  const mapped = toWorkroomRequest({ id: "activity-1", text: "<at>LandOps</at> check ownership", recipientId: "bot-1", entities: [{ type: "mention", text: "<at>LandOps</at>", mentioned: { id: "bot-1" } }], from: { id: "alex" }, channelData: { tenant: { id: "tenant-1" } }, conversation: { id: "conversation-1", conversationType: "channel" } }, { caseId: "case-1", scenarioId: "land-ownership-gaps", roleId: "land-analyst", requiredGroup: "title-curative-board" });
+  const mapped = toWorkroomRequest({ id: "activity-1", text: "<at>LandOps</at> check ownership", recipientId: "bot-1", entities: [{ type: "mention", text: "<at>LandOps</at>", mentioned: { id: "bot-1" } }], from: { id: "alex", aadObjectId: "aad-alex" }, channelData: { tenant: { id: "tenant-1" } }, conversation: { id: "conversation-1", conversationType: "channel" } }, { caseId: "case-1", scenarioId: "land-ownership-gaps", roleId: "land-analyst", requiredGroup: "title-curative-board" });
   assert.equal(mapped.channel, "channel");
   assert.equal(mapped.tenantId, "tenant-1");
   assert.equal(mapped.request.question, "check ownership");
   assert.equal(mapped.request.requestedBy, "alex");
+  assert.deepEqual(mapped.request.actor, { tenantId: "tenant-1", userId: "alex", aadObjectId: "aad-alex" });
 });
 
 test("suppresses duplicate activity IDs", () => {

@@ -2,7 +2,7 @@
 
 **Last reconciled:** 2026-09-07  
 **First read for a new Codex or VS Code session**  
-**Authoritative continuation record:** [specs/042-project-state-reconciliation.md](../specs/042-project-state-reconciliation.md)
+**Authoritative continuation record:** [specs/044-teams-live-activation.md](../specs/044-teams-live-activation.md)
 
 ## What this project is
 
@@ -56,6 +56,7 @@ interpretation, authorization, persistence, or agent orchestration.
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
 | Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
 | Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md` |
+| Teams live activation | In progress; scope reduced to a minimal tenant-backed demo, production identity bridge deferred | `specs/044-teams-live-activation.md`, `docs/teams-live-activation.md` |
 
 ## Record quality
 
@@ -70,17 +71,19 @@ unpaired or malformed execution records.
 
 ## Unfinished work and continuation backlog
 
-### Next approved slice: Teams activation
+### Active approved slice: Teams live activation
 
-The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md)
-and its result. The remaining production activation is externally blocked until
-the tenant, bot registration, credentials, consent, public endpoint, and Teams
-channel configuration are supplied.
+The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md).
+The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md)
+with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
+Tenant, bot registration, credentials, consent, public endpoint, and Teams
+channel configuration remain external prerequisites for the demo.
 
-Local evidence now includes the adapter receive-path smoke test, all four
-append-only action contracts, and an Entra-style wrong-role denial. The next
-activation work must use the same API boundary and record endpoint smoke,
-evaluation, immutable version, rollback, and deployment evidence.
+Local evidence includes the adapter receive-path smoke test, all four
+append-only action contracts, an Entra-style wrong-role denial, and a typed
+Teams actor contract. The minimal demo will use the same API boundary and
+record a tenant smoke result; production workload authentication and
+directory-backed authorization remain later work.
 
 ### After Teams activation: product workflow depth
 

@@ -14,7 +14,7 @@ export type TeamsActivity = {
   timestamp?: string;
   recipientId?: string;
   entities?: unknown;
-  from?: { id?: string };
+  from?: { id?: string; aadObjectId?: string };
   channelData?: { tenant?: { id?: string } };
   conversation?: { id?: string; conversationType?: string };
 };
@@ -27,6 +27,7 @@ export type LandOpsWorkroomRequest = {
   roleId: string;
   groups: string[];
   threadMessages: { messageId: string; authorRole: string; content: string }[];
+  actor: { tenantId: string; userId: string; aadObjectId: string | null };
 };
 
 export type LandOpsWorkroomResponse = {
@@ -104,6 +105,7 @@ export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: st
       roleId: options.roleId,
       groups: [options.requiredGroup],
       threadMessages: [{ messageId: activityId, authorRole: roleIdForChannel(channel), content: question || "Please review this case." }],
+      actor: { tenantId, userId, aadObjectId: activity.from?.aadObjectId ?? null },
     },
   };
 }
