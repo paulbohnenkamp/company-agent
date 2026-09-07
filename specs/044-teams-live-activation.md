@@ -129,6 +129,11 @@ adapter endpoint health → Bot Service endpoint → Teams channel delivery
   delivery remains the next external step.
 - 2026-09-07: Added a ChatGPT Work browser handoff for the external tenant
   setup. It requires the user to enter credentials, MFA, and billing details.
+- 2026-09-07: Microsoft 365 Business Basic trial tenant created with the
+  non-secret domain `landopsdemo.onmicrosoft.com`. Verified the DecisionForge
+  tenant, Entra tenant ID, Teams status, two licensed demo users, the
+  `LandOps Demo` Team, and the `landops-demo` standard channel. Custom app
+  sideloading remains unverified.
 
 ## Decision log
 

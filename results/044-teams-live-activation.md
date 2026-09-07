@@ -45,8 +45,22 @@ are required before this result is considered committed.
 ## Deviations from the spec
 
 The real tenant smoke was not run because the Microsoft 365 Developer Program
-did not grant sandbox eligibility and no paid test tenant exists yet. This
-result covers preparation only and does not claim live Teams delivery.
+did not grant sandbox eligibility. A Business Basic trial tenant now exists,
+but this result still covers preparation and tenant prerequisites only. It does
+not claim live Teams delivery.
+
+## External activation checkpoint
+
+The DecisionForge Microsoft 365 Business Basic trial tenant is
+`landopsdemo.onmicrosoft.com` with Entra tenant ID
+`ec4b8411-d158-44e0-a8cf-6f71e2d8b96b`. Microsoft Teams is enabled. The tenant
+has licensed users `legal.demo@landopsdemo.onmicrosoft.com` and
+`land.demo@landopsdemo.onmicrosoft.com`, the `LandOps Demo` Team, and the
+`landops-demo` standard channel. Custom app upload remains unverified because
+Teams app management was still provisioning.
+
+Bot registration, a public endpoint, consent, identity mapping, and a real
+Teams mention smoke test remain incomplete.
 
 ## Important decisions
 
@@ -59,10 +73,8 @@ result covers preparation only and does not claim live Teams delivery.
 
 ## Remaining follow-ups
 
-- Create a paid Microsoft 365 test tenant, preferably with a Business Basic
-  trial or monthly plan.
-- Create an admin and two or three licensed test users, then create one Team
-  and `landops-demo` channel.
+- Verify custom app upload or sideloading after Teams app management finishes
+  provisioning.
 - Register the bot, expose the adapter over HTTPS, and run the tenant smoke.
 - Implement the production workload-token and directory-backed identity bridge
   before calling the integration production-ready.

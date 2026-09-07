@@ -78,7 +78,11 @@ The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md
 with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
 The browser-assisted tenant setup prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
 Tenant, bot registration, credentials, consent, public endpoint, and Teams
-channel configuration remain external prerequisites for the demo.
+channel configuration remain external prerequisites for the demo. The Business
+Basic trial tenant is `DecisionForge` at `landopsdemo.onmicrosoft.com` with
+Entra tenant ID `ec4b8411-d158-44e0-a8cf-6f71e2d8b96b`. Teams is enabled, the
+two licensed demo users exist, and the `LandOps Demo` Team with its
+`landops-demo` channel exists. Custom app sideloading remains unverified.
 
 Local evidence includes the adapter receive-path smoke test, all four
 append-only action contracts, an Entra-style wrong-role denial, and a typed
