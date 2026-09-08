@@ -83,6 +83,12 @@ Azure resource and app-role inspection
 → evaluation and rollback/version record
 ```
 
+Before tenant delivery, the local playbook proof is available in
+`dotnet/LandOps.Api.Tests/PlaybookEndToEndTests.cs`. It covers Legal curative
+blockers, lease development obligations, and division-order readiness through
+the ASP.NET Core Workroom API. It does not replace the real Teams mention
+smoke test.
+
 Until the real Teams mention reaches the bot and returns the deterministic
 Workroom reply, describe the component as a local reference. After that smoke
 passes, describe it as a tenant-backed demo—not as production Teams activation.

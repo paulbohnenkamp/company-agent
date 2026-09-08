@@ -58,6 +58,7 @@ interpretation, authorization, persistence, or agent orchestration.
 | Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md` |
 | Teams live activation | In progress; scope reduced to a minimal tenant-backed demo, production identity bridge deferred | `specs/044-teams-live-activation.md`, `docs/teams-live-activation.md` |
 | Teams app package contract | Verified local manifest and ZIP builder; real bot values, endpoint, icons, upload, and smoke test incomplete | `specs/045-teams-app-package.md`, `results/045-teams-app-package.md` |
+| Role playbook end-to-end tests | Verified three canonical Workroom playbooks through the ASP.NET Core HTTP boundary; live Teams delivery remains external | `specs/046-playbook-e2e-tests.md`, `results/046-playbook-e2e-tests.md` |
 
 ## Record quality
 
@@ -89,9 +90,10 @@ upload until the bot ID, HTTPS endpoint, and final icons exist.
 
 Local evidence includes the adapter receive-path smoke test, all four
 append-only action contracts, an Entra-style wrong-role denial, and a typed
-Teams actor contract. The minimal demo will use the same API boundary and
-record a tenant smoke result; production workload authentication and
-directory-backed authorization remain later work.
+Teams actor contract. The playbook end-to-end suite now proves three
+representative role journeys through the same API boundary. It does not prove
+live Teams delivery; production workload authentication and directory-backed
+authorization remain later work.
 
 ### After Teams activation: product workflow depth
 
