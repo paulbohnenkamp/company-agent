@@ -1,15 +1,15 @@
-# LandOps development workflow
+# Business Agent development workflow
 
 Use this guide when you change the C# application or its React integration.
 
 ## Choose the owning project
 
-Start with the [LandOps code tour](landops-code-tour.md). Put the change in the layer that owns the behavior. Keep the public API and database concerns at their boundaries.
+Start with the [Business Agent code tour](landops-code-tour.md). Put the change in the layer that owns the behavior. Keep the public API and database concerns at their boundaries.
 
 ## Local identity and Azure identity
 
 The local app uses `LandOps:IdentityMode=local`. In this mode, the demo UI
-sends a clearly labeled local user, role, and group so the Workroom can be
+sends a clearly labeled local user, role, and group so the agent request can be
 tested without a tenant or sign-in account.
 
 The Azure deployment uses `LandOps:IdentityMode=entra`. The hosting layer must
@@ -23,7 +23,7 @@ reads these claims:
 The browser request may still contain the local fields because the JSON shape
 is shared, but Entra mode ignores them. This is important: a browser is not an
 authority for identity. The API checks the resolved role and required group
-before it creates a Workroom thread.
+before it creates an agent request thread.
 
 This repository does not register an Entra app or create tenant role
 assignments. In `entra` mode, however, the API now validates JWT bearer tokens
@@ -36,15 +36,15 @@ write-capable API calls. The browser still talks only to the same-origin Next.js
 routes, while the API remains the authority for authentication and role/group
 authorization.
 
-## Workroom storage modes
+## agent request storage modes
 
 Use the default `LandOps:WorkroomPersistence=memory` while learning or running
 offline tests. It keeps the demo independent of SQL Server. Use
 `LandOps:WorkroomPersistence=sql` when the API runs with SQL Server or Azure
 SQL and migrations have been applied. The SQL adapter stores only the bounded
-Workroom contract; it does not turn the product into an unbounded chat archive.
+agent request contract; it does not turn the product into an unbounded chat archive.
 
-## Workroom execution modes
+## agent request execution modes
 
 `LandOps:WorkroomExecutionProvider=deterministic` is the local default. It is
 fast, offline, and useful for learning the UI. Set it to `foundry` only in an

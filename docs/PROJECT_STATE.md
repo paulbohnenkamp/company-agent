@@ -1,25 +1,26 @@
-# LandOps project state
+# Business Agent project state
 
-**Last reconciled:** 2026-09-07  
-**First read for a new Codex or VS Code session**  
-**Authoritative continuation record:** [specs/044-teams-live-activation.md](../specs/044-teams-live-activation.md)
+**Last reconciled:** 2026-09-08
+
+**First read for a new Codex or VS Code session**
+
+**Latest repository slice:** [spec 048](../specs/048-business-agent-naming.md)
+
+**External activation work:** [spec 044](../specs/044-teams-live-activation.md) and [tenant naming adoption](tenant-naming-adoption.md)
 
 ## What this project is
 
-LandOps is an evidence-centered oil-and-gas land-operations application. The
-primary user conversation is intended to happen in Microsoft Teams. A focused
-Next.js review surface lets a person inspect a case, evidence, findings,
-unknowns, and human decisions. ASP.NET Core/.NET owns the application boundary.
+Business Agent supports people across departments through Microsoft Teams.
+Sample Energy Company supplies fictional people and records. Land is a department,
+alongside Legal, Compliance, Accounting, and Operations. The current implementation
+covers specific case-based reviews; it does not yet support arbitrary workflows.
 
-The central flow is:
+Teams is the collaboration environment. Next.js provides focused review and local
+examples. ASP.NET Core/.NET owns authorization, evidence, persistence, agent
+execution, and human decisions. See [product naming](product-naming.md).
 
-```text
-Teams conversation → Workroom → bounded agent route → evidence-backed result
-→ focused review → human action
-```
-
-Teams and the web app are front ends. They do not own land rules, evidence
-interpretation, authorization, persistence, or agent orchestration.
+`LandOps` and `Workroom` remain legacy code, configuration, storage, and wire
+identifiers for compatibility. Neither names a separate collaboration product.
 
 ## Current architecture
 
@@ -37,7 +38,7 @@ interpretation, authorization, persistence, or agent orchestration.
 - **Evidence:** immutable source snapshots, provenance, findings, conflicts, and
   explicit unknowns. Public WVDEP/WVGES data is never proof of mineral title.
 - **Teams:** `src/teams/` owns activity parsing, idempotency, channel mapping,
-  and transport. It calls the same Workroom API as the web app.
+  and transport. It calls the same ASP.NET Core API as the web app.
 
 ## Verified implementation inventory
 
@@ -48,17 +49,17 @@ interpretation, authorization, persistence, or agent orchestration.
 | C# WV workflow and persistence | Implemented and tested | `results/014–017` |
 | C# Foundry/provider boundaries | Implemented; provider smoke is opt-in | `results/019`, `results/033` |
 | Local/Azure runtime configuration | Implemented | `results/018`, `results/021`, `results/036–037` |
-| Fictional Blue Ridge company/data room | Verified local seed/read paths | `results/022`, `results/028-fictional-company-data-room.md` |
+| Sample Energy Company/data room | Verified local seed/read paths | `results/022`, `results/028-fictional-company-data-room.md`, `results/048-business-agent-naming.md` |
 | Role scenarios and delegation plans | Verified local contracts | `results/024–027`, `results/035` |
-| Durable Workroom threads | Implemented and SQL-tested | `results/032` |
+| Durable agent request threads | Implemented and SQL-tested; legacy Workroom identifiers retained for compatibility | `results/032`, `results/048-business-agent-naming.md` |
 | Entra identity boundary | Implemented; tenant activation remains external | `results/030`, `results/034` |
 | AgentSchema YAML artifacts | Validated locally | `results/039`, `npm run validate:agent-artifacts` |
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
 | Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
-| Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md` |
+| Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md`, `results/048-business-agent-naming.md` |
 | Teams adapter deployment foundation | Completed and healthy; Bot Service registration and tenant package activation remain externally blocked on single-tenant app setup | `specs/047-teams-bot-activation.md`, `results/047-teams-bot-activation.md`, `docs/teams-live-activation.md` |
 | Teams app package contract | Verified local manifest and ZIP builder; real bot values, endpoint, icons, upload, and smoke test incomplete | `specs/045-teams-app-package.md`, `results/045-teams-app-package.md` |
-| Role playbook end-to-end tests | Verified three canonical Workroom playbooks through the ASP.NET Core HTTP boundary; live Teams delivery remains external | `specs/046-playbook-e2e-tests.md`, `results/046-playbook-e2e-tests.md` |
+| Role playbook end-to-end tests | Verified three canonical agent request playbooks through the ASP.NET Core HTTP boundary; live Teams delivery remains external | `specs/046-playbook-e2e-tests.md`, `results/046-playbook-e2e-tests.md` |
 
 ## Record quality
 
@@ -73,13 +74,17 @@ unpaired or malformed execution records.
 
 ## Unfinished work and continuation backlog
 
-### Active approved slice: Teams live activation
+### External Teams activation
+
+Spec 048 completed the approved repository naming. The current CLI credential
+fails in the Microsoft 365 tenant with AADSTS50020 and no signed-in browser is
+available, so live tenant adoption remains incomplete.
 
 The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md).
 The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md)
 with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
-The browser-assisted tenant setup prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
-Tenant bot registration, credentials, consent, and channel configuration remain
+The browser-assisted tenant naming prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
+Tenant user and Team naming, bot registration, credentials, consent, and channel configuration remain
 external prerequisites for the demo. Teams is enabled, two licensed sample
 users exist, and the `LandOps Demo` Team with its `landops-demo` channel exists.
 Microsoft's unified app-management provisioning has completed and custom app
@@ -117,7 +122,7 @@ authorization remain later work.
 
 1. Read `AGENTS.md`.
 2. Read this file.
-3. Read the active spec named above.
+3. Read spec 048 and the activation records before starting a follow-up.
 4. Inspect `git status --short` and do not overwrite unrelated user work.
 5. Work only the next approved slice.
 6. Run the verification commands in that spec.

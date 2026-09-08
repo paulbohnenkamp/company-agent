@@ -2,18 +2,18 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, stripAgentMention, toWorkroomRequest, TeamsIdempotencyStore } from "../src/teams/landops-adapter";
 
-test("strips only the LandOps bot mention", () => {
-  assert.equal(stripAgentMention("<at>LandOps</at> review this", [{ type: "mention", text: "<at>LandOps</at>", mentioned: { id: "bot-1" } }], "bot-1"), "review this");
-  assert.equal(stripAgentMention("<at>Alex</at> and <at>LandOps</at>", [{ type: "mention", text: "<at>Alex</at>", mentioned: { id: "user-1" } }, { type: "mention", text: "<at>LandOps</at>", mentioned: { id: "bot-1" } }], "bot-1"), "<at>Alex</at> and");
+test("strips only the Business Agent bot mention", () => {
+  assert.equal(stripAgentMention("<at>Business Agent</at> review this", [{ type: "mention", text: "<at>Business Agent</at>", mentioned: { id: "bot-1" } }], "bot-1"), "review this");
+  assert.equal(stripAgentMention("<at>Taylor</at> and <at>Business Agent</at>", [{ type: "mention", text: "<at>Taylor</at>", mentioned: { id: "user-1" } }, { type: "mention", text: "<at>Business Agent</at>", mentioned: { id: "bot-1" } }], "bot-1"), "<at>Taylor</at> and");
 });
 
 test("maps a channel message into a bounded Workroom request", () => {
-  const mapped = toWorkroomRequest({ id: "activity-1", text: "<at>LandOps</at> check ownership", recipientId: "bot-1", entities: [{ type: "mention", text: "<at>LandOps</at>", mentioned: { id: "bot-1" } }], from: { id: "alex", aadObjectId: "aad-alex" }, channelData: { tenant: { id: "tenant-1" } }, conversation: { id: "conversation-1", conversationType: "channel" } }, { caseId: "case-1", scenarioId: "land-ownership-gaps", roleId: "land-analyst", requiredGroup: "title-curative-board" });
+  const mapped = toWorkroomRequest({ id: "activity-1", text: "<at>Business Agent</at> check ownership", recipientId: "bot-1", entities: [{ type: "mention", text: "<at>Business Agent</at>", mentioned: { id: "bot-1" } }], from: { id: "taylor", aadObjectId: "aad-taylor" }, channelData: { tenant: { id: "tenant-1" } }, conversation: { id: "conversation-1", conversationType: "channel" } }, { caseId: "case-1", scenarioId: "land-ownership-gaps", roleId: "land-analyst", requiredGroup: "title-curative-board" });
   assert.equal(mapped.channel, "channel");
   assert.equal(mapped.tenantId, "tenant-1");
   assert.equal(mapped.request.question, "check ownership");
-  assert.equal(mapped.request.requestedBy, "alex");
-  assert.deepEqual(mapped.request.actor, { tenantId: "tenant-1", userId: "alex", aadObjectId: "aad-alex" });
+  assert.equal(mapped.request.requestedBy, "taylor");
+  assert.deepEqual(mapped.request.actor, { tenantId: "tenant-1", userId: "taylor", aadObjectId: "aad-taylor" });
 });
 
 test("suppresses duplicate activity IDs", () => {
@@ -24,20 +24,27 @@ test("suppresses duplicate activity IDs", () => {
 });
 
 test("formats the human boundary and delegation path", () => {
-  const reply = formatTeamsReply({ threadId: "thread-1", status: "Ready", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", kind: "requested", order: 1 }, { agentId: "title-chain-reviewer", kind: "delegated", order: 2, delegatedFrom: "ownership-reviewer" }] });
-  assert.match(reply.text, /ownership-reviewer → title-chain-reviewer/);
+  const reply = formatTeamsReply({ threadId: "thread-1", status: "Ready", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", agentName: "Ownership Agent", kind: "requested", order: 1 }, { agentId: "title-chain-reviewer", agentName: "Title Review Agent", kind: "delegated", order: 2, delegatedFrom: "ownership-reviewer" }] });
+  assert.match(reply.text, /Ownership Agent → Title Review Agent/);
   assert.match(reply.text, /Human review required/);
 });
 
 test("formats a bounded evidence-linked review for Teams", () => {
   const reply = formatTeamsReply(
-    { threadId: "thread-1", status: "planned", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", kind: "requested", order: 1 }] },
+    { threadId: "thread-1", status: "planned", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", agentName: "Ownership Agent", kind: "requested", order: 1 }] },
     { recordIds: ["record-1"], findings: [{ recordId: "record-1", subject: "ownership", assertion: "The ownership package is incomplete.", status: "inconclusive", confidence: "medium" }], unknowns: ["Missing recorded conveyance"], proposedRoute: "human-review", humanBoundary: "A person must approve title or payment actions." },
     "http://localhost:3000",
   );
   assert.match(reply.text, /Findings: 1 · Sources: 1 · Unknowns: 1/);
   assert.match(reply.text, /ownership: The ownership package is incomplete\./);
   assert.match(reply.text, /Review packet: http:\/\/localhost:3000\/teams\?threadId=thread-1/);
+});
+
+test("older API responses remain readable without exposing routing IDs as names", () => {
+  const reply = formatTeamsReply({ threadId: "thread-1", status: "planned", humanBoundary: "Human review", steps: [{ agentId: "ownership-reviewer", kind: "requested", order: 1 }] });
+  assert.match(reply.text, /Business Agent review planned/);
+  assert.match(reply.text, /Agents: Agent/);
+  assert.doesNotMatch(reply.text, /ownership-reviewer|LandOps|workroom/i);
 });
 
 test("parses explicit human workroom actions", () => {
@@ -53,5 +60,5 @@ test("parses explicit human workroom actions", () => {
     reason: "Land should request the document",
   });
   assert.equal(parseWorkroomAction("what is the status?"), undefined);
-  assert.match(formatWorkroomActionReply({ action: "request-evidence", actorId: "legal-1", reason: "Need the missing conveyance" }).text, /LandOps recorded request-evidence/);
+  assert.match(formatWorkroomActionReply({ action: "request-evidence", actorId: "legal-1", reason: "Need the missing conveyance" }).text, /Business Agent recorded request-evidence/);
 });

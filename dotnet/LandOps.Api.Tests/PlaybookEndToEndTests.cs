@@ -39,7 +39,7 @@ public sealed class PlaybookEndToEndTests : IClassFixture<ApiFactory>
             caseId = "synthetic-blue-ridge-lease-001",
             scenarioId,
             question = $"Run the {scenarioId} playbook and identify the next human review step.",
-            requestedBy = "legal.demo@landopsdemo.onmicrosoft.com",
+            requestedBy = "taylor.kim@sampleenergy.example",
             roleId,
             groups = new[] { requiredGroup },
             threadMessages = new[]
@@ -55,7 +55,7 @@ public sealed class PlaybookEndToEndTests : IClassFixture<ApiFactory>
         Assert.Equal(roleId, thread.RoleId);
         Assert.Equal(requiredGroup, thread.RequiredGroup);
         Assert.Equal("planned", thread.Status);
-        Assert.Contains("legal.demo@landopsdemo.onmicrosoft.com", thread.Participants);
+        Assert.Contains("taylor.kim@sampleenergy.example", thread.Participants);
 
         var runResponse = await client.PostAsync($"/api/v1/workroom/threads/{thread.ThreadId}/run", null);
 
@@ -81,7 +81,7 @@ public sealed class PlaybookEndToEndTests : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.Created, actionResponse.StatusCode);
         var action = await actionResponse.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal("request-evidence", action.GetProperty("action").GetString());
-        Assert.Equal("legal.demo@landopsdemo.onmicrosoft.com", action.GetProperty("actorId").GetString());
+        Assert.Equal("taylor.kim@sampleenergy.example", action.GetProperty("actorId").GetString());
         Assert.Equal("case-manager", action.GetProperty("assignee").GetString());
 
         var actionsResponse = await client.GetAsync($"/api/v1/workroom/threads/{thread.ThreadId}/actions");

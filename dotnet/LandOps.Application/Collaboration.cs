@@ -2,6 +2,10 @@ using System.Collections.Concurrent;
 
 namespace LandOps.Application;
 
+// Workroom is the legacy wire/storage name for agent-request context, not a
+// collaboration product. Teams hosts conversations. Preserve these contracts
+// until an explicit API/data migration replaces them (docs/product-naming.md).
+
 public sealed record WorkroomMessage(string MessageId, string AuthorRole, string Content);
 
 public sealed record WorkroomContext(string Summary, IReadOnlyList<WorkroomMessage> Messages, bool WasTruncated);

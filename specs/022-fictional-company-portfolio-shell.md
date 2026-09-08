@@ -18,7 +18,7 @@ context that can grow into the seeded LandOps product.
 
 ## Product decision
 
-The fictional company is **Blue Ridge Energy Resources**. Its data is clearly
+The fictional company is **Sample Energy Company**. Its data is clearly
 synthetic. Public WV evidence remains separately attributed and is never
 represented as title proof.
 

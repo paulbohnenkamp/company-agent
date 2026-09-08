@@ -1,21 +1,21 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
   "manifestVersion": "1.30",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "id": "{{TEAMS_APP_ID}}",
   "developer": {
-    "name": "LandOps",
+    "name": "Sample Energy Company",
     "websiteUrl": "{{LANDOPS_WEB_URL}}",
     "privacyUrl": "{{LANDOPS_WEB_URL}}/privacy",
     "termsOfUseUrl": "{{LANDOPS_WEB_URL}}/terms"
   },
   "name": {
-    "short": "LandOps",
-    "full": "LandOps Workroom"
+    "short": "Business Agent",
+    "full": "Business Agent"
   },
   "description": {
-    "short": "Evidence-backed land operations collaboration.",
-    "full": "LandOps routes evidence-backed land operations questions through a bounded Workroom and keeps consequential actions with a human reviewer."
+    "short": "Agents help departments review evidence and coordinate work.",
+    "full": "Business Agent helps people across departments collaborate in Microsoft Teams. Agents review business records, preserve evidence and uncertainty, and route consequential decisions to a person. Sample Energy Company provides fictional example data."
   },
   "icons": {
     "outline": "outline.png",
@@ -41,7 +41,7 @@
           "commands": [
             {
               "title": "Review ownership gaps",
-              "description": "Ask LandOps to review the bounded ownership-gap scenario."
+              "description": "Ask Business Agent to review the ownership-gap example."
             }
           ]
         }

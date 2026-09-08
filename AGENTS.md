@@ -10,6 +10,14 @@
 See [docs/execution-records.md](docs/execution-records.md) for the full
 specification and result-record workflow.
 
+## Product naming
+
+Read [docs/product-naming.md](docs/product-naming.md) before changing product
+labels or information architecture. Business Agent is the application, Sample
+Energy Company is fictional context, and Teams hosts collaboration. Land is a
+department. LandOps and Workroom remain documented compatibility identifiers;
+do not introduce them as product names or another collaboration space.
+
 ## Runtime and dependency compatibility
 
 - Treat the installed Omarchy-supported runtime as the compatibility baseline;

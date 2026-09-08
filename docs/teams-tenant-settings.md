@@ -1,14 +1,14 @@
-# Teams tenant settings for a controlled LandOps demo
+# Teams tenant settings for a controlled Business Agent demo
 
 These settings control who can discover the Team and what guests can do. They
-are Microsoft 365 tenant configuration, not LandOps business rules.
+are Microsoft 365 tenant configuration, not Business Agent business rules.
 
 | Setting | Meaning | Recommended value |
 | --- | --- | --- |
-| Privacy: Private | Only owners can add members; the Team is not discoverable to everyone in the tenant. | **Private** |
+| Privacy: Private | Membership requires owner approval; this setting controls Team access. | **Private** |
 | Privacy: Public | Any user in the tenant can discover and join the Team. It does not publish the Team on the public internet. | Avoid for controlled testing |
 | Guest permissions | Controls what invited external guests can do with channels, files, and messages. | Disabled unless external guests are required |
-| Mentions | Controls whether members can use mentions such as `@LandOps`. | Keep enabled for the bot smoke test |
+| Mentions | Controls team/channel-wide mentions; a bot mention such as `@Business Agent` requires the installed app. | Verify bot installation separately |
 | Member permissions | Controls actions such as creating channels, deleting messages, or adding apps. | Keep defaults; restrict app management to the owner |
 | Fun settings | Controls stickers, GIFs, and memes. | Not relevant to the demo |
 

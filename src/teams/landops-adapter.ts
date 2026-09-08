@@ -1,5 +1,5 @@
 /**
- * Transport-neutral Microsoft Teams adapter for LandOps Workbench.
+ * Transport-neutral Microsoft Teams adapter for Business Agent.
  *
  * This module deliberately contains no land rules. It translates a Teams
  * activity into the existing Workroom API contract and formats the bounded
@@ -34,7 +34,7 @@ export type LandOpsWorkroomResponse = {
   threadId: string;
   status: string;
   humanBoundary: string;
-  steps: { agentId: string; kind: string; order: number; delegatedFrom?: string | null }[];
+  steps: { agentName?: string; agentId: string; kind: string; order: number; delegatedFrom?: string | null }[];
 };
 
 export type WorkroomReviewPacket = {
@@ -112,9 +112,9 @@ export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: st
 
 /** Formats a Workroom result for a concise, safe Teams message. */
 export function formatTeamsReply(response: LandOpsWorkroomResponse, packet?: WorkroomReviewPacket, webBaseUrl = ""): TeamsReply {
-  const path = response.steps.map((step) => step.agentId).join(" → ");
+  const path = response.steps.map((step) => step.agentName ?? "Agent").join(" → ");
   const lines = [
-    `LandOps workroom ${packet ? "completed" : response.status.toLowerCase()}.`,
+    `Business Agent review ${packet ? "completed" : response.status.toLowerCase()}.`,
     `Agents: ${path}`,
     packet ? `Findings: ${packet.findings.length} · Sources: ${packet.recordIds.length} · Unknowns: ${packet.unknowns.length}` : `Thread: ${response.threadId}`,
   ];
@@ -138,10 +138,10 @@ export function parseWorkroomAction(text: string | undefined): WorkroomActionReq
   const match = value.match(/^(approve|reject|request evidence|assign)\s+([a-z0-9-]+)(?:\s+to\s+([a-z0-9-]+))?(?:\s+because\s+(.+))?$/i);
   if (!match) return undefined;
   const action = match[1].toLowerCase() === "approve" ? "approve-next-step" : match[1].toLowerCase() === "reject" ? "reject-recommendation" : match[1].toLowerCase() === "request evidence" ? "request-evidence" : "assign-task";
-  return { threadId: match[2], action, ...(match[3] ? { assignee: match[3] } : {}), reason: match[4]?.trim() || "Action requested from the Teams workroom." };
+  return { threadId: match[2], action, ...(match[3] ? { assignee: match[3] } : {}), reason: match[4]?.trim() || "Action requested in Teams." };
 }
 
 export function formatWorkroomActionReply(action: { action: string; actorId: string; assignee?: string; reason: string }): TeamsReply {
   const assignment = action.assignee ? ` Assigned to ${action.assignee}.` : "";
-  return { text: `LandOps recorded ${action.action}.${assignment}\nActor: ${action.actorId}\nReason: ${action.reason}` };
+  return { text: `Business Agent recorded ${action.action}.${assignment}\nActor: ${action.actorId}\nReason: ${action.reason}` };
 }

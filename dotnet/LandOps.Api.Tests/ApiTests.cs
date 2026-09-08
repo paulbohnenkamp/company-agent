@@ -55,7 +55,10 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         var body = await response.Content.ReadFromJsonAsync<CompanyPortfolio>();
         Assert.NotNull(body);
         Assert.True(body!.IsSynthetic);
-        Assert.Equal("Blue Ridge Energy Resources", body.CompanyName);
+        Assert.Equal("Sample Energy Company", body.CompanyName);
+        Assert.All(body.Agents, agent => Assert.EndsWith(" Agent", agent.Name));
+        Assert.Equal(body.Agents.Count, body.Agents.Select(agent => agent.Name).Distinct().Count());
+        Assert.DoesNotContain(body.Roles, role => role.Name.EndsWith(" Agent"));
         Assert.Contains(body.Departments, department => department.Id == "land-administration");
         Assert.Contains(body.Agents, agent => agent.Id == "lease-analyst");
         Assert.Contains(body.Agents, agent => agent.Id == "division-order-analyst");
@@ -146,12 +149,28 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         var response = await client.GetAsync("/api/v1/scenarios/lease-development-obligations/plan");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<CollaborationPlan>();
+        var text = await response.Content.ReadAsStringAsync();
+        var body = System.Text.Json.JsonSerializer.Deserialize<CollaborationPlan>(text, new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
         Assert.NotNull(body);
         Assert.Equal("workroom", body!.Surface);
         Assert.Equal("lease-compliance-review", body.RequiredGroup);
         Assert.Equal("requested", body.Steps[0].Kind);
         Assert.Contains(body.Steps, step => step.Kind == "delegated" && step.AgentId == "compliance-reviewer");
+        var json = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(text);
+        var steps = json.GetProperty("steps");
+        Assert.Equal("lease-lifecycle-reviewer", steps[0].GetProperty("agentId").GetString());
+        Assert.Equal("Lease Lifecycle Agent", steps[0].GetProperty("agentName").GetString());
+        Assert.Equal("Lease Lifecycle Agent", steps[1].GetProperty("delegatedFromName").GetString());
+    }
+
+    [Fact]
+    public void Legacy_stored_steps_resolve_current_display_names_without_an_id_migration()
+    {
+        const string stored = """[{"AgentId":"ownership-reviewer","Kind":"requested","Order":1,"DelegatedFrom":null}]""";
+        var steps = System.Text.Json.JsonSerializer.Deserialize<CollaborationStep[]>(stored)!;
+        Assert.Equal("ownership-reviewer", steps[0].AgentId);
+        Assert.Equal("Ownership Agent", steps[0].AgentName);
+        Assert.Null(steps[0].DelegatedFromName);
     }
 
     [Fact]

@@ -2,19 +2,23 @@
 
 ## Start here
 
-If you are learning the current application, start with the [LandOps Workbench learner path](landops-learning-path.md). The documents below describe the earlier TypeScript reference runtime and the wider domain research.
+Read [product naming and information architecture](product-naming.md) for the
+current vocabulary and [tenant adoption](tenant-naming-adoption.md) for live
+configuration targets. Historical specs describe their original implementation.
+
+If you are learning the current application, start with the [Business Agent learner path](landops-learning-path.md). The documents below describe the earlier TypeScript reference runtime and the wider domain research.
 
 | Document | Purpose |
 | --- | --- |
 | [Project state](PROJECT_STATE.md) | First-read inventory of verified work, unfinished slices, decisions, and continuation instructions |
 | [Quickstart](quickstart.md) | Install and run the offline example |
-| [LandOps Workbench learner path](landops-learning-path.md) | Build and understand the current C#/.NET application from the first local run |
-| [LandOps architecture](landops-architecture.md) | Explain the current .NET, SQL Server, React, and Azure seams |
-| [LandOps code tour](landops-code-tour.md) | Map product behavior to the folders and files that implement it |
-| [LandOps data and evidence](landops-data-and-evidence.md) | Explain cases, evidence, provenance, conflicts, unknowns, and review |
-| [LandOps development workflow](landops-development-workflow.md) | Run, test, migrate, and extend the application safely |
-| [LandOps glossary](landops-glossary.md) | Define the terms used by the product and code |
-| [LandOps documentation gap report](landops-documentation-gap-report.md) | Record completed documentation work and genuine remaining product/deployment gaps |
+| [Business Agent learner path](landops-learning-path.md) | Build and understand the current C#/.NET application from the first local run |
+| [Business Agent architecture](landops-architecture.md) | Explain the current .NET, SQL Server, React, and Azure seams |
+| [Business Agent code tour](landops-code-tour.md) | Map product behavior to the folders and files that implement it |
+| [Business Agent data and evidence](landops-data-and-evidence.md) | Explain cases, evidence, provenance, conflicts, unknowns, and review |
+| [Business Agent development workflow](landops-development-workflow.md) | Run, test, migrate, and extend the application safely |
+| [Business Agent glossary](landops-glossary.md) | Define the terms used by the product and code |
+| [Business Agent documentation gap report](landops-documentation-gap-report.md) | Record completed documentation work and genuine remaining product/deployment gaps |
 | [Microsoft Foundry standards](microsoft-foundry-standards.md) | Define YAML, Markdown skill, MCP, versioning, VS Code, `azd`, and `az` interoperability rules |
 | [Identity catalog](../config/identity/personas.json) | Synthetic local employees, departments, roles, and review groups used by the UI and gated Entra provisioning |
 | [Architecture](architecture.md) | Explain domains, agents, skills, flows, and runtime |

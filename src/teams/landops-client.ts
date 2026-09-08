@@ -30,7 +30,7 @@ export function createLandOpsClient(baseUrl: string, tokenProvider = createOptio
         headers: await headers(identity),
         body: JSON.stringify(request),
       });
-      if (!response.ok) throw new Error(`LandOps Workroom returned HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`Business Agent review returned HTTP ${response.status}`);
       return await response.json() as LandOpsWorkroomResponse;
     },
     async runWorkroom(threadId: string, identity: WorkroomIdentity): Promise<WorkroomReviewPacket> {
@@ -38,7 +38,7 @@ export function createLandOpsClient(baseUrl: string, tokenProvider = createOptio
         method: "POST",
         headers: await headers(identity),
       });
-      if (!response.ok) throw new Error(`LandOps Workroom run returned HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`Business Agent review run returned HTTP ${response.status}`);
       return await response.json() as WorkroomReviewPacket;
     },
     async recordAction(request: WorkroomActionRequest, identity: WorkroomIdentity): Promise<{ action: string; actorId: string; assignee?: string; reason: string }> {
@@ -47,7 +47,7 @@ export function createLandOpsClient(baseUrl: string, tokenProvider = createOptio
         headers: await headers(identity),
         body: JSON.stringify({ action: request.action, reason: request.reason, assignee: request.assignee }),
       });
-      if (!response.ok) throw new Error(`LandOps Workroom action returned HTTP ${response.status}`);
+      if (!response.ok) throw new Error(`Business Agent review action returned HTTP ${response.status}`);
       return await response.json() as { action: string; actorId: string; assignee?: string; reason: string };
     },
   };
@@ -67,7 +67,7 @@ function createOptionalApiTokenProvider(): TokenProvider | undefined {
   const credential = new ClientSecretCredential(tenantId!, clientId!, clientSecret!);
   return async () => {
     const token = await credential.getToken(scope!);
-    if (!token?.token) throw new Error("Entra did not return a LandOps API access token");
+    if (!token?.token) throw new Error("Entra did not return a Business Agent API access token");
     return token.token;
   };
 }

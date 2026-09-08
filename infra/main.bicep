@@ -1,5 +1,9 @@
 targetScope = 'resourceGroup'
 
+// Business Agent retains the deployed LandOps resource, SQL, and configuration
+// identifiers below. A display-name change must not replace resources or data.
+// Current product terminology and tenant naming targets are in docs/product-naming.md.
+
 @description('The deployment location.')
 param location string = resourceGroup().location
 @description('The AZD environment name.')

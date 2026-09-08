@@ -127,7 +127,7 @@ app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, Workroom
     var scenario = RoleScenarioSeed.Current.SingleOrDefault(item => item.Id == request.ScenarioId);
     var plan = scenario is null ? null : RoleScenarioSeed.PlanFor(request.ScenarioId);
     if (scenario is null || plan is null) return Results.NotFound(new { error = "scenario not found" });
-    if (!scenario.EscalatesToWorkroom) return Results.BadRequest(new { error = "scenario does not require a Workroom" });
+    if (!scenario.EscalatesToWorkroom) return Results.BadRequest(new { error = "scenario does not require an agent review" });
     if (!identity.Roles.Any(role => CollaborationAuthorization.CanStart(scenario, plan, role, identity.Groups))) return Results.StatusCode(StatusCodes.Status403Forbidden);
     var context = WorkroomContextAnalyzer.Analyze(request.ThreadMessages);
     var thread = await store.CreateAsync(request.CaseId, scenario, plan, request.Question, context, identity.Subject, identity.PrimaryRole, cancellationToken);
@@ -140,7 +140,7 @@ app.MapGet("/api/v1/workroom/threads/{threadId}", async (string threadId, IWorkr
 app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, IWorkroomThreadStore store, IWorkroomRunService runner, CancellationToken cancellationToken) =>
 {
     var thread = await store.GetAsync(threadId, cancellationToken);
-    if (thread is null) return Results.NotFound(new { error = "workroom thread not found" });
+    if (thread is null) return Results.NotFound(new { error = "agent request not found" });
     try
     {
         return Results.Ok(await runner.RunAsync(thread, cancellationToken));
@@ -154,7 +154,7 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, I
 app.MapPost("/api/v1/workroom/threads/{threadId}/actions", async (string threadId, HttpContext httpContext, WorkroomActionRequest request, IWorkroomThreadStore store, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
 {
     var thread = await store.GetAsync(threadId, cancellationToken);
-    if (thread is null) return Results.NotFound(new { error = "workroom thread not found" });
+    if (thread is null) return Results.NotFound(new { error = "agent request not found" });
     if (request.Action is not ("approve-next-step" or "request-evidence" or "reject-recommendation" or "assign-task"))
         return Results.BadRequest(new { error = "action must be approve-next-step, request-evidence, reject-recommendation, or assign-task" });
     if (string.IsNullOrWhiteSpace(request.Reason)) return Results.BadRequest(new { error = "reason is required" });

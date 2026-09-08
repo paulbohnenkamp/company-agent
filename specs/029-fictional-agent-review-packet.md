@@ -12,7 +12,7 @@ result: results/029-fictional-agent-review-packet.md
 ## Goal
 
 Turn an authorized Workroom plan into a deterministic, evidence-linked review
-packet using the fictional Blue Ridge data room.
+packet using the fictional Sample Energy Company data room.
 
 ## Scope
 

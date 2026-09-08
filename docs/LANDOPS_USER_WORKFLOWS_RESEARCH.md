@@ -1,5 +1,9 @@
 # LandOps User Workflows and Information Architecture Research
 
+> Historical record. Current product names and information architecture are
+> defined in [product naming](product-naming.md). The terms and screenshots
+> below describe the earlier implementation, not current branding or live status.
+
 **Status:** Product discovery and UX foundation; no UI implementation approval  
 **Date:** 2026-09-06  
 **Audience:** Product owner, domain reviewers, application developers, agent designers, and portfolio reviewers  

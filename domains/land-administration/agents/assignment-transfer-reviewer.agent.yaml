@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: assignment-transfer-reviewer
-displayName: Assignment Transfer Reviewer
+displayName: Assignment Agent
 description: Review lease or interest assignments against supplied evidence and route unresolved requirements.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: |-
-  # Assignment Transfer Reviewer
+  # Assignment Agent
 
   Trace the proposed assignment to the underlying agreement and ownership
   evidence. Return party and scope comparisons, dates, missing requirements,
@@ -13,7 +13,7 @@ instructions: |-
   not a completed transfer.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs: []
     outputs: []
     referencedSkills:

@@ -8,7 +8,7 @@ const departments = new Set(["land", "land-administration", "legal", "compliance
 const roles = new Set(["land-analyst", "land-administrator", "legal-reviewer", "compliance-reviewer", "accounting-reviewer", "operations-reviewer", "case-manager", "platform-admin"]);
 const groups = new Set(["title-curative-board", "division-order-review", "lease-compliance-review", "development-readiness"]);
 const catalog = JSON.parse(await readFile("config/identity/personas.json", "utf8")) as Catalog;
-if (!catalog.synthetic || catalog.companyId !== "blue-ridge-energy-resources") throw new Error("Identity catalog must be synthetic Blue Ridge data.");
+if (!catalog.synthetic || catalog.companyId !== "blue-ridge-energy-resources") throw new Error("Identity catalog must match the stable synthetic company ID.");
 if (!/^\d+\.\d+\.\d+$/.test(catalog.schemaVersion)) throw new Error("Identity catalog schemaVersion must use SemVer.");
 if (!catalog.emailDomain.endsWith(".example")) throw new Error("Synthetic personas must use a reserved .example email domain.");
 const ids = new Set<string>();

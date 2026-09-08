@@ -1,4 +1,8 @@
 ---
+
+> Historical record. Current product names and information architecture are
+> defined in [product naming](product-naming.md). The terms and screenshots
+> below describe the earlier implementation, not current branding or live status.
 title: LandOps Workbench V1 implementation spec
 status: in-progress
 created: 2026-09-04

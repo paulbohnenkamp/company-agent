@@ -11,7 +11,7 @@ result: results/024-role-based-collaboration-scenarios.md
 
 ## Goal
 
-Give each Blue Ridge Energy Resources role a small set of realistic questions
+Give each Sample Energy Company role a small set of realistic questions
 that become evidence-grounded agent workflows and, when needed, a human review
 task.
 
@@ -62,7 +62,7 @@ payment, legal, or regulatory actions.
 
 1. Legal asks: “Before we send this tract to title review, what lease terms
    could create a development or notice issue?”
-2. The coordinator scopes the request to the selected Blue Ridge matter.
+2. The coordinator scopes the request to the selected Sample Energy Company matter.
 3. Lease Analyst extracts term, expiration, notice, depth, pooling, and
    continuous-development obligations from the lease/OCR evidence.
 4. Compliance Reviewer checks which obligations have corroborating operational

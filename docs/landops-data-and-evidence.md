@@ -1,6 +1,6 @@
-# LandOps data and evidence
+# Business Agent data and evidence
 
-LandOps separates what a case says, what a public source reports, what the system concludes, and what remains unknown. This separation prevents a convenient value from looking more certain than the evidence allows.
+Business Agent separates what a case says, what a public source reports, what the system concludes, and what remains unknown. This separation prevents a convenient value from looking more certain than the evidence allows.
 
 ## The main objects
 

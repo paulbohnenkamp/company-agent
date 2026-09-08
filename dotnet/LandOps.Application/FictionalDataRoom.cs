@@ -30,7 +30,7 @@ public static class FictionalDataRoomSeed
             "Harrison South Unit Lease 2024-17",
             "active-review",
             true,
-            "Blue Ridge internal synthetic lease seed; no real lessor or lessee.",
+            "Sample Energy Company internal synthetic lease seed; no real lessor or lessee.",
             new Dictionary<string, string>
             {
                 ["term"] = "5 years with extension option",
@@ -48,7 +48,7 @@ public static class FictionalDataRoomSeed
             "Harrison South Unit Title Abstract",
             "curative-needed",
             true,
-            "Blue Ridge internal synthetic title seed assembled for curative training.",
+            "Sample Energy Company internal synthetic title seed assembled for curative training.",
             new Dictionary<string, string>
             {
                 ["tract"] = "Harrison South Unit / Tract 14",
@@ -66,7 +66,7 @@ public static class FictionalDataRoomSeed
             "Harrison South Unit Division Order Draft",
             "exception-open",
             true,
-            "Blue Ridge internal synthetic division-order seed; no payment instruction.",
+            "Sample Energy Company internal synthetic division-order seed; no payment instruction.",
             new Dictionary<string, string>
             {
                 ["payee"] = "Fictional Harrison Family Holdings",
@@ -84,7 +84,7 @@ public static class FictionalDataRoomSeed
             "Harrison South Unit Ownership Schedule",
             "reconciliation-needed",
             true,
-            "Blue Ridge internal synthetic ownership schedule for cross-agent comparison.",
+            "Sample Energy Company internal synthetic ownership schedule for cross-agent comparison.",
             new Dictionary<string, string>
             {
                 ["recordedInterest"] = "3.125%",

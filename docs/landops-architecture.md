@@ -1,6 +1,9 @@
-# LandOps architecture
+# Business Agent architecture
 
-LandOps Workbench is a browser application for evidence-bounded oil-and-gas land operations. The current application uses C# and .NET as the application center of gravity. Next.js App Router hosts the React user interface and same-origin routes. SQL Server stores the durable case and run history.
+Business Agent supports collaboration across departments in Microsoft Teams.
+Its current examples review energy-company records. C# and .NET own application
+behavior, Next.js hosts focused review and local examples, and SQL Server stores
+case and run history. See [product naming](product-naming.md) for the agreed model.
 
 ## The system at a glance
 
@@ -74,17 +77,14 @@ deterministic workflow does not depend on this provider, so local tests remain
 offline. API-key mode supports a local live Foundry run. Managed-identity mode
 supports an Azure deployment without putting an API key in application settings.
 
-## Case Copilot and Teams Workroom
+## Questions and agent requests
 
-These are two connected but different user experiences:
+People collaborate in Teams. The local Case Copilot suggests questions against
+a selected case. The existing API can record a question and bounded conversation
+context, run the selected agent steps, and return a review packet. An agent
+request is application state; it does not create another collaboration space.
 
-- **Case Copilot** is private and case-scoped. It helps one person ask a
-  question and understand the evidence.
-- **Workroom** is collaborative. An authorized user can mention a role, pass a
-  bounded Teams-style thread excerpt, and create a reviewable task for an
-  ordered group of agents.
-
-The Workroom contract carries the original question, captured context,
+The agent request contract carries the original question, captured context,
 participants, required Entra group, delegated steps, and human decision
 boundary. Each delegated step names the preceding agent in `delegatedFrom`, so
 the handoff is visible rather than hidden inside a model prompt. Local development supplies a role and group so the flow can run
@@ -94,7 +94,7 @@ application roles, and group claims from the authenticated ASP.NET Core
 principal. ASP.NET Core JWT bearer middleware validates the token when Entra
 mode is enabled. The deployment still owns Entra app registration and role/group
 assignments; this API adapter consumes only validated claims. Production must
-also persist threads in SQL Server/Azure SQL. Workroom does not approve title,
+also persist threads in SQL Server/Azure SQL. An agent request does not approve title,
 change payment status, or perform another consequential action.
 
 Thread storage follows the same local/cloud split. `LandOps:WorkroomPersistence`
@@ -104,7 +104,7 @@ bounded context, route, identity, status, and timestamps in `WorkroomThreads`.
 The application API depends on the store interface, so the browser contract does
 not change when the persistence adapter changes.
 
-Workroom execution is also a replaceable boundary. The default
+Agent execution is also a replaceable boundary. The default
 `LandOps:WorkroomExecutionProvider=deterministic` mode is offline and repeatable.
 Azure can select `foundry`; that mode sends the bounded thread context and
 selected fictional records through `IAgentProvider`, validates the JSON result,
@@ -138,16 +138,18 @@ The local seams map to a future Azure shape:
 | Deterministic provider boundary | Microsoft Foundry | Add a validated model-backed provider |
 | Local health and logs | Application Insights | Observe requests and failures |
 
-The cloud layer is intentionally deferred until identity, cost, networking, and deployment choices have an approved plan.
+The deployed Azure foundation is recorded in result 047. Tenant bot activation
+and directory-backed authorization remain incomplete; consult project state
+before treating the application as a live Teams installation.
 
 ## Microsoft Teams channel boundary
 
-The Workroom screen and the Microsoft Teams channel are separate surfaces over
-the same application contract. The Workroom screen is useful for local
+The agent request screen and the Microsoft Teams channel are separate surfaces over
+the same application contract. The agent request screen is useful for local
 learning and portfolio review. The Teams adapter is the real channel shell.
 
 `src/teams/server.ts` uses the Microsoft Teams SDK to receive Bot Framework
-message activities. It removes the LandOps bot mention, maps the conversation
+message activities. It removes the Business Agent bot mention, maps the conversation
 to `personal`, `groupChat`, or `channel`, preserves tenant and user identity,
 and calls `POST /api/v1/workroom/threads`. It does not contain land rules or
 make title, payment, filing, or owner-contact decisions.

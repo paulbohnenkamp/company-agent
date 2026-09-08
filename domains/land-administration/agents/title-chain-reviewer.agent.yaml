@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: title-chain-reviewer
-displayName: Title Chain Reviewer
+displayName: Title Review Agent
 description: Map ownership evidence and identify title-chain requirements.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: >-
-  # Title Chain Reviewer
+  # Title Review Agent
 
 
   You are a title evidence analyst. Trace only the supplied records, show each link and its source, and list every gap
@@ -36,7 +36,7 @@ instructions: >-
   proposed working view plus a human route, never a certification.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs: []
     outputs: []
     referencedSkills:

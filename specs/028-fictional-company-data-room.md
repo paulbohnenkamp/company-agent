@@ -11,7 +11,7 @@ result: results/028-fictional-company-data-room.md
 
 ## Goal
 
-Give the Blue Ridge Energy Resources workbench a coherent, case-scoped
+Give the Sample Energy Company workbench a coherent, case-scoped
 fictional data room containing the lease, title, division-order, ownership, and
 OCR-derived records that its role agents are meant to analyze.
 
@@ -26,7 +26,7 @@ OCR-derived records that its role agents are meant to analyze.
 
 ## Acceptance criteria
 
-- The seeded Blue Ridge case returns at least one record for lease, title,
+- The seeded Sample Energy Company case returns at least one record for lease, title,
   division order, ownership, and OCR categories.
 - Every record is marked synthetic and has a source/provenance description.
 - Unknown case IDs return 404 and records cannot cross case boundaries.

@@ -23,7 +23,7 @@ Status: completed
 
 - Portfolio displayed 15 agent roles, 5 workflows, and 4 review groups across
   Land, Land Administration, Legal, Compliance, and Accounting.
-- Fictional Blue Ridge data room displayed lease, title, division-order,
+- Fictional Sample Energy Company data room displayed lease, title, division-order,
   ownership, and OCR records.
 - Workroom displayed a three-agent ownership chain: requested by the user,
   delegated by Ownership Reviewer, then delegated by Title Chain Reviewer.

@@ -1,6 +1,6 @@
 # Azure recreation guide
 
-This document records the deployable shape of LandOps. It is intentionally
+This document records the deployable shape of Business Agent. It is intentionally
 safe to commit: it contains resource names, parameter meanings, and commands,
 but no passwords, client secrets, tokens, or exported credentials.
 
@@ -16,7 +16,7 @@ references the following boundaries:
 | `api` App Service | ASP.NET Core application boundary | API identity accesses SQL, Foundry, and storage |
 | `teams` App Service | Teams protocol adapter | Teams identity reads one Key Vault secret and calls the API |
 | Azure Container Registry | Stores the three container images | Web, API, and Teams identities each have `AcrPull` |
-| Azure SQL | Durable Workroom persistence | API identity is the data-plane identity |
+| Azure SQL | Durable agent request persistence | API identity is the data-plane identity |
 | Storage account | Evidence/blob storage | API identity has blob read access |
 | Key Vault | Runtime secret references | API and Teams identities receive `Key Vault Secrets User` |
 | Application Insights/Log Analytics | Runtime telemetry | Connection strings are injected as settings |
@@ -32,7 +32,7 @@ Do not replace those references with plaintext settings.
 following Teams values are added only after the external app registration and
 API role exist:
 
-- `teamsBotAppId`: multi-tenant bot application ID.
+- `teamsBotAppId`: single-tenant bot application ID in the Microsoft 365 tenant.
 - `landOpsApiScope`: API application scope, normally
   `api://<api-app-id>/.default`.
 - `teamsBotClientSecretName`: Key Vault secret name, defaulting to

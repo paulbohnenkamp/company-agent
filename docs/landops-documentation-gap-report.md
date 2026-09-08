@@ -1,5 +1,9 @@
 # LandOps documentation and implementation gap report
 
+> Historical record. Current product names and information architecture are
+> defined in [product naming](product-naming.md). The terms and screenshots
+> below describe the earlier implementation, not current branding or live status.
+
 Reviewed: 2026-09-06
 
 ## Completed in this review

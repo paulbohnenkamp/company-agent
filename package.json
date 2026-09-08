@@ -11,6 +11,7 @@
     "validate:records": "tsx scripts/validate-records.ts",
     "validate:agent-artifacts": "tsx scripts/validate-agent-artifacts.ts",
     "validate:identity-personas": "tsx scripts/validate-identity-personas.ts",
+    "validate:naming": "tsx scripts/validate-naming.ts",
     "provision:entra-personas": "tsx scripts/provision-entra-personas.ts",
     "test": "node --import tsx --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",

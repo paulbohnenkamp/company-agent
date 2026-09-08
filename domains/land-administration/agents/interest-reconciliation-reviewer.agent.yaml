@@ -1,18 +1,18 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: interest-reconciliation-reviewer
-displayName: Interest Reconciliation Reviewer
+displayName: Interest Agent
 description: Reconcile ownership and payment-related interests across supplied land records.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: |-
-  # Interest Reconciliation Reviewer
+  # Interest Agent
 
   Compare values and provenance without certifying title or authorizing payments.
   Preserve every material conflict and escalate any discrepancy that could affect
   ownership, revenue, or an external business record.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs:
       - land package
       - ownership and division-of-interest records

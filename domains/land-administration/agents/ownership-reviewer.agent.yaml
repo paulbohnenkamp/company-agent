@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: ownership-reviewer
-displayName: Ownership Reviewer
+displayName: Ownership Agent
 description: Assess the identity, authority, and consistency of parties and ownership evidence for one parcel transfer.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: >-
-  # Ownership Reviewer
+  # Ownership Agent
 
 
   Assess whether the supplied evidence consistently identifies the relevant parties and recorded interests for the
@@ -43,7 +43,7 @@ instructions: >-
   one without authority.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs:
       - intake assessment
       - transfer instrument and supporting ownership records

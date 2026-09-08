@@ -1,5 +1,9 @@
 # LandOps Teams-First Product Direction
 
+> Historical record. Current product names and information architecture are
+> defined in [product naming](product-naming.md). The terms and screenshots
+> below describe the earlier implementation, not current branding or live status.
+
 **Status:** Approved direction for implementation  
 **Date:** 2026-09-06  
 **Product:** LandOps Workbench  

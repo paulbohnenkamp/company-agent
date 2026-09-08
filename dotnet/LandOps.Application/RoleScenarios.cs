@@ -1,8 +1,8 @@
 namespace LandOps.Application;
 
 /// <summary>
-/// A role-aware question that can start in the private Case Copilot and,
-/// when it needs collaboration, become a durable Workroom thread.
+/// A role-aware question and its agent-review path. Workroom remains the
+/// legacy wire identifier for durable request context; Teams hosts collaboration.
 /// </summary>
 public sealed record RoleScenario(
     string Id,
@@ -26,7 +26,12 @@ public sealed record RoleScenario(
     };
 }
 
-public sealed record CollaborationStep(string AgentId, string Kind, int Order, string? DelegatedFrom);
+/// <summary>Stable routing IDs with current catalog labels for web and Teams presentation.</summary>
+public sealed record CollaborationStep(string AgentId, string Kind, int Order, string? DelegatedFrom)
+{
+    public string AgentName => CompanyPortfolioSeed.AgentName(AgentId);
+    public string? DelegatedFromName => DelegatedFrom is null ? null : CompanyPortfolioSeed.AgentName(DelegatedFrom);
+}
 
 public sealed record CollaborationPlan(
     string ScenarioId,

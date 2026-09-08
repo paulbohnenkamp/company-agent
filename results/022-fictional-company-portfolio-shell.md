@@ -10,7 +10,7 @@ spec: specs/022-fictional-company-portfolio-shell.md
 
 ## What changed
 
-- Added the typed C# `/api/v1/company` contract for Blue Ridge Energy
+- Added the typed C# `/api/v1/company` contract for Sample Energy Company Energy
   Resources, including synthetic departments, roles, review groups, agent
   roster, workflows, and seeded case summaries.
 - Added the same-origin Next proxy and browser adapter.

@@ -1,4 +1,4 @@
-# LandOps glossary
+# Business Agent glossary
 
 Use these definitions consistently in code, UI text, and documentation.
 
@@ -23,3 +23,12 @@ Use these definitions consistently in code, UI text, and documentation.
 | run | One execution of the reconciliation workflow |
 | snapshot | An immutable captured source response with retrieval metadata and a hash |
 | synthesis | A compact review packet that summarizes the run and proposes a route |
+
+## Product and legacy terminology
+
+Business Agent is the platform; Sample Energy Company is the fictional company.
+Teams hosts collaboration across departments. Land is one department.
+
+`Workroom` is a legacy code and wire identifier for stored request context. It
+is not a named destination in the product. `LandOps` remains in operational
+identifiers for compatibility. See [product naming](product-naming.md).

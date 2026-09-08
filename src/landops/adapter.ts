@@ -43,7 +43,7 @@ function parseJson<T>(value: string, field: string): T {
   try {
     return JSON.parse(value) as T;
   } catch (error) {
-    throw new Error(`LandOps API returned invalid ${field}: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(`Business Agent API returned invalid ${field}: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 

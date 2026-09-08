@@ -2,21 +2,178 @@
   "schemaVersion": "1.0.0",
   "companyId": "blue-ridge-energy-resources",
   "synthetic": true,
-  "emailDomain": "blueridge.example",
+  "emailDomain": "sampleenergy.example",
   "personas": [
-    { "id": "alex-morgan", "displayName": "Alex Morgan", "jobTitle": "Legal Reviewer", "departmentId": "legal", "roleIds": ["legal-reviewer"], "groupIds": ["title-curative-board"] },
-    { "id": "jordan-lee", "displayName": "Jordan Lee", "jobTitle": "Title and Curative Counsel", "departmentId": "legal", "roleIds": ["legal-reviewer"], "groupIds": ["title-curative-board", "development-readiness"] },
-    { "id": "sam-rivera", "displayName": "Sam Rivera", "jobTitle": "Land Analyst", "departmentId": "land", "roleIds": ["land-analyst", "case-manager"], "groupIds": ["title-curative-board", "development-readiness"] },
-    { "id": "taylor-nguyen", "displayName": "Taylor Nguyen", "jobTitle": "Land Operations Coordinator", "departmentId": "land", "roleIds": ["case-manager"], "groupIds": ["development-readiness"] },
-    { "id": "morgan-patel", "displayName": "Morgan Patel", "jobTitle": "Lease Analyst", "departmentId": "land-administration", "roleIds": ["land-administrator"], "groupIds": ["lease-compliance-review", "title-curative-board"] },
-    { "id": "casey-brooks", "displayName": "Casey Brooks", "jobTitle": "Division Order Analyst", "departmentId": "land-administration", "roleIds": ["land-administrator"], "groupIds": ["division-order-review"] },
-    { "id": "riley-thomas", "displayName": "Riley Thomas", "jobTitle": "Compliance Reviewer", "departmentId": "compliance", "roleIds": ["compliance-reviewer"], "groupIds": ["lease-compliance-review"] },
-    { "id": "jamie-wilson", "displayName": "Jamie Wilson", "jobTitle": "Compliance Analyst", "departmentId": "compliance", "roleIds": ["compliance-reviewer"], "groupIds": ["lease-compliance-review", "development-readiness"] },
-    { "id": "drew-carter", "displayName": "Drew Carter", "jobTitle": "Accounting Reviewer", "departmentId": "accounting", "roleIds": ["accounting-reviewer"], "groupIds": ["division-order-review", "development-readiness"] },
-    { "id": "quinn-hayes", "displayName": "Quinn Hayes", "jobTitle": "Revenue Accounting Analyst", "departmentId": "accounting", "roleIds": ["accounting-reviewer"], "groupIds": ["division-order-review"] },
-    { "id": "avery-stone", "displayName": "Avery Stone", "jobTitle": "Operations Reviewer", "departmentId": "operations", "roleIds": ["operations-reviewer"], "groupIds": ["development-readiness", "lease-compliance-review"] },
-    { "id": "blake-ross", "displayName": "Blake Ross", "jobTitle": "Development Readiness Lead", "departmentId": "operations", "roleIds": ["operations-reviewer"], "groupIds": ["development-readiness"] },
-    { "id": "reese-kim", "displayName": "Reese Kim", "jobTitle": "Platform Administrator", "departmentId": "it-platform", "roleIds": ["platform-admin"], "groupIds": [] },
-    { "id": "devon-price", "displayName": "Devon Price", "jobTitle": "Identity and Integration Administrator", "departmentId": "it-platform", "roleIds": ["platform-admin"], "groupIds": [] }
+    {
+      "id": "taylor-kim",
+      "displayName": "Taylor Kim (Legal)",
+      "jobTitle": "Legal Reviewer",
+      "departmentId": "legal",
+      "roleIds": [
+        "legal-reviewer"
+      ],
+      "groupIds": [
+        "title-curative-board"
+      ]
+    },
+    {
+      "id": "jordan-lee",
+      "displayName": "Jordan Lee (Land)",
+      "jobTitle": "Land Analyst",
+      "departmentId": "land",
+      "roleIds": [
+        "land-analyst"
+      ],
+      "groupIds": [
+        "title-curative-board",
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "sam-rivera",
+      "displayName": "Sam Rivera (Land)",
+      "jobTitle": "Land Analyst",
+      "departmentId": "land",
+      "roleIds": [
+        "land-analyst",
+        "case-manager"
+      ],
+      "groupIds": [
+        "title-curative-board",
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "taylor-nguyen",
+      "displayName": "Taylor Nguyen (Land)",
+      "jobTitle": "Land Coordinator",
+      "departmentId": "land",
+      "roleIds": [
+        "case-manager"
+      ],
+      "groupIds": [
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "morgan-patel",
+      "displayName": "Morgan Patel (Land Admin)",
+      "jobTitle": "Lease Analyst",
+      "departmentId": "land-administration",
+      "roleIds": [
+        "land-administrator"
+      ],
+      "groupIds": [
+        "lease-compliance-review",
+        "title-curative-board"
+      ]
+    },
+    {
+      "id": "casey-brooks",
+      "displayName": "Casey Brooks (Land Admin)",
+      "jobTitle": "Division Order Analyst",
+      "departmentId": "land-administration",
+      "roleIds": [
+        "land-administrator"
+      ],
+      "groupIds": [
+        "division-order-review"
+      ]
+    },
+    {
+      "id": "casey-morgan",
+      "displayName": "Casey Morgan (Compliance)",
+      "jobTitle": "Compliance Reviewer",
+      "departmentId": "compliance",
+      "roleIds": [
+        "compliance-reviewer"
+      ],
+      "groupIds": [
+        "lease-compliance-review"
+      ]
+    },
+    {
+      "id": "jamie-wilson",
+      "displayName": "Jamie Wilson (Compliance)",
+      "jobTitle": "Compliance Analyst",
+      "departmentId": "compliance",
+      "roleIds": [
+        "compliance-reviewer"
+      ],
+      "groupIds": [
+        "lease-compliance-review",
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "drew-carter",
+      "displayName": "Drew Carter (Accounting)",
+      "jobTitle": "Accounting Reviewer",
+      "departmentId": "accounting",
+      "roleIds": [
+        "accounting-reviewer"
+      ],
+      "groupIds": [
+        "division-order-review",
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "quinn-hayes",
+      "displayName": "Quinn Hayes (Accounting)",
+      "jobTitle": "Revenue Accounting Analyst",
+      "departmentId": "accounting",
+      "roleIds": [
+        "accounting-reviewer"
+      ],
+      "groupIds": [
+        "division-order-review"
+      ]
+    },
+    {
+      "id": "avery-stone",
+      "displayName": "Avery Stone (Operations)",
+      "jobTitle": "Operations Reviewer",
+      "departmentId": "operations",
+      "roleIds": [
+        "operations-reviewer"
+      ],
+      "groupIds": [
+        "development-readiness",
+        "lease-compliance-review"
+      ]
+    },
+    {
+      "id": "blake-ross",
+      "displayName": "Blake Ross (Operations)",
+      "jobTitle": "Development Readiness Lead",
+      "departmentId": "operations",
+      "roleIds": [
+        "operations-reviewer"
+      ],
+      "groupIds": [
+        "development-readiness"
+      ]
+    },
+    {
+      "id": "reese-kim",
+      "displayName": "Reese Kim (IT)",
+      "jobTitle": "Platform Administrator",
+      "departmentId": "it-platform",
+      "roleIds": [
+        "platform-admin"
+      ],
+      "groupIds": []
+    },
+    {
+      "id": "devon-price",
+      "displayName": "Devon Price (IT)",
+      "jobTitle": "Identity and Integration Administrator",
+      "departmentId": "it-platform",
+      "roleIds": [
+        "platform-admin"
+      ],
+      "groupIds": []
+    }
   ]
 }

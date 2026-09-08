@@ -1,6 +1,6 @@
-# LandOps Workbench
+# Business Agent
 
-LandOps Workbench is a portfolio-quality enterprise oil-and-gas land operations application. It lets a fictional energy company ask evidence-bounded questions about leases, title, ownership, division orders, OCR documents, and regulatory records. Specialized agents collaborate, preserve uncertainty, and route consequential decisions to a person.
+Business Agent helps people across departments work with agents in Microsoft Teams. Sample Energy Company provides the fictional people and records. The current examples cover leases, title, ownership, division orders, and regulatory evidence; the platform name is independent of any department.
 
 The application is centered on C#/.NET, ASP.NET Core, EF Core, SQL Server, React, Next.js, Microsoft Entra ID, Azure, and Microsoft Foundry. The older TypeScript Business Agent runtime remains a temporary behavioral reference and offline fallback; it is not the product’s long-term application boundary.
 
@@ -8,21 +8,16 @@ For continuation in a new Codex or VS Code session, read [the canonical project 
 
 ## See the product
 
-The portfolio view shows the fictional company, departments, roles, agents, workflows, and case data room.
+Read the [approved naming and information architecture](docs/product-naming.md).
+Microsoft Teams is the collaboration environment. The web application provides
+focused review, administration, and local examples.
 
-![LandOps portfolio view showing the fictional energy company, departments, agents, workflows, and case data room](docs/images/landops-portfolio.png)
+Open [the Teams example](http://localhost:3001/teams) after starting the local
+application. It illustrates Sample Energy Company departments and contributions
+from Business Agent. It is not a screenshot of an installed Teams app.
 
-The Teams view shows the intended collaboration story: a legal user asks a question in a channel, LandOps delegates to specialized agents, and the final response stays inside a human-review boundary.
-
-![LandOps Teams channel view showing a legal user handing work to ownership, title-chain, and synthesis agents](docs/images/landops-teams.png)
-
-The focused integration view makes the transport boundary explicit: Teams SDK activity enters the adapter, reaches the ASP.NET Core Workroom API, and returns a safe human-review outcome.
-
-![LandOps Teams integration view showing the Microsoft Teams SDK adapter connected to the ASP.NET Core Workroom API](docs/images/landops-teams-integration.png)
-
-The web view is a local portfolio/demo surface. The repository also contains a separate Microsoft Teams SDK entrypoint under `src/teams/server.ts`, which forwards real Teams messages to the same ASP.NET Core Workroom API.
-
-Open [the focused Teams integration preview](http://localhost:3001/teams) when you want to inspect the channel shell and adapter boundary without scrolling through the full case workspace.
+Earlier screenshots in `docs/images/landops-*.png` retain historical branding
+and are not current product illustrations. Spec 048 records the naming change.
 
 ## Run the local application
 
@@ -40,7 +35,7 @@ Open [http://localhost:3001](http://localhost:3001). The seeded Braxton County c
 To run the separate Teams channel adapter locally, keep the API running and start another terminal:
 
 ```sh
-LANDOPS_API_URL=http://127.0.0.1:5006 npm run teams:dev
+DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true LANDOPS_API_URL=http://127.0.0.1:5006 npm run teams:dev
 ```
 
 The adapter listens on port `3978` for the Microsoft Teams/Bot Framework endpoint. Real tenant registration, Bot configuration, Entra credentials, and Teams sideloading are deployment steps; the pure adapter tests run without those credentials.
@@ -49,17 +44,17 @@ For a local receive-path smoke test without a Teams tenant, run the API and
 adapter with deterministic lease settings, then post a Bot Framework-shaped
 activity to `/api/messages`. The activity must include a local `serviceUrl`
 that accepts the adapter's typing and reply activities. A successful HTTP 200
-proves local adapter-to-Workroom wiring only; it is not a Teams tenant test.
+proves local adapter-to-agent request wiring only; it is not a Teams tenant test.
 
 ## What the demo proves
 
 - A fictional company portfolio with Land, Land Administration, Legal, Compliance, Accounting, Operations, and IT/Platform departments.
 - Role-aware scenarios for land analysts, lease analysts, division-order analysts, legal reviewers, compliance reviewers, accounting reviewers, operations reviewers, and case managers.
-- A private Case Copilot and a collaborative Workroom with explicit agent-to-agent delegation.
+- Case questions and agent requests with explicit delegation, evidence, and human review.
 - Lease, title, division-order, ownership, and OCR sample records alongside frozen public WV evidence.
 - Evidence-linked findings, preserved conflicts, explicit unknowns, provenance, production no-match semantics, and a human review decision.
 - Local deterministic execution and a replaceable Microsoft Foundry provider boundary.
-- A real Teams channel adapter that accepts personal chat, group chat, and channel messages and forwards them to the bounded Workroom API.
+- A real Teams channel adapter that accepts personal chat, group chat, and channel messages and forwards them to the bounded agent request API.
 
 ## Architecture in one picture
 
@@ -69,7 +64,7 @@ Microsoft Teams channel / personal chat
           ▼
 src/teams/server.ts
   mention parsing · identity context · idempotency
-          │  Workroom HTTP contract
+          │  Agent request HTTP contract
           ▼
 Next.js web surface ──► ASP.NET Core API
                            │
@@ -89,7 +84,7 @@ The Teams adapter owns transport concerns only. The C# application owns authoriz
 
 ## Learn the codebase
 
-Start with the [LandOps learner path](docs/landops-learning-path.md), then read:
+Start with the [Business Agent learner path](docs/landops-learning-path.md), then read:
 
 1. [Architecture](docs/landops-architecture.md)
 2. [Data and evidence](docs/landops-data-and-evidence.md)
@@ -110,6 +105,9 @@ For the reference runtime’s deeper concepts, see [architecture](docs/architect
 npm run typecheck
 npm test
 npm run build
+npm run validate:naming
+npm run validate:identity-personas
+npm run validate:agent-artifacts
 dotnet test dotnet/LandOps.sln
 git diff --check
 ```
@@ -121,7 +119,7 @@ The local identity catalog is [`config/identity/personas.json`](config/identity/
 ## Repository map
 
 - `dotnet/LandOps.Domain` — business contracts and invariants.
-- `dotnet/LandOps.Application` — use cases, role scenarios, Workroom, and execution boundaries.
+- `dotnet/LandOps.Application` — use cases, role scenarios, agent request, and execution boundaries.
 - `dotnet/LandOps.Infrastructure` — EF Core, SQL Server, fixtures, and Foundry integration.
 - `dotnet/LandOps.Api` — ASP.NET Core HTTP boundary.
 - `app/` — Next.js App Router and same-origin browser routes.
@@ -132,4 +130,4 @@ The local identity catalog is [`config/identity/personas.json`](config/identity/
 
 ## Current limits
 
-The local Teams adapter is runnable and tested, but production still needs a registered Azure Bot/Teams app, Entra app credentials, durable distributed idempotency, and Azure hosting. OCR extraction, live source ingestion, and consequential actions such as filing, payment changes, and owner contact remain intentionally outside the autonomous boundary.
+The Teams adapter has a deployed Azure foundation recorded in result 047. The Microsoft 365 bot identity, API consent, package installation, tenant naming, and live mention verification remain incomplete. See [project state](docs/PROJECT_STATE.md) and [tenant naming adoption](docs/tenant-naming-adoption.md). OCR extraction, live source ingestion, and consequential external actions remain outside the current verified scope.

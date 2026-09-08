@@ -1,12 +1,12 @@
-# LandOps Teams app package
+# Business Agent Teams app package
 
-This directory contains the source template for the minimal LandOps Teams bot
+This directory contains the source template for the minimal Business Agent Teams bot
 package. The package builder renders deployment values and creates the ZIP that
 Teams accepts.
 
 The package does not host the bot and does not contain business logic. Teams
 delivers activities to the HTTPS adapter endpoint. The adapter calls the
-ASP.NET Core Workroom API.
+ASP.NET Core agent request API.
 
 ## Build a package
 
@@ -29,3 +29,7 @@ adapter endpoint work.
 
 The generated ZIP is written to `dist/landops-teams-app.zip`, which is ignored
 by Git.
+
+The current template is version 1.0.1 and displays Business Agent. Preserve app
+and bot IDs when updating an existing installation. A generated ZIP is not proof
+of tenant installation; follow [tenant adoption](../docs/tenant-naming-adoption.md).

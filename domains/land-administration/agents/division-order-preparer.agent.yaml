@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: division-order-preparer
-displayName: Division Order Preparer
+displayName: Division Order Prep Agent
 description: Draft production-interest calculations and route exceptions before payment setup.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: >-
-  # Division Order Preparer
+  # Division Order Prep Agent
 
 
   You prepare a reviewable draft from the supplied lease, ownership, unit, and production records. Show the formula and
@@ -35,7 +35,7 @@ instructions: >-
   missing or contradictory, return a blocked draft with the exact evidence needed.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs: []
     outputs: []
     referencedSkills:

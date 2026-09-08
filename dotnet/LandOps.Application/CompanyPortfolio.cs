@@ -37,16 +37,20 @@ public sealed record PortfolioWorkflow(string Id, string Name, string Descriptio
 public sealed record PortfolioCase(string CaseId, string Title, string Jurisdiction, string Status, string PrimaryWorkflow, bool IsSynthetic);
 
 /// <summary>
-/// Deterministic seed data for the fictional Blue Ridge Energy Resources demo.
+/// Deterministic seed data for the fictional Sample Energy Company demo.
 /// It contains no private people, real company records, or authorization
 /// decisions. Public evidence remains linked to its original publisher.
 /// </summary>
 public static class CompanyPortfolioSeed
 {
+    /// <summary>Presentation label for a stable agent ID; never an authorization decision.</summary>
+    public static string AgentName(string agentId) =>
+        Current.Agents.SingleOrDefault(agent => agent.Id == agentId)?.Name ?? "Agent";
+
     public static CompanyPortfolio Current { get; } = new(
         "blue-ridge-energy-resources",
-        "Blue Ridge Energy Resources",
-        "Synthetic Appalachian energy company portfolio for evidence-bounded land operations.",
+        "Sample Energy Company",
+        "Fictional company where departments collaborate through Business Agent.",
         true,
         "All company people, leases, title documents, ownership records, and workflow history are fictional. Public WV evidence is reference material, not proof of mineral title.",
         [
@@ -75,21 +79,21 @@ public static class CompanyPortfolioSeed
             new("development-readiness", "Development Readiness", "Land, operations, legal, and accounting coordinate a development handoff.", ["land", "operations", "legal", "accounting"])
         ],
         [
-            new("land-case-intake", "Case Intake and Triage", "land", "Assess submitted clues and identify evidence gaps without inventing identifiers."),
-            new("lease-analyst", "Lease Analyst", "land-administration", "Review leases, amendments, obligations, deadlines, and continuation evidence."),
-            new("lease-lifecycle-reviewer", "Lease Lifecycle Reviewer", "land-administration", "Review lease dates, notices, extensions, and lifecycle status."),
-            new("lease-obligation-reviewer", "Lease Obligation Reviewer", "land-administration", "Extract obligation candidates and route uncertain clauses for review."),
-            new("title-curative-analyst", "Title and Curative Analyst", "legal", "Compare title and ownership evidence and route legal conclusions to people."),
-            new("title-chain-reviewer", "Title Chain Reviewer", "legal", "Organize chain gaps and competing claims without issuing a title opinion."),
-            new("ownership-reviewer", "Ownership Reviewer", "land-administration", "Compare ownership schedules and preserve source disagreements."),
-            new("land-well-reconciler", "Well and Regulatory Reconciler", "land", "Compare independent public well and production evidence with submitted clues."),
-            new("division-order-analyst", "Division Order Analyst", "land-administration", "Prepare source-linked interest and decimal analysis without issuing payment."),
-            new("division-order-preparer", "Division Order Preparer", "land-administration", "Assemble division-order evidence and identify suspense reasons."),
-            new("document-intelligence-analyst", "Document Intelligence Analyst", "land-administration", "Review OCR observations and retain page-level provenance."),
-            new("compliance-analyst", "Compliance Analyst", "compliance", "Identify control and records exceptions while preserving governing-source gaps."),
-            new("compliance-reviewer", "Compliance Reviewer", "compliance", "Review compliance exceptions and distinguish missing evidence from reported status."),
-            new("land-operations-coordinator", "Land Operations Coordinator", "land", "Coordinate deadlines, handoffs, and development-readiness blockers."),
-            new("case-synthesizer", "Case Synthesizer", "land", "Preserve conflicts and unknowns and propose the next human-controlled route.")
+            new("land-case-intake", "Case Intake Agent", "land", "Assess submitted clues and identify evidence gaps without inventing identifiers."),
+            new("lease-analyst", "Lease Review Agent", "land-administration", "Review leases, amendments, obligations, deadlines, and continuation evidence."),
+            new("lease-lifecycle-reviewer", "Lease Lifecycle Agent", "land-administration", "Review lease dates, notices, extensions, and lifecycle status."),
+            new("lease-obligation-reviewer", "Lease Obligation Agent", "land-administration", "Extract obligation candidates and route uncertain clauses for review."),
+            new("title-curative-analyst", "Curative Agent", "legal", "Compare title and ownership evidence and route legal conclusions to people."),
+            new("title-chain-reviewer", "Title Review Agent", "legal", "Organize chain gaps and competing claims without issuing a title opinion."),
+            new("ownership-reviewer", "Ownership Agent", "land-administration", "Compare ownership schedules and preserve source disagreements."),
+            new("land-well-reconciler", "Well Reconciliation Agent", "land", "Compare independent public well and production evidence with submitted clues."),
+            new("division-order-analyst", "Division Order Agent", "land-administration", "Prepare source-linked interest and decimal analysis without issuing payment."),
+            new("division-order-preparer", "Division Order Prep Agent", "land-administration", "Assemble division-order evidence and identify suspense reasons."),
+            new("document-intelligence-analyst", "Document Agent", "land-administration", "Review OCR observations and retain page-level provenance."),
+            new("compliance-analyst", "Compliance Analysis Agent", "compliance", "Identify control and records exceptions while preserving governing-source gaps."),
+            new("compliance-reviewer", "Compliance Agent", "compliance", "Review compliance exceptions and distinguish missing evidence from reported status."),
+            new("land-operations-coordinator", "Coordination Agent", "land", "Coordinate deadlines, handoffs, and development-readiness blockers."),
+            new("case-synthesizer", "Case Synthesis Agent", "land", "Preserve conflicts and unknowns and propose the next human-controlled route.")
         ],
         [
             new("wv-land-well-reconciliation", "WV Land-Well Reconciliation", "Reconcile submitted well clues with independent public evidence.", "ready"),

@@ -14,7 +14,7 @@ spec: 028-fictional-company-data-room
 
 ## Delivered
 
-- Added a typed, read-only Blue Ridge case data room.
+- Added a typed, read-only Sample Energy Company case data room.
 - Seeded lease, title, division-order, ownership, and OCR records.
 - Marked every record synthetic and documented its provenance and warnings.
 - Linked records to the specialist agents that analyze them.

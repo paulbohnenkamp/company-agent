@@ -1,4 +1,4 @@
-# LandOps Azure deployment
+# Business Agent Azure deployment
 
 This repository uses Azure Developer CLI (`azd`) as the deployment entrypoint
 and Bicep as the infrastructure source of truth.
@@ -7,15 +7,17 @@ and Bicep as the infrastructure source of truth.
 
 `infra/main.bicep` provisions:
 
-- two Linux App Service container apps: the Next.js web surface and the
-  ASP.NET Core API;
+- three Linux App Service container apps: Next.js, ASP.NET Core, and the Teams
+  adapter, sharing the existing App Service plan;
 - Azure Container Registry with managed-identity pull assignments;
 - Azure SQL Database with Entra-only authentication;
 - Blob Storage and Key Vault with API managed-identity permissions;
 - Application Insights and Log Analytics;
 - a managed-identity permission on the existing Azure AI Services/Foundry
   account and `land-model` deployment from the shared Foundry resource group;
-- a managed-identity `Cognitive Services OpenAI User` assignment for the API.
+- a managed-identity `Cognitive Services OpenAI User` assignment for the API;
+- an optional single-tenant Azure Bot resource and Teams channel, configured
+  only when bot app and tenant inputs are supplied.
 
 The web and API are separate services because they have different runtimes and
 deployment lifecycles. `azure.yaml` maps those services to their Dockerfiles.

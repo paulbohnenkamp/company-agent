@@ -1,10 +1,10 @@
-# Learn the LandOps Workbench
+# Learn Business Agent
 
-This tutorial builds a mental model of the current LandOps Workbench and then runs one complete case through it. The web application uses Next.js App Router with React. You do not need prior knowledge of ASP.NET Core or Entity Framework Core.
+This tutorial builds a mental model of the current Business Agent and then runs one complete case through it. The web application uses Next.js App Router with React. You do not need prior knowledge of ASP.NET Core or Entity Framework Core.
 
 ## What you will build
 
-You will run a local oil-and-gas land operations application that:
+You will run Business Agent against a sample energy-company case that:
 
 - loads a synthetic Braxton County, West Virginia case;
 - stores the case in SQL Server;
@@ -18,11 +18,11 @@ The application does not make a title determination or take a consequential busi
 
 ## Read these pages in order
 
-1. Read [LandOps architecture](landops-architecture.md) to see how the browser, API, application services, domain model, and database fit together.
-2. Read [LandOps data and evidence](landops-data-and-evidence.md) to understand why the application stores source identity, snapshots, evidence, findings, conflicts, and unknowns separately.
-3. Follow [LandOps development workflow](landops-development-workflow.md) to start the application and run its checks.
-4. Use [LandOps code tour](landops-code-tour.md) when you want to connect a screen or API request to the code that handles it.
-5. Keep [LandOps glossary](landops-glossary.md) open when a product term is new.
+1. Read [Business Agent architecture](landops-architecture.md) to see how the browser, API, application services, domain model, and database fit together.
+2. Read [Business Agent data and evidence](landops-data-and-evidence.md) to understand why the application stores source identity, snapshots, evidence, findings, conflicts, and unknowns separately.
+3. Follow [Business Agent development workflow](landops-development-workflow.md) to start the application and run its checks.
+4. Use [Business Agent code tour](landops-code-tour.md) when you want to connect a screen or API request to the code that handles it.
+5. Keep [Business Agent glossary](landops-glossary.md) open when a product term is new.
 
 ## Prerequisites
 
@@ -156,4 +156,4 @@ for Entra accounts or place SQL secrets in `.env` files.
 
 ## What to learn next
 
-Read the [LandOps development workflow](landops-development-workflow.md) before changing code. It explains which project owns each kind of change and which checks prove the change works.
+Read the [Business Agent development workflow](landops-development-workflow.md) before changing code. It explains which project owns each kind of change and which checks prove the change works.

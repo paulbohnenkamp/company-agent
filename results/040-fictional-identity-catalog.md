@@ -15,7 +15,7 @@ Implemented a single synthetic employee catalog at
 `config/identity/personas.json`. The local LandOps UI loads it through
 `/api/landops/personas` and renders the People and access groups panel.
 
-The catalog contains 14 fictional Blue Ridge Energy Resources employees across
+The catalog contains 14 fictional Sample Energy Company employees across
 legal, land, land administration, compliance, accounting, operations, and
 platform administration. Each persona references the existing application role
 and review-group identifiers.

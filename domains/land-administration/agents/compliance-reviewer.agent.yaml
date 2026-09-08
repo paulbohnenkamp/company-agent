@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: compliance-reviewer
-displayName: Compliance Reviewer
+displayName: Compliance Agent
 description: Compare one parcel-transfer case against supplied jurisdictional configuration and administrative requirements.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: >-
-  # Compliance Reviewer
+  # Compliance Agent
 
 
   Compare the case evidence with explicitly supplied administrative requirements and report only supportable findings.
@@ -42,7 +42,7 @@ instructions: >-
   uncertainty, failure status if configuration is unavailable, and explicit human-review triggers.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs:
       - intake assessment
       - ownership assessment, when available

@@ -1,5 +1,9 @@
 # LandOps Workbench UI Issue Report
 
+> Historical record. Current product names and information architecture are
+> defined in [product naming](product-naming.md). The terms and screenshots
+> below describe the earlier implementation, not current branding or live status.
+
 **Review date:** 2026-09-06  
 **Surface reviewed:** local Next.js application at `http://localhost:3000/`  
 **Evidence:** four user-provided screenshots, source inspection of `app/page.tsx`, `app/globals.css`, and the LandOps UI components, plus the deterministic UI anti-pattern scan.
@@ -31,7 +35,7 @@ These should be fixed locally before another Azure deployment. The report does n
 
 ### P1-01 — Portfolio title collision
 
-**Evidence:** Screenshot 1. “Blue Ridge Energy Resources,” “Braxton County well reconciliation,” and the surrounding context render on the same line and overlap.
+**Evidence:** Screenshot 1. “Sample Energy Company,” “Braxton County well reconciliation,” and the surrounding context render on the same line and overlap.
 
 **Likely cause:** `CompanyPortfolio.tsx` renders Fluent `Title3` and `Text` next to each other inside a flex child, while the local CSS only styles a native `h3` and does not establish a vertical stack for Fluent typography components.
 
@@ -155,7 +159,7 @@ The loading state is a bare heading. Error messages appear as a generic alert ne
 
 ### P3-01 — Repeated eyebrow labels create visual noise
 
-Nearly every section begins with small uppercase tracked text: `CURRENT PORTFOLIO`, `IDENTITY CATALOG`, `MICROSOFT TEAMS CHANNEL`, `BLUE RIDGE DATA ROOM`, `CASE COPILOT`, `FLAGSHIP WORKFLOW`, and many more.
+Nearly every section begins with small uppercase tracked text: `CURRENT PORTFOLIO`, `IDENTITY CATALOG`, `MICROSOFT TEAMS CHANNEL`, `SAMPLE ENERGY DATA ROOM`, `CASE COPILOT`, `FLAGSHIP WORKFLOW`, and many more.
 
 **Recommendation:** Keep the eyebrow treatment for a few high-value section markers and let headings carry the rest of the hierarchy.
 

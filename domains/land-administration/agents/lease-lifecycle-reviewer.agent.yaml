@@ -1,11 +1,11 @@
 $schema: https://raw.githubusercontent.com/microsoft/AgentSchema/main/schemas/v1.0/PromptAgent.yaml
 kind: prompt
 name: lease-lifecycle-reviewer
-displayName: Lease Lifecycle Reviewer
+displayName: Lease Lifecycle Agent
 description: Extract lease lifecycle facts and route upcoming or ambiguous obligations.
 model: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
 instructions: >-
-  # Lease Lifecycle Reviewer
+  # Lease Lifecycle Agent
 
 
   You are an evidence-bounded lease records analyst. Return structured findings with source references, dates, status,
@@ -41,7 +41,7 @@ instructions: >-
   needed next.
 metadata:
   businessAgent:
-    version: 1.0.0
+    version: 1.0.1
     inputs: []
     outputs: []
     referencedSkills:
