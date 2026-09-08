@@ -33,6 +33,25 @@ general-purpose autonomous agent system. Naming cleanup and evidence-grounded
 review improvements are the next approved work. See [project state](docs/PROJECT_STATE.md)
 for verified work, limits, and the active specs.
 
+## Technology used
+
+This project uses the parts of the Antero role’s stack that it demonstrates:
+
+- **.NET 10 and C#** for the domain, application, infrastructure, and API layers.
+- **ASP.NET Core and Entity Framework Core** for HTTP boundaries, authorization, persistence, and migrations.
+- **SQL Server and Azure SQL** for local and deployed durable state.
+- **React, TypeScript, and Next.js** for the web surface and Teams transport adapter.
+- **Microsoft Teams and Bot Framework** for channel, group-chat, and personal-chat integration.
+- **Microsoft Entra ID** for application identity, roles, groups, and workload boundaries.
+- **Azure App Service, Azure Storage, Key Vault, Application Insights, and Log Analytics** for the deployed PaaS foundation.
+- **Microsoft Foundry** as the replaceable provider boundary for model-backed agent execution.
+- **Bicep, Azure Developer CLI, Docker, and GitHub Actions** for infrastructure, packaging, deployment, and repeatable checks.
+- **Automated testing** across .NET unit and API tests, TypeScript tests, adapter contracts, artifact validation, and playbook flows.
+
+The repository does not claim desktop technologies, PostgreSQL, APIM, or
+Terraform as part of this project. Those technologies appear in the role
+description but are outside this application’s current scope.
+
 For continuation in a new Codex or VS Code session, read [the canonical project state](docs/PROJECT_STATE.md) first. It separates verified work from unfinished slices and identifies the next approved spec.
 
 ## See the product
