@@ -465,7 +465,7 @@ The current single-page showcase may remain as a portfolio/demo route temporaril
 - A universal workflow designer.
 - Every lease basin and jurisdiction.
 - Replacing Microsoft Teams with a custom social network.
-- Rebuilding every DecisionForge feature.
+- Rebuilding every prior platform feature.
 
 ## Decision requested before broad UI work
 

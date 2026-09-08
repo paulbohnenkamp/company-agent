@@ -4,10 +4,24 @@
  * Run this service separately from Next.js. The web app is the portfolio
  * surface; this process is the Bot Framework/Teams transport surface.
  */
-import { App } from "@microsoft/teams.apps";
-import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, TeamsIdempotencyStore, toWorkroomRequest, type LandOpsClient, type TeamsActivity } from "./landops-adapter.js";
+import { App, ExpressAdapter } from "@microsoft/teams.apps";
+import type { Request, Response } from "express";
+import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, TeamsIdempotencyStore, toWorkroomRequest, type TeamsActivity } from "./landops-adapter.js";
+import { createLandOpsClient } from "./landops-client.js";
 
-const app = new App();
+const isLocalUnauthenticatedMode = process.env.DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS === "true";
+if (!isLocalUnauthenticatedMode && (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET)) {
+  throw new Error("CLIENT_ID and CLIENT_SECRET are required unless DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true for local testing");
+}
+
+const httpAdapter = new ExpressAdapter();
+httpAdapter.get("/health", (_request: Request, response: Response) => response.status(200).json({ status: "ok", service: "landops-teams-adapter" }));
+const app = new App({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  httpServerAdapter: httpAdapter,
+  dangerouslyAllowUnauthenticatedRequests: isLocalUnauthenticatedMode,
+});
 const idempotency = new TeamsIdempotencyStore();
 const landOpsClient = createLandOpsClient(process.env.LANDOPS_API_URL ?? "http://127.0.0.1:5006");
 
@@ -38,34 +52,3 @@ app.start(port).catch((error: unknown) => {
   console.error("Failed to start the LandOps Teams adapter", error);
   process.exitCode = 1;
 });
-
-function createLandOpsClient(baseUrl: string): LandOpsClient {
-  return {
-    async createWorkroom(request, identity) {
-      const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/v1/workroom/threads`, {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-landops-tenant": identity.tenantId, "x-landops-user": identity.userId },
-        body: JSON.stringify(request),
-      });
-      if (!response.ok) throw new Error(`LandOps Workroom returned HTTP ${response.status}`);
-      return await response.json() as Awaited<ReturnType<LandOpsClient["createWorkroom"]>>;
-    },
-    async runWorkroom(threadId, identity) {
-      const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/v1/workroom/threads/${encodeURIComponent(threadId)}/run`, {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-landops-tenant": identity.tenantId, "x-landops-user": identity.userId },
-      });
-      if (!response.ok) throw new Error(`LandOps Workroom run returned HTTP ${response.status}`);
-      return await response.json() as Awaited<ReturnType<LandOpsClient["runWorkroom"]>>;
-    },
-    async recordAction(request, identity) {
-      const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/v1/workroom/threads/${encodeURIComponent(request.threadId)}/actions`, {
-        method: "POST",
-        headers: { "content-type": "application/json", "x-landops-tenant": identity.tenantId, "x-landops-user": identity.userId },
-        body: JSON.stringify({ action: request.action, reason: request.reason, assignee: request.assignee }),
-      });
-      if (!response.ok) throw new Error(`LandOps Workroom action returned HTTP ${response.status}`);
-      return await response.json() as Awaited<ReturnType<LandOpsClient["recordAction"]>>;
-    },
-  };
-}

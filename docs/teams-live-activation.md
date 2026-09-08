@@ -1,7 +1,7 @@
 # LandOps Teams live activation
 
 This runbook connects the existing `src/teams/server.ts` transport to a small
-real Microsoft 365 test tenant for a labeled LandOps demo. It does not replace
+real Microsoft 365 tenant for a controlled LandOps demo. It does not replace
 the ASP.NET Core Workroom API or authorize actions in the Teams adapter.
 
 For a browser-assisted tenant setup, use the [ChatGPT Work handoff](chatgpt-work-teams-handoff.md).
@@ -11,6 +11,12 @@ For a browser-assisted tenant setup, use the [ChatGPT Work handoff](chatgpt-work
 Local adapter readiness is verified in [result 043](../results/043-teams-activation-readiness.md).
 The active target is a minimal tenant-backed demo. Production workload
 authentication and directory-backed authorization remain deferred.
+
+For tenant privacy and member-management guidance, see
+[`teams-tenant-settings.md`](teams-tenant-settings.md). A private Team is the
+recommended setting for controlled testing. “Public” in Teams means discoverable
+and joinable by users in that Microsoft 365 tenant; it does not mean public on
+the internet.
 
 ## Preferred test environment
 

@@ -103,7 +103,7 @@ The validation command must not create or upload a package when
 ## Progress log
 
 - 2026-09-07: Approved after custom app upload became available in the
-  DecisionForge tenant.
+  Microsoft 365 tenant.
 
 ## Decision log
 

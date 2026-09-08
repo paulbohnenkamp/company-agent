@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "id": "{{TEAMS_APP_ID}}",
   "developer": {
-    "name": "DecisionForge",
+    "name": "LandOps",
     "websiteUrl": "{{LANDOPS_WEB_URL}}",
     "privacyUrl": "{{LANDOPS_WEB_URL}}/privacy",
     "termsOfUseUrl": "{{LANDOPS_WEB_URL}}/terms"

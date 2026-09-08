@@ -8,7 +8,7 @@ spec: specs/044-teams-live-activation.md
 
 ## What changed
 
-- Reduced the next Teams milestone to a small tenant-backed interview/demo
+- Reduced the next Teams milestone to a small tenant-backed demo
   slice: one bot, one channel, two or three real test users, and one fixed
   deterministic Workroom scenario.
 - Added the typed Teams actor contract, including tenant ID, Teams user ID, and
@@ -51,13 +51,10 @@ not claim live Teams delivery.
 
 ## External activation checkpoint
 
-The DecisionForge Microsoft 365 Business Basic trial tenant is
-`landopsdemo.onmicrosoft.com` with Entra tenant ID
-`ec4b8411-d158-44e0-a8cf-6f71e2d8b96b`. Microsoft Teams is enabled. The tenant
-has licensed users `legal.demo@landopsdemo.onmicrosoft.com` and
-`land.demo@landopsdemo.onmicrosoft.com`, the `LandOps Demo` Team, and the
-`landops-demo` standard channel. Custom app upload remains unverified because
-Teams app management was still provisioning.
+The Microsoft 365 Business Basic trial tenant has Microsoft Teams enabled, two
+licensed sample users, the `LandOps Demo` Team, and the `landops-demo` standard
+channel. Tenant identifiers and user addresses remain deployment-local and are
+not committed. Custom app upload remains unverified in this historical record.
 
 Bot registration, a public endpoint, consent, identity mapping, and a real
 Teams mention smoke test remain incomplete.

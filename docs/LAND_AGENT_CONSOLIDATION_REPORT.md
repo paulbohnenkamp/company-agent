@@ -2,14 +2,14 @@
 
 **Date:** 2026-09-05  
 **Scope:** Land and land-administration repositories under `/Users/paul/code`,
-plus `decisionforge` and `ms-teams-agent`  
+plus prior platform and Teams-agent work
 **Purpose:** Identify overlap, preserve the strongest work, and define a
 low-risk consolidation path for LandOps Workbench.
 
 ## Executive recommendation
 
 Use `/Users/paul/code/business-agent` as the canonical LandOps product
-repository, while carrying forward the rich DecisionForge UI experience and
+repository, while carrying forward the strongest prior UI experience and
 the most useful Microsoft/Azure engineering lessons.
 
 Keep its C#/.NET application path and Next.js interface as the product center
@@ -30,7 +30,7 @@ The recommended ownership model is:
 | --- | --- | --- |
 | Evidence-bounded land workflow and WV flagship | `business-agent` | `land-ai-engineering`, demos |
 | C#/.NET application, persistence, API, and Azure path | `business-agent` | — |
-| Agent/skill catalog ideas and pack metadata | `business-agent`, informed by `decisionforge` | `decisionforge`, `role-forge` |
+| Agent/skill catalog ideas and pack metadata | `business-agent`, informed by prior platform work | prior platform work, role-forge |
 | Project/workspace collaboration model | `business-agent` product design, selectively informed by `agent-workspace` | `agent-workspace` |
 | Teams channel adapter | Separate integration package or service | `ms-teams-agent` |
 | Foundry/MCP/Search learning experiments | Reference material only | `land-ai-engineering` |
@@ -58,7 +58,7 @@ Create case
 
 ### Rich UI direction
 
-DecisionForge's UI is the strongest existing starting point for the visual
+The prior platform UI is the strongest existing starting point for the visual
 product. Its panels, conversation history, approval actions, evidence view,
 conflict view, timeline, agent runner, and responsive Fluent/Tailwind treatment
 are directly relevant. The LandOps UI should become a richer, domain-specific
@@ -133,7 +133,7 @@ identity and Azure services rather than becoming a separate product.
 
 ### Organization, departments, roles, and groups
 
-This is the area where DecisionForge already has the clearest working model.
+This is the area where the prior platform already has the clearest working model.
 Its RBAC types distinguish departments, users, direct roles, groups, resource
 ownership, permissions, and execution-time audit context. Its demo
 authorization data already includes Land, Legal, Finance, Operations,
@@ -188,7 +188,7 @@ human role authorizes the review or consequential action; the agent produces a
 bounded artifact, finding, calculation, recommendation, or handoff.
 
 This gives the seed company a believable organization without reproducing
-DecisionForge's entire generic role-management surface.
+The prior platform's entire generic role-management surface.
 
 ## Repository inventory
 
@@ -227,11 +227,11 @@ The repository also contains additional historical or inactive definitions.
 The catalog, not the complete filesystem, is the source of truth for active
 behavior. This distinction should remain explicit during consolidation.
 
-### 2. `decisionforge` — reusable orchestration and governance platform
+### 2. Prior platform — reusable orchestration and governance platform
 
-Path: `/Users/paul/code/decisionforge`
+Path: external source repository (not required for this project)
 
-DecisionForge contains two layers in one TypeScript/Express repository:
+The prior platform contains two layers in one TypeScript/Express repository:
 
 - a reusable platform with authentication, RBAC, audit logging, admin tooling,
   loaders, versioning, prompt/conversation stores, and pluggable model clients;
@@ -475,7 +475,7 @@ domain runtime.
 - `role-forge` is a subset of the broader `business-agent`/`agent-workspace`
   land catalogs.
 - The two lease/ownership demos repeat the same basic skills.
-- `decisionforge` has a separate Oil & Gas vocabulary for title, royalty,
+- The prior platform has a separate Oil & Gas vocabulary for title, royalty,
   cotenancy, JIB, and division orders.
 - `business-agent` currently has historical definitions beyond its active
   three-agent catalog.
@@ -489,7 +489,7 @@ and status (`active`, `reference`, `planned`, or `retired`).
 There are currently several competing runtimes:
 
 - C#/.NET plus Next.js in `business-agent`;
-- TypeScript/Express in `decisionforge`;
+- TypeScript/Express in the prior platform;
 - metadata-driven Next.js/TypeScript in `agent-workspace`;
 - TypeScript demos;
 - Python learning code;
@@ -538,7 +538,7 @@ truth. A bounded MCP server can expose approved tools over these application
 ports; it must not become a second database or bypass authorization, case
 scope, provenance, or human review.
 
-Platform capabilities from DecisionForge should be represented as explicit
+Platform capabilities from the prior platform should be represented as explicit
 C# application ports and persistence records rather than copied as a second
 runtime:
 
@@ -590,7 +590,7 @@ contract, evidence references, and a result record.
 
 ### Phase 3 — add platform governance
 
-Bring over DecisionForge concepts in this order:
+Bring over prior platform concepts in this order:
 
 1. definition versioning;
 2. audit events;
@@ -655,7 +655,7 @@ agent policy or bypassing the case/evidence scope.
 
 - `business-agent/catalog.yaml` and `docs/land-administration-catalog.md`
 - `business-agent/docs/landops-architecture.md`
-- `decisionforge/README.md`, `AGENTS.md`, and `packs/oil-gas/MANIFEST.yml`
+- The prior platform README, agent rules, and oil-and-gas manifest
 - `agent-workspace/README.md` and `AGENTS.md`
 - `land-agent-demo-learning/README.md` and `docs/ARCHITECTURE.md`
 - `land-ai-engineering/README.md` and `docs/MICROSOFT_AI_STACK.md`

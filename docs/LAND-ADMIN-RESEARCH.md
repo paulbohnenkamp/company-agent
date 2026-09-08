@@ -10,7 +10,7 @@ below therefore remain research leads, not quoted transcripts.
 - [Division Order Expertise](https://www.youtube.com/watch?v=I5SKZeEBPsU)
 - [EAG Land Administration Outsourcing](https://www.youtube.com/watch?v=piSVEX2IjqQ)
 - [How to Search the BLM Site for Oil & Gas Leases](https://www.youtube.com/watch?v=By02MQoUTmY)
-- [Interview with Landman Peter Scott](https://www.youtube.com/watch?v=V3El9ECybWg)
+- [Landman workflow discussion with Peter Scott](https://www.youtube.com/watch?v=V3El9ECybWg)
 - [Steering Clear of Legal Landmines](https://www.youtube.com/watch?v=WmRonQBUBiE)
 - [The Basics of Oil & Gas Land Administration](https://www.petro-ledger.com/resources/insights/the-basics-of-oil-gas-land-administration/)
 - [SAIT Petroleum Land Administration](https://www.sait.ca/programs-and-courses/certificates/petroleum-land-administration)

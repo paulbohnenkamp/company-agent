@@ -123,15 +123,15 @@ adapter endpoint health → Bot Service endpoint → Teams channel delivery
 
 - 2026-09-07: Selected after local Teams readiness completed and live
   activation was confirmed to require a Microsoft 365 test tenant.
-- 2026-09-07: Scope reduced to one tenant-backed demo so the interview/demo
+- 2026-09-07: Scope reduced to one tenant-backed demo so the demo
   path can be learned and verified before production identity work.
 - 2026-09-07: Preparation slice completed locally; tenant-dependent demo
   delivery remains the next external step.
 - 2026-09-07: Added a ChatGPT Work browser handoff for the external tenant
   setup. It requires the user to enter credentials, MFA, and billing details.
 - 2026-09-07: Microsoft 365 Business Basic trial tenant created with the
-  non-secret domain `landopsdemo.onmicrosoft.com`. Verified the DecisionForge
-  tenant, Entra tenant ID, Teams status, two licensed demo users, the
+  tenant domain. Verified the Microsoft 365 tenant, Entra tenant ID, Teams
+  status, two licensed demo users, the
   `LandOps Demo` Team, and the `landops-demo` standard channel. Custom app
   sideloading remains unverified.
 - 2026-09-07: Tenant-side verification found custom app upload unavailable in

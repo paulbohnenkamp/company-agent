@@ -16,10 +16,11 @@
     "typecheck": "tsc --noEmit",
     "eval": "tsx scripts/run-evals.ts",
     "teams:dev": "tsx src/teams/server.ts",
-    "teams:start": "node dist/teams/server.js",
+    "teams:start": "tsx src/teams/server.ts",
     "teams:package": "tsx scripts/build-teams-app-package.ts"
   },
   "dependencies": {
+    "@azure/identity": "4.13.2",
     "@fluentui/react-components": "^9.74.7",
     "@fluentui/react-icons": "^2.0.339",
     "@microsoft/teams.api": "2.0.15",
@@ -30,6 +31,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
+    "@types/express": "5.0.6",
     "@types/node": "26.3.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",

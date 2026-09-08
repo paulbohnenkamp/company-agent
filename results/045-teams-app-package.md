@@ -40,7 +40,7 @@ spec: specs/045-teams-app-package.md
 ## Deviations from the spec
 
 The generated ZIP was a local build proof only. It used existing repository
-screenshots as test PNG inputs. It must not be uploaded as the interview demo
+screenshots as test PNG inputs. It must not be uploaded as the real Teams app
 package. Final icon artwork, the real Teams app ID, the bot application ID,
 and the public adapter endpoint are still required.
 

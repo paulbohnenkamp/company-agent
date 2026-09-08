@@ -34,7 +34,7 @@ This brief was refined through several passes:
 
 1. Existing repository and product review: current LandOps components, role scenarios, seed records, agent catalog, Teams view, and UI issue report.
 2. Professional role definitions: American Association of Professional Landmen (AAPL) and National Association of Division Order Analysts (NADOA).
-3. Representative current employer job descriptions: lease/title analyst, division-order analyst, and land administration roles.
+3. Representative lease/title analyst, division-order analyst, and land administration role descriptions.
 4. Government and regulatory sources: WVDEP, BLM, and ONRR materials describing records, permits, lease administration, royalty, and production reporting.
 5. Education and reference materials: University of Texas PETEX curriculum, AAPL books and model forms, and title/land reference material.
 
@@ -216,7 +216,7 @@ Agents may extract and compare terms. A person must decide legal meaning, whethe
 
 Determine whether ownership and title claims are supported by the available chain of title, identify defects and exceptions, obtain or recommend curative documents, and preserve the boundary between evidence comparison and legal determination.
 
-AAPL defines landwork as determining ownership through public and private records, reviewing title status, curing title defects, and performing title due diligence. Title-oriented job descriptions emphasize deeds, assignments, probate documents, title opinions, affidavits, conveyances, owner communications, curative tracking, and coordination with Legal, Land, Accounting, and operators.
+AAPL defines landwork as determining ownership through public and private records, reviewing title status, curing title defects, and performing title due diligence. Title-oriented role descriptions emphasize deeds, assignments, probate documents, title opinions, affidavits, conveyances, owner communications, curative tracking, and coordination with Legal, Land, Accounting, and operators.
 
 Sources: [AAPL landwork definitions](https://www.landman.org/join-engage/membership-types/active-members.html) and the [EOG Staff Title Analyst description](https://www.indeed.com/viewjob?jk=3f93ac27322aa92d).
 

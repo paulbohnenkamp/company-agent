@@ -56,7 +56,7 @@ interpretation, authorization, persistence, or agent orchestration.
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
 | Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
 | Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md` |
-| Teams live activation | In progress; scope reduced to a minimal tenant-backed demo, production identity bridge deferred | `specs/044-teams-live-activation.md`, `docs/teams-live-activation.md` |
+| Teams adapter deployment foundation | Completed and healthy; Bot Service registration and tenant package activation remain externally blocked on single-tenant app setup | `specs/047-teams-bot-activation.md`, `results/047-teams-bot-activation.md`, `docs/teams-live-activation.md` |
 | Teams app package contract | Verified local manifest and ZIP builder; real bot values, endpoint, icons, upload, and smoke test incomplete | `specs/045-teams-app-package.md`, `results/045-teams-app-package.md` |
 | Role playbook end-to-end tests | Verified three canonical Workroom playbooks through the ASP.NET Core HTTP boundary; live Teams delivery remains external | `specs/046-playbook-e2e-tests.md`, `results/046-playbook-e2e-tests.md` |
 
@@ -79,14 +79,14 @@ The local readiness slice is complete in [spec 043](../specs/043-teams-activatio
 The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md)
 with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
 The browser-assisted tenant setup prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
-Tenant, bot registration, credentials, consent, public endpoint, and Teams
-channel configuration remain external prerequisites for the demo. The Business
-Basic trial tenant is `DecisionForge` at `landopsdemo.onmicrosoft.com` with
-Entra tenant ID `ec4b8411-d158-44e0-a8cf-6f71e2d8b96b`. Teams is enabled, the
-two licensed demo users exist, and the `LandOps Demo` Team with its
-`landops-demo` channel exists. Microsoft's unified app-management provisioning
-has completed and custom app upload is now available. No package is ready for
-upload until the bot ID, HTTPS endpoint, and final icons exist.
+Tenant bot registration, credentials, consent, and channel configuration remain
+external prerequisites for the demo. Teams is enabled, two licensed sample
+users exist, and the `LandOps Demo` Team with its `landops-demo` channel exists.
+Microsoft's unified app-management provisioning has completed and custom app
+upload is available. The deployed adapter is healthy at its Azure HTTPS
+endpoint. Package upload and live smoke testing remain incomplete until the
+single-tenant bot app is created in the Teams tenant. The adapter deployment
+foundation is recorded in [result 047](../results/047-teams-bot-activation.md).
 
 Local evidence includes the adapter receive-path smoke test, all four
 append-only action contracts, an Entra-style wrong-role denial, and a typed

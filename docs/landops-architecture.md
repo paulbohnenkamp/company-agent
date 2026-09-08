@@ -123,7 +123,7 @@ Each step produces a durable `AgentStep` with an order, status, artifact, and pr
 
 ## Why the API uses SQL Server now
 
-The target job description calls for enterprise Microsoft technologies. SQL Server and EF Core make the persistence boundary visible in the portfolio while keeping local development repeatable through Docker. The code still uses deterministic fixtures, so a learner can run it without government endpoints or a language-model account.
+The project requirements call for enterprise Microsoft technologies. SQL Server and EF Core make the persistence boundary visible while keeping local development repeatable through Docker. The code still uses deterministic fixtures, so a learner can run it without government endpoints or a language-model account.
 
 ## The Azure direction
 

@@ -7,7 +7,7 @@ changes, Azure changes, purchases, or secret handling.
 ## Prompt to paste into ChatGPT Work
 
 You are helping me prepare a small Microsoft Teams environment for a LandOps
-job-interview demo.
+tenant-backed demo.
 
 Read the attached repository documents if they are available:
 
@@ -52,7 +52,7 @@ Try the Microsoft 365 Business Basic trial first if Microsoft offers it.
 Otherwise show me the current price and billing interval before checkout.
 Do not complete checkout without my direct confirmation.
 
-Use `DecisionForge` as the company name if Microsoft asks for a company name.
+Use the neutral LandOps project name if Microsoft asks for a company name.
 This tenant is for a custom solution demo for a third party, not for internal
 use by the tenant owner.
 
