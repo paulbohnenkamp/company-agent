@@ -14,6 +14,17 @@ explicit boundaries around identity, providers, persistence, and human action.
 The design keeps business rules in the C# application while Teams and the web
 application act as presentation and transport surfaces.
 
+### Resume-ready project brief
+
+Designed and built a .NET 10 and C# agent platform that routes evidence-based
+work through bounded specialist agents and presents one auditable review in
+Microsoft Teams. Implemented the ASP.NET Core and EF Core application boundary,
+Next.js and React review surface, Teams and Bot Framework adapter, Entra ID
+identity controls, deterministic and Microsoft Foundry provider paths, and
+Azure infrastructure with Bicep, `azd`, App Service, Azure SQL, Key Vault, and
+managed identities. Added automated API, adapter, identity, artifact, and
+playbook tests with explicit provenance, uncertainty, and human-review limits.
+
 ### What is implemented
 
 - C#/.NET application boundary with ASP.NET Core, EF Core, and SQL Server support.
