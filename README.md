@@ -43,14 +43,10 @@ This project uses the parts of the Antero role’s stack that it demonstrates:
 - **React, TypeScript, and Next.js** for the web surface and Teams transport adapter.
 - **Microsoft Teams and Bot Framework** for channel, group-chat, and personal-chat integration.
 - **Microsoft Entra ID** for application identity, roles, groups, and workload boundaries.
-- **Azure App Service, Azure Storage, Key Vault, Application Insights, and Log Analytics** for the deployed PaaS foundation.
+- **Azure App Service, Azure Bot Service, Azure Container Registry, Azure SQL, Blob Storage, Key Vault, Application Insights, and Log Analytics** for the deployed PaaS foundation.
 - **Microsoft Foundry** as the replaceable provider boundary for model-backed agent execution.
-- **Bicep, Azure Developer CLI, Docker, and GitHub Actions** for infrastructure, packaging, deployment, and repeatable checks.
+- **Bicep, Azure Developer CLI, Azure CLI, and Docker** for infrastructure, packaging, and deployment.
 - **Automated testing** across .NET unit and API tests, TypeScript tests, adapter contracts, artifact validation, and playbook flows.
-
-The repository does not claim desktop technologies, PostgreSQL, APIM, or
-Terraform as part of this project. Those technologies appear in the role
-description but are outside this application’s current scope.
 
 For continuation in a new Codex or VS Code session, read [the canonical project state](docs/PROJECT_STATE.md) first. It separates verified work from unfinished slices and identifies the next approved spec.
 
