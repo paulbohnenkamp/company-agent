@@ -1,8 +1,37 @@
 # Business Agent
 
-Business Agent helps people across departments work with agents in Microsoft Teams. Sample Energy Company provides the fictional people and records. The current examples cover leases, title, ownership, division orders, and regulatory evidence; the platform name is independent of any department.
+Business Agent is a full-stack, evidence-focused agent platform for teams that review records and make human decisions. It gives people one Business Agent entry point in Microsoft Teams, routes requests through bounded specialist agents, and returns findings with provenance, uncertainty, and a clear human-review boundary.
 
 The application is centered on C#/.NET, ASP.NET Core, EF Core, SQL Server, React, Next.js, Microsoft Entra ID, Azure, and Microsoft Foundry. The older TypeScript Business Agent runtime remains a temporary behavioral reference and offline fallback; it is not the product’s long-term application boundary.
+
+Sample Energy Company provides the fictional people, departments, cases, and records. The examples cover leases, title, ownership, division orders, and regulatory evidence. The product name is intentionally independent of any one department or industry.
+
+## Portfolio summary
+
+This project demonstrates a .NET-centered agent application with a Teams
+integration, a Next.js review surface, deterministic evidence workflows, and
+explicit boundaries around identity, providers, persistence, and human action.
+The design keeps business rules in the C# application while Teams and the web
+application act as presentation and transport surfaces.
+
+### What is implemented
+
+- C#/.NET application boundary with ASP.NET Core, EF Core, and SQL Server support.
+- Bounded specialist-agent flows with explicit delegation, evidence, conflicts, and human review.
+- Synthetic case data with immutable source snapshots and provenance.
+- Microsoft Teams channel adapter for personal chat, group chat, and channel messages.
+- Next.js and React review surfaces for focused case work and local demonstration.
+- Microsoft Entra ID, Azure, and Microsoft Foundry integration boundaries.
+- Deterministic local execution with automated API, adapter, identity, artifact, and end-to-end tests.
+
+### Current status
+
+The local application and the core Teams read-only review path are verified. A
+test tenant has the Teams package installed and can receive a Business Agent
+mention. The current demo uses a bounded fictional review flow rather than a
+general-purpose autonomous agent system. Naming cleanup and evidence-grounded
+review improvements are the next approved work. See [project state](docs/PROJECT_STATE.md)
+for verified work, limits, and the active specs.
 
 For continuation in a new Codex or VS Code session, read [the canonical project state](docs/PROJECT_STATE.md) first. It separates verified work from unfinished slices and identifies the next approved spec.
 
