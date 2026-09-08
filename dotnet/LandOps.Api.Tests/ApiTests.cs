@@ -111,6 +111,8 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         Assert.Contains("br-ocr-001", body.RecordIds);
         Assert.NotEmpty(body.Findings);
         Assert.NotEmpty(body.Unknowns);
+        Assert.NotEmpty(body.Contributions);
+        Assert.Contains(body.Contributions, contribution => contribution.AgentId == "compliance-reviewer");
         Assert.Contains(body.AgentSteps, step => step.Kind == "delegated");
         Assert.Contains(body.AgentSteps, step => step.Kind == "requested" && step.DelegatedFrom is null);
         Assert.Contains(body.AgentSteps, step => step.AgentId == "lease-obligation-reviewer" && step.DelegatedFrom == "lease-lifecycle-reviewer");
@@ -266,6 +268,37 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         Assert.Contains("br-lease-001", packet.RecordIds);
     }
 
+    [Fact]
+    public async Task Runs_the_teams_ownership_playbook_against_the_seed_case()
+    {
+        var createResponse = await client.PostAsJsonAsync("/api/v1/workroom/threads", new
+        {
+            caseId = "synthetic-blue-ridge-lease-001",
+            scenarioId = "land-ownership-gaps",
+            question = "Review the ownership evidence and identify what remains unverified.",
+            requestedBy = "teams-user-001",
+            roleId = "land-analyst",
+            groups = new[] { "case-management" }
+        });
+        Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+        var thread = await createResponse.Content.ReadFromJsonAsync<WorkroomThread>();
+        Assert.NotNull(thread);
+
+        var runResponse = await client.PostAsync($"/api/v1/workroom/threads/{thread!.ThreadId}/run", null);
+
+        Assert.Equal(HttpStatusCode.OK, runResponse.StatusCode);
+        var packet = await runResponse.Content.ReadFromJsonAsync<FictionalReviewPacket>();
+        Assert.NotNull(packet);
+        Assert.Equal("land-ownership-gaps", packet!.ScenarioId);
+        Assert.Equal("human-review", packet.ProposedRoute);
+        Assert.NotEmpty(packet.Findings);
+        Assert.NotEmpty(packet.Unknowns);
+        Assert.Contains(packet.AgentSteps, step => step.AgentId == "ownership-reviewer");
+        Assert.Contains(packet.Contributions, contribution => contribution.AgentId == "ownership-reviewer" && contribution.Summary.Contains("3.125%", StringComparison.Ordinal));
+        Assert.Contains(packet.Contributions, contribution => contribution.AgentId == "title-chain-reviewer" && contribution.Summary.Contains("probate reference", StringComparison.Ordinal));
+        Assert.Contains(packet.Contributions, contribution => contribution.AgentId == "case-synthesizer" && contribution.Summary.Contains("more title records", StringComparison.Ordinal));
+    }
+
     [Theory]
     [InlineData("approve-next-step")]
     [InlineData("request-evidence")]
@@ -355,6 +388,61 @@ public sealed class EntraAuthorizationApiTests : IClassFixture<EntraApiFactory>
     private readonly HttpClient client;
 
     public EntraAuthorizationApiTests(EntraApiFactory factory) => client = factory.CreateClient();
+
+    [Fact]
+    public async Task Allows_only_the_configured_adapter_workload_to_start_a_demo_review()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/workroom/threads")
+        {
+            Content = JsonContent.Create(new
+            {
+                caseId = "synthetic-blue-ridge-lease-001",
+                scenarioId = "land-ownership-gaps",
+                question = "Review the ownership evidence.",
+                requestedBy = "teams-user-001",
+                roleId = "land-analyst",
+                groups = new[] { "case-management" }
+            })
+        };
+        request.Headers.Add("x-test-user", "adapter-service-principal");
+        request.Headers.Add("x-test-role", "LandOps.Workroom.Invoke");
+        request.Headers.Add("x-test-group", "ignored-by-adapter-policy");
+        request.Headers.Add("x-test-app-id", "trusted-adapter-app");
+
+        var response = await client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var thread = await response.Content.ReadFromJsonAsync<WorkroomThread>();
+        Assert.NotNull(thread);
+        Assert.Equal("teams-user-001", thread!.RequestedBy);
+        Assert.Equal("land-analyst", thread.RoleId);
+        Assert.Equal("case-management", thread.RequiredGroup);
+    }
+
+    [Fact]
+    public async Task Rejects_a_workload_with_the_wrong_adapter_app_identity()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/v1/workroom/threads")
+        {
+            Content = JsonContent.Create(new
+            {
+                caseId = "synthetic-blue-ridge-lease-001",
+                scenarioId = "land-ownership-gaps",
+                question = "Review the ownership evidence.",
+                requestedBy = "teams-user-001",
+                roleId = "land-analyst",
+                groups = new[] { "case-management" }
+            })
+        };
+        request.Headers.Add("x-test-user", "adapter-service-principal");
+        request.Headers.Add("x-test-role", "LandOps.Workroom.Invoke");
+        request.Headers.Add("x-test-group", "case-management");
+        request.Headers.Add("x-test-app-id", "wrong-app");
+
+        var response = await client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
 
     [Fact]
     public async Task Rejects_a_valid_authenticated_identity_with_the_wrong_workroom_role()
@@ -525,6 +613,7 @@ public sealed class EntraApiFactory : WebApplicationFactory<Program>
         builder.UseSetting("LandOps:IdentityMode", "entra");
         builder.UseSetting("Entra:Authority", "https://login.example.test/tenant/v2.0");
         builder.UseSetting("Entra:Audience", "landops-test");
+        builder.UseSetting("Entra:TrustedAdapterAppId", "trusted-adapter-app");
         builder.UseSetting("LandOps:ApplyMigrations", "true");
         builder.ConfigureTestServices(services =>
         {
@@ -560,6 +649,7 @@ public sealed class TestAuthenticationHandler : AuthenticationHandler<Authentica
             new Claim("oid", userId),
             new Claim("roles", role),
             new Claim("groups", group),
+            new Claim("azp", Request.Headers["x-test-app-id"].FirstOrDefault() ?? string.Empty),
         };
         var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, TestScheme));
         return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(principal, TestScheme)));

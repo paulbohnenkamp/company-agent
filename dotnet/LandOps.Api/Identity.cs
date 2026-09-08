@@ -9,14 +9,20 @@ public sealed record ResolvedLandOpsIdentity(
     IReadOnlyCollection<string> Roles,
     IReadOnlyCollection<string> Groups,
     bool IsAuthenticated,
-    string Mode)
+    string Mode,
+    bool IsTrustedAdapter = false)
 {
     public string PrimaryRole => Roles.FirstOrDefault() ?? string.Empty;
 }
 
 public static class LandOpsIdentityResolver
 {
-    public static ResolvedLandOpsIdentity Resolve(HttpContext httpContext, WorkroomThreadRequest request, string? configuredMode)
+    public static ResolvedLandOpsIdentity Resolve(
+        HttpContext httpContext,
+        WorkroomThreadRequest request,
+        string? configuredMode,
+        string? trustedAdapterAppId = null,
+        string trustedAdapterRole = "LandOps.Workroom.Invoke")
     {
         var mode = string.Equals(configuredMode, "entra", StringComparison.OrdinalIgnoreCase)
             ? "entra"
@@ -46,6 +52,31 @@ public static class LandOpsIdentityResolver
             .Where(value => !string.IsNullOrWhiteSpace(value))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
+
+        // The Teams adapter uses an app-only token. It cannot carry the
+        // Teams user's department role or group claims, so the API accepts
+        // its transported context only after validating both the known
+        // adapter app identity and the dedicated workload role. Scenario and
+        // group policy is still enforced by the API endpoint.
+        var appId = principal.FindFirst("azp")?.Value
+            ?? principal.FindFirst("appid")?.Value
+            ?? string.Empty;
+        var isTrustedAdapter = principal.Identity?.IsAuthenticated == true
+            && !string.IsNullOrWhiteSpace(trustedAdapterAppId)
+            && string.Equals(appId, trustedAdapterAppId, StringComparison.OrdinalIgnoreCase)
+            && roles.Contains(trustedAdapterRole, StringComparer.OrdinalIgnoreCase);
+        if (isTrustedAdapter)
+        {
+            var transportedRoles = string.IsNullOrWhiteSpace(request.RoleId) ? [] : new[] { request.RoleId };
+            var transportedGroups = request.Groups ?? [];
+            return new ResolvedLandOpsIdentity(
+                request.RequestedBy,
+                transportedRoles,
+                transportedGroups,
+                true,
+                "entra-trusted-adapter",
+                true);
+        }
 
         return new ResolvedLandOpsIdentity(subject, roles, groups, principal.Identity?.IsAuthenticated == true, mode);
     }

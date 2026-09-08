@@ -44,6 +44,10 @@ results document what was actually verified at the time; this document governs
 current naming. Changing wire contracts or SQL names requires a migration with
 independent compatibility verification, not search-and-replace.
 
+The remaining migration is intentionally deferred until a versioned API and
+resource-name migration plan exists. It must move callers first, preserve
+persisted data and Azure resource continuity, then remove compatibility names.
+
 ## Tenant adoption
 
 The existing tenant domain remains in use. No replacement slug is approved.

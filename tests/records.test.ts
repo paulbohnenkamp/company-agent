@@ -12,6 +12,10 @@ describe("execution record validation", () => {
     assert.deepEqual(validateRecordText("results/example.md", validResult, "result"), []);
   });
 
+  it("allows an approved spec to wait for its result", () => {
+    assert.deepEqual(validateRecordText("specs/example.md", validSpec, "spec"), []);
+  });
+
   it("reports missing fields and sections", () => {
     const errors = validateRecordText("specs/example.md", "# incomplete", "spec");
     assert.equal(errors.some((error) => error.message.includes("missing front matter field: id")), true);

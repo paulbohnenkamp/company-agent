@@ -110,7 +110,7 @@ export async function validateRecords(root = process.cwd()): Promise<RecordValid
     if (spec.status === "completed" && spec.result !== `results/${id}.md`) {
       errors.push({ file: `specs/${id}.md`, message: `completed spec must reference results/${id}.md` });
     }
-    if (spec.result && !results.has(id)) errors.push({ file: `specs/${id}.md`, message: `missing result for ${id}` });
+    if (spec.status === "completed" && spec.result && !results.has(id)) errors.push({ file: `specs/${id}.md`, message: `missing result for ${id}` });
   }
   for (const [id, result] of results) {
     if (result.spec !== `specs/${id}.md`) errors.push({ file: `results/${id}.md`, message: `result must reference specs/${id}.md` });

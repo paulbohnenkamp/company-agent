@@ -27,21 +27,37 @@ Two licensed test users and the original Team/channel are recorded in
 target names. A repository persona is not a licensed tenant account.
 
 The deployed adapter foundation is recorded in
-[result 047](../results/047-teams-bot-activation.md). Current CLI credentials
-cannot access the Microsoft 365 tenant, so user/Team renaming, correct bot
-registration, package installation, and live mention verification remain pending.
+[result 047](../results/047-teams-bot-activation.md). The original Azure Bot
+resource is retained for compatibility, and `business-agent-bot` now uses the
+Microsoft 365 tenant app identity with the existing adapter endpoint. The
+version 1.0.1 package is uploaded and installed in `Sample Energy Company` →
+`Operations`. A live mention completed the ownership playbook and returned five
+findings from five sources with a human-review boundary. The old bot is not
+the active package identity and is retained as a legacy resource; it does not
+participate in the current message path.
+
+The Teams reply is intentionally one Business Agent response. It includes the
+ordered agent path and a numbered contribution summary for each specialist,
+followed by the complete findings and one concise human-review boundary.
+Specialist names are contributions in the response, not separate tenant
+accounts or bots. Evidence disclaimers remain in the structured packet for
+auditing but are not repeated in the conversational Teams reply.
+
+The API packet and Teams formatter are independently verified: the live API
+scenario response contains the three contribution objects, and the adapter
+health endpoint is returning HTTP 200. A new mention uses the already-installed
+package; no package upload is required for this response-only change.
 
 ## Azure and application setup
 
-The Azure subscription already contains the Business Agent web and API services. The
-remaining live resources/configuration are:
+The Azure subscription contains the Business Agent web and API services. The
+verified live resource/configuration set is:
 
 1. Configure the API app registration with a stable identifier URI and a
    narrowly scoped application role for the Teams adapter workload.
-2. Create a separate Teams bot app registration and credential, or use the
-   supported managed-identity/federated setup once the Bot Framework account
-   configuration is confirmed.
-3. Deploy the adapter as a separately managed HTTPS service with
+2. Use the `business-agent-bot` Azure Bot resource with the single-tenant app
+   registration in the Microsoft 365 tenant.
+3. Keep the existing adapter as a separately managed HTTPS service with
    `/api/messages` reachable publicly.
 4. Store any bot secret in Key Vault and expose it through an App Service Key
    Vault reference. Never commit or print the secret.
@@ -50,11 +66,13 @@ remaining live resources/configuration are:
 6. Grant only the required API/Graph permissions and obtain administrator
    consent.
 
-For this first demo, the adapter can target the deterministic local API mode
-with a fixed case, scenario, role, and group. The demo must visibly identify
-that limitation. The adapter must send an authenticated workload token before
-the Entra-protected API is used for production. Unsigned role or group headers
-are not an acceptable production substitute.
+For this first demo, the adapter targets a fixed case and scenario. The API
+accepts transported role/group context only when the authenticated token
+matches the configured adapter app identity and carries the
+`LandOps.Workroom.Invoke` application role. The API still validates the role
+and group against its scenario catalog. This narrow workload boundary is for
+starting the review thread; human action endpoints remain claim-based and do
+not accept the adapter workload as a human.
 
 ## Verification sequence
 
@@ -79,6 +97,9 @@ blockers, lease development obligations, and division-order readiness through
 the ASP.NET Core agent request API. It does not replace the real Teams mention
 smoke test.
 
-Until a real Teams mention reaches the bot and returns an evidence-backed
-reply, describe it as a deployed adapter foundation with locally verified contracts. After that smoke
-passes, describe it as a tenant-backed demo—not as production Teams activation.
+The real Teams mention gate has passed. The tenant-backed demo is verified for
+the read-only evidence review path. Package upload proves catalog availability;
+the successful mention additionally proves endpoint delivery, workload
+authentication, API authorization, persistence, playbook execution, and reply
+delivery. Human-action authorization and duplicate-activity suppression remain
+separate live checks.

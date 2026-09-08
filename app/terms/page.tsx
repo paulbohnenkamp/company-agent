@@ -1,0 +1,3 @@
+export default function TermsPage() {
+  return <main className="shell"><header className="topbar"><div><span className="eyebrow">BUSINESS AGENT</span><h1>Terms of use</h1></div><span className="offline"><i /> DEMONSTRATION</span></header><section className="card"><p>Business Agent is provided as a demonstration of evidence-aware department collaboration. The records, people, agent outputs, and company context are fictional.</p><p>Use the application only for testing and review. It does not certify title, authorize payments or filings, or replace required professional and human decisions.</p></section></main>;
+}

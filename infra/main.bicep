@@ -18,8 +18,10 @@ param existingFoundryResourceGroupName string = 'rg-land-ai-engineering-foundry'
 param existingFoundryAccountName string = 'ai-account-7b7o3sct37fgg'
 @description('The existing model deployment name.')
 param foundryModelName string = 'land-model'
-@description('Optional Entra application audience used by the API JWT validation.')
+@description('Optional Entra API client ID used by the API JWT validation. v2 access tokens use the API client GUID as aud.')
 param entraAudience string = ''
+@description('The Entra client ID of the adapter workload allowed to invoke the demo review boundary.')
+param trustedAdapterAppId string = ''
 @description('The single-tenant Teams bot application ID. Set during live Teams activation.')
 param teamsBotAppId string = ''
 @description('The Entra tenant that owns the Teams bot application.')
@@ -112,6 +114,10 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
   properties: {
     serverFarmId: plan.id
     httpsOnly: true
+    // The Teams App Service uses this user-assigned identity for ACR pulls
+    // and Key Vault references. Keep the reference identity explicit so a
+    // restart resolves secrets through the same identity as deployment.
+    keyVaultReferenceIdentity: teamsIdentity.id
     siteConfig: {
       linuxFxVersion: 'DOCKER|${webImage}'
       alwaysOn: true
@@ -158,6 +164,7 @@ resource api 'Microsoft.Web/sites@2023-12-01' = {
         #disable-next-line no-hardcoded-env-urls
         { name: 'Entra__Authority', value: 'https://login.microsoftonline.com/${subscription().tenantId}/v2.0' }
         { name: 'Entra__Audience', value: entraAudience }
+        { name: 'Entra__TrustedAdapterAppId', value: trustedAdapterAppId }
         { name: 'Foundry__Endpoint', value: foundry.properties.endpoint }
         { name: 'Foundry__Model', value: foundryModelName }
         { name: 'Foundry__UseManagedIdentity', value: 'true' }
@@ -195,12 +202,19 @@ resource teams 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'TEAMS_PORT', value: '3978' }
         { name: 'WEBSITES_CONTAINER_START_TIME_LIMIT', value: '1800' }
         { name: 'CLIENT_ID', value: teamsBotAppId }
+        { name: 'TENANT_ID', value: teamsBotTenantId }
         { name: 'CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
         { name: 'LANDOPS_API_URL', value: 'https://${apiName}.azurewebsites.net' }
-        { name: 'LANDOPS_API_CLIENT_ID', value: teamsBotAppId }
+        // The API workload token is issued to the trusted adapter app, which
+        // is separate from the Bot Framework app used for Teams delivery.
+        { name: 'LANDOPS_API_CLIENT_ID', value: trustedAdapterAppId }
         { name: 'LANDOPS_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
         { name: 'LANDOPS_API_TENANT_ID', value: subscription().tenantId }
         { name: 'LANDOPS_API_SCOPE', value: landOpsApiScope }
+        { name: 'LANDOPS_TEAMS_CASE_ID', value: 'synthetic-blue-ridge-lease-001' }
+        { name: 'LANDOPS_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
+        { name: 'LANDOPS_TEAMS_ROLE_ID', value: 'land-analyst' }
+        { name: 'LANDOPS_TEAMS_GROUP', value: 'case-management' }
         { name: 'LANDOPS_WEB_URL', value: 'https://${webName}.azurewebsites.net' }
         { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
       ]

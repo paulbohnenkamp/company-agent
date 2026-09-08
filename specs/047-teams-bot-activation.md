@@ -17,7 +17,7 @@ Result: `results/047-teams-bot-activation.md`
 
 ## Goal
 
-Deploy and verify the smallest real Teams transport foundation for the LandOps
+Deploy and verify the smallest real Teams transport foundation for the Business Agent
 demo. The transport must receive Teams activities over HTTPS, have the
 authenticated API contract wired, and be documented for the remaining tenant
 Bot Service activation.
@@ -95,10 +95,16 @@ authorizes a request from unsigned tenant or user headers.
 - `/api/messages` is exposed over HTTPS and configured as the bot endpoint.
 - Adapter-to-API calls use a bearer token in deployed mode; unsigned headers
   are not an authorization path.
+- The trusted adapter invocation boundary is explicit: only the configured
+  adapter app identity with the `LandOps.Workroom.Invoke` application role may
+  use transported demo role/group context to create a review thread. The API
+  remains the authorization authority, and human action endpoints continue to
+  require human role claims.
 - Bicep and AZD metadata are validated and documented sufficiently to recreate
   the deployment without relying on chat history.
-- The deployment foundation is complete even though tenant Bot Service
-  registration, package upload, and live mention testing remain a follow-up.
+- The tenant package is installed and a real mention returns an evidence-backed
+  reply. Any action or duplicate-activity check that remains externally blocked
+  is recorded as incomplete rather than implied complete.
 - All required local and Azure verification commands pass.
 
 ## Verification commands
@@ -133,6 +139,34 @@ git diff --check
   a single-tenant bot app must be created in the Microsoft 365 tenant. The
   remaining live gate is recorded as a follow-up rather than hidden in a
   completed deployment claim.
+- 2026-09-08: The existing Bot Service app ID was immutable, so it was left
+  unchanged. A separate `business-agent-bot` resource was created in the
+  existing subscription using the Microsoft 365 tenant app ID and tenant ID.
+  Its Teams channel is enabled and its endpoint targets the existing adapter.
+- 2026-09-08: The adapter now uses the Microsoft 365 bot credential through a
+  new Key Vault reference while retaining the original subscription-tenant API
+  credential. The deployed health check remained green after restart.
+- 2026-09-08: Live mention delivery reached the adapter, but the downstream API
+  returned HTTP 401. The adapter tenant was made explicit, the API audience was
+  corrected for Entra v2 tokens, and the API registration was set to issue v2
+  access tokens. Authentication-boundary diagnostics are being added before
+  the next live verification; no token or secret values are logged.
+- 2026-09-08: The API returned HTTP 403 after authentication succeeded. The
+  client-credential token correctly carries the adapter workload role rather
+  than a human department role. The approved continuation slice is a narrow
+  trusted-adapter invocation policy in the API: it validates the adapter app
+  identity and application role, then validates the transported role/group
+  against the selected scenario. It does not authorize human actions or trust
+  arbitrary unsigned headers.
+- 2026-09-08: The live adapter received Teams activity but the first request
+  after an API deployment overlapped a transient Azure SQL login reset. After
+  the API warmed, Teams attempt 17 completed with five findings from five
+  sources and the explicit human-review boundary.
+- 2026-09-08: The adapter response was refined to show the ordered agent path
+  and numbered contributions from each specialist before the complete finding
+  and open-question lists. This is a formatting and observability change; it
+  does not require a new Teams package upload because the manifest and bot
+  identity are unchanged.
 
 ## Decision log
 

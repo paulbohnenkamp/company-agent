@@ -8,6 +8,13 @@ public sealed record FictionalReviewFinding(
     string Status,
     string Confidence);
 
+public sealed record AgentContribution(
+    string AgentId,
+    string AgentName,
+    string Summary,
+    IReadOnlyList<string> RecordIds,
+    IReadOnlyList<string> Unknowns);
+
 public sealed record FictionalReviewPacket(
     string PacketId,
     string CaseId,
@@ -17,6 +24,7 @@ public sealed record FictionalReviewPacket(
     IReadOnlyList<FictionalReviewFinding> Findings,
     IReadOnlyList<string> Unknowns,
     IReadOnlyList<CollaborationStep> AgentSteps,
+    IReadOnlyList<AgentContribution> Contributions,
     string ProposedRoute,
     string HumanBoundary,
     DateTimeOffset CreatedAt);
@@ -54,6 +62,28 @@ public static class FictionalReviewPacketSeed
                 record.RecordType == "ocr" ? "medium" : "high");
         }).ToArray();
         var unknowns = selected.SelectMany(record => record.Warnings).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        var contributions = plan.Steps.Select((step, index) =>
+        {
+            var directlyRelevant = selected
+                .Where(record => record.RelevantAgentIds.Contains(step.AgentId, StringComparer.OrdinalIgnoreCase))
+                .ToArray();
+            var contributionRecords = index == plan.Steps.Length - 1
+                ? selected
+                : directlyRelevant;
+            var contributionUnknowns = contributionRecords
+                .SelectMany(record => record.Warnings)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+            var summary = step.AgentId switch
+            {
+                "ownership-reviewer" => "Compared the ownership schedule with the title abstract and division order. The recorded and division-order interests match at 3.125%, but the title exception remains unresolved.",
+                "title-chain-reviewer" => "Reviewed the Tract 14 title abstract. Mineral ownership is unverified, and the probate reference still requires document review.",
+                "case-synthesizer" => "Combined the lease, title, division-order, ownership, and OCR records. A person must decide whether more title records are needed before relying on the recorded interest.",
+                _ when index == plan.Steps.Length - 1 => "Combined the selected evidence. A person must decide whether more records are needed before relying on the result.",
+                _ => $"Completed the {step.Kind} review step using the selected case evidence."
+            };
+            return new AgentContribution(step.AgentId, step.AgentName, summary, contributionRecords.Select(record => record.RecordId).ToArray(), contributionUnknowns);
+        }).ToArray();
         return new FictionalReviewPacket(
             $"packet-{Guid.NewGuid():N}",
             caseId,
@@ -63,6 +93,7 @@ public static class FictionalReviewPacketSeed
             findings,
             unknowns,
             plan.Steps,
+            contributions,
             "human-review",
             "This seeded packet organizes evidence for a person. It does not issue a title opinion, change payment status, or approve development.",
             DateTimeOffset.UtcNow);

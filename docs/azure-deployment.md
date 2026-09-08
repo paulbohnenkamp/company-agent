@@ -31,7 +31,7 @@ azd env new landops-dev --no-prompt
 azd env set AZURE_SUBSCRIPTION_ID "<subscription-id>"
 azd env set AZURE_LOCATION "westus2"
 azd env set SQL_ADMIN_OBJECT_ID "<signed-in-entra-object-id>"
-azd env set ENTRA_AUDIENCE "api://<api-app-registration-client-id>"
+azd env set ENTRA_AUDIENCE "<api-app-registration-client-id>"
 AZURE_DEV_USER_AGENT=microsoft_foundry_skill azd provision --no-prompt
 AZURE_DEV_USER_AGENT=microsoft_foundry_skill azd deploy --no-prompt
 ```

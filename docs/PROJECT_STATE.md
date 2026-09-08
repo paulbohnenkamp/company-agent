@@ -4,7 +4,7 @@
 
 **First read for a new Codex or VS Code session**
 
-**Latest repository slice:** [spec 048](../specs/048-business-agent-naming.md)
+**Latest approved slices:** [spec 049](../specs/049-remove-legacy-landops-naming.md), then [spec 050](../specs/050-evidence-grounded-teams-review.md)
 
 **External activation work:** [spec 044](../specs/044-teams-live-activation.md) and [tenant naming adoption](tenant-naming-adoption.md)
 
@@ -57,8 +57,8 @@ identifiers for compatibility. Neither names a separate collaboration product.
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
 | Azure/AZD infrastructure | Deployed evidence recorded; repeatable activation requires credentials | `results/041`, `docs/azure-deployment.md` |
 | Teams adapter and human actions | Verified local vertical slice; activation readiness verified locally, tenant activation externally blocked | `specs/028-teams-first-vertical-slice.md`, `results/028-teams-first-vertical-slice.md`, `specs/043-teams-activation-readiness.md`, `results/048-business-agent-naming.md` |
-| Teams adapter deployment foundation | Completed and healthy; Bot Service registration and tenant package activation remain externally blocked on single-tenant app setup | `specs/047-teams-bot-activation.md`, `results/047-teams-bot-activation.md`, `docs/teams-live-activation.md` |
-| Teams app package contract | Verified local manifest and ZIP builder; real bot values, endpoint, icons, upload, and smoke test incomplete | `specs/045-teams-app-package.md`, `results/045-teams-app-package.md` |
+| Teams adapter deployment foundation | Completed and healthy; package installed in the test Team; live evidence-backed mention verified; human-action and duplicate-activity checks remain separate follow-ups | `specs/047-teams-bot-activation.md`, `results/047-teams-bot-activation.md`, `docs/teams-live-activation.md` |
+| Teams app package contract | Verified local manifest and ZIP builder; version 1.0.1 uploaded and installed in the test Team; read-only mention smoke test passed | `specs/045-teams-app-package.md`, `results/045-teams-app-package.md`, `results/047-teams-bot-activation.md` |
 | Role playbook end-to-end tests | Verified three canonical agent request playbooks through the ASP.NET Core HTTP boundary; live Teams delivery remains external | `specs/046-playbook-e2e-tests.md`, `results/046-playbook-e2e-tests.md` |
 
 ## Record quality
@@ -76,29 +76,50 @@ unpaired or malformed execution records.
 
 ### External Teams activation
 
-Spec 048 completed the approved repository naming. The current CLI credential
-fails in the Microsoft 365 tenant with AADSTS50020 and no signed-in browser is
-available, so live tenant adoption remains incomplete.
+Spec 048 completed the approved repository naming. The Microsoft 365 trial
+tenant, licensed sample users, Team/channel, app catalog upload, and package
+installation are now verified externally.
 
 The local readiness slice is complete in [spec 043](../specs/043-teams-activation-readiness.md).
 The active minimal demo plan is [spec 044](../specs/044-teams-live-activation.md)
 with the operational checklist in [docs/teams-live-activation.md](teams-live-activation.md).
 The browser-assisted tenant naming prompt is [docs/chatgpt-work-teams-handoff.md](chatgpt-work-teams-handoff.md).
-Tenant user and Team naming, bot registration, credentials, consent, and channel configuration remain
-external prerequisites for the demo. Teams is enabled, two licensed sample
-users exist, and the `LandOps Demo` Team with its `landops-demo` channel exists.
+Teams is enabled and the tenant has licensed sample users and a test Team/channel.
 Microsoft's unified app-management provisioning has completed and custom app
 upload is available. The deployed adapter is healthy at its Azure HTTPS
-endpoint. Package upload and live smoke testing remain incomplete until the
-single-tenant bot app is created in the Teams tenant. The adapter deployment
-foundation is recorded in [result 047](../results/047-teams-bot-activation.md).
+endpoint. The `business-agent-bot` resource and Teams channel now use the
+Microsoft 365 tenant app identity, while the existing API workload identity
+remains in the deployment tenant. The version 1.0.1 package is uploaded and
+installed. The first post-install mention reached the API but returned HTTP
+403 because the app-only adapter token did not carry a human role claim. A
+narrow trusted-adapter API boundary was implemented, tested, deployed, and
+both service health checks pass. A later post-deploy mention completed
+successfully, returning five evidence findings from five sources with the
+human-review boundary. The adapter deployment foundation is recorded in
+[result 047](../results/047-teams-bot-activation.md).
+
+The next approved work is ordered deliberately: complete the compatibility-aware
+naming and documentation cleanup in [spec 049](../specs/049-remove-legacy-landops-naming.md),
+then make the Teams review evidence-grounded and finish activation follow-ups in
+[spec 050](../specs/050-evidence-grounded-teams-review.md).
 
 Local evidence includes the adapter receive-path smoke test, all four
-append-only action contracts, an Entra-style wrong-role denial, and a typed
-Teams actor contract. The playbook end-to-end suite now proves three
-representative role journeys through the same API boundary. It does not prove
-live Teams delivery; production workload authentication and directory-backed
-authorization remain later work.
+append-only action contracts, an Entra-style wrong-role denial, a trusted
+adapter allow/deny regression pair, and a typed Teams actor contract. The
+playbook end-to-end suite proves three representative role journeys through
+the same API boundary. Live reply delivery is verified for the read-only
+evidence review path. Live human-action authorization and duplicate-activity
+suppression remain external verification gates.
+
+### Product-name compatibility migration
+
+`Business Agent` is the product name. `LandOps` remains in namespaces, Azure
+resource names, environment variables, routes, tables, and application-role
+values so the current deployment and persisted data remain stable. A future
+migration must move callers first and preserve those resources and records;
+it is not a search-and-replace task and is not part of the current Teams repair.
+Spec 049 defines the approved migration and documentation cleanup; until it is
+completed, this compatibility state remains intentional.
 
 ### After Teams activation: product workflow depth
 
@@ -122,7 +143,8 @@ authorization remain later work.
 
 1. Read `AGENTS.md`.
 2. Read this file.
-3. Read spec 048 and the activation records before starting a follow-up.
+3. Read specs 049 and 050 and the activation records before starting a
+   follow-up.
 4. Inspect `git status --short` and do not overwrite unrelated user work.
 5. Work only the next approved slice.
 6. Run the verification commands in that spec.

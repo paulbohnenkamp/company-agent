@@ -32,6 +32,28 @@ LANDOPS_API_URL=http://127.0.0.1:5006 NEXT_PUBLIC_LANDOPS_MODE=true npm run dev 
 
 Open [http://localhost:3001](http://localhost:3001). The seeded Braxton County case is synthetic. The frozen WVDEP/WVGES evidence is included for repeatable local review and does not require live government endpoints.
 
+## What “Business Agent” means
+
+Business Agent is the single user-facing application and Teams bot that people
+mention. It is an entry point and orchestrator, not a separate Teams account for
+every specialist. A request can be routed through a bounded flow such as:
+
+```text
+Intake Reviewer → Ownership Reviewer → Title Chain Reviewer
+                → Compliance Reviewer → Case Synthesizer
+```
+
+Each specialist agent owns one responsibility and contributes findings to the
+flow. The orchestrator controls sequencing, handoffs, persistence, conflicts,
+and the human-review boundary. Teams receives one Business Agent reply that
+shows the path and each specialist's contribution; the specialist names are
+not separate Teams users or bots. The ASP.NET Core API remains authoritative for
+authorization, evidence rules, durable requests, and actions; Teams and Next.js
+are collaboration and presentation surfaces. The current live Teams slice uses
+one configured review flow and sample case, while the repository models the
+broader specialist-agent and flow structure. Agent names are application
+contributions, not tenant user accounts.
+
 To run the separate Teams channel adapter locally, keep the API running and start another terminal:
 
 ```sh
@@ -52,7 +74,7 @@ proves local adapter-to-agent request wiring only; it is not a Teams tenant test
 - Role-aware scenarios for land analysts, lease analysts, division-order analysts, legal reviewers, compliance reviewers, accounting reviewers, operations reviewers, and case managers.
 - Case questions and agent requests with explicit delegation, evidence, and human review.
 - Lease, title, division-order, ownership, and OCR sample records alongside frozen public WV evidence.
-- Evidence-linked findings, preserved conflicts, explicit unknowns, provenance, production no-match semantics, and a human review decision.
+- Evidence-linked findings, preserved conflicts, explicit unknowns presented as evidence disclaimers, provenance, production no-match semantics, and a human review decision.
 - Local deterministic execution and a replaceable Microsoft Foundry provider boundary.
 - A real Teams channel adapter that accepts personal chat, group chat, and channel messages and forwards them to the bounded agent request API.
 
@@ -130,4 +152,10 @@ The local identity catalog is [`config/identity/personas.json`](config/identity/
 
 ## Current limits
 
-The Teams adapter has a deployed Azure foundation recorded in result 047. The Microsoft 365 bot identity, API consent, package installation, tenant naming, and live mention verification remain incomplete. See [project state](docs/PROJECT_STATE.md) and [tenant naming adoption](docs/tenant-naming-adoption.md). OCR extraction, live source ingestion, and consequential external actions remain outside the current verified scope.
+The Teams adapter has a deployed Azure foundation recorded in result 047. The
+Microsoft 365 bot identity, package installation, and read-only live mention
+path are verified in the test tenant. Human-action authorization and duplicate
+activity suppression remain separate live checks. See [project state](docs/PROJECT_STATE.md)
+and [tenant naming adoption](docs/tenant-naming-adoption.md). OCR extraction,
+live source ingestion, and consequential external actions remain outside the
+current verified scope.

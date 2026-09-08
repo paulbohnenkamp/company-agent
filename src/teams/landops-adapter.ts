@@ -45,6 +45,7 @@ export type WorkroomReviewPacket = {
   recordIds: string[];
   findings: { recordId: string; subject: string; assertion: string; status: string; confidence: string }[];
   unknowns: string[];
+  contributions?: { agentId: string; agentName: string; summary: string; recordIds: string[]; unknowns: string[] }[];
   proposedRoute: string;
   humanBoundary?: string;
 };
@@ -111,21 +112,81 @@ export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: st
 }
 
 /** Formats a Workroom result for a concise, safe Teams message. */
-export function formatTeamsReply(response: LandOpsWorkroomResponse, packet?: WorkroomReviewPacket, webBaseUrl = ""): TeamsReply {
+export function formatTeamsReply(response: LandOpsWorkroomResponse, packet?: WorkroomReviewPacket): TeamsReply {
   const path = response.steps.map((step) => step.agentName ?? "Agent").join(" → ");
   const lines = [
-    `Business Agent review ${packet ? "completed" : response.status.toLowerCase()}.`,
-    `Agents: ${path}`,
-    packet ? `Findings: ${packet.findings.length} · Sources: ${packet.recordIds.length} · Unknowns: ${packet.unknowns.length}` : `Thread: ${response.threadId}`,
+    `**Business Agent review ${packet ? "completed" : response.status.toLowerCase()}**`,
+    "",
+    `**Agent path:** ${path}`,
   ];
-  if (packet?.findings.length) {
-    lines.push(...packet.findings.slice(0, 3).map((finding) => `- ${finding.subject}: ${finding.assertion}`));
+  if (packet?.contributions?.length) {
+    lines.push(
+      "",
+      "**Agent contributions**",
+      ...packet.contributions.map((contribution, index) => `${index + 1}. **${contribution.agentName}** — ${contribution.summary}`),
+    );
   }
-  if (packet?.unknowns.length) lines.push(`Open questions: ${packet.unknowns.slice(0, 3).join("; ")}`);
-  lines.push(`Recommendation: ${packet?.proposedRoute ?? "human review required"}.`);
-  lines.push(`Human boundary: ${packet?.humanBoundary ?? response.humanBoundary}`);
-  if (webBaseUrl.trim()) lines.push(`Review packet: ${webBaseUrl.replace(/\/$/, "")}/teams?threadId=${encodeURIComponent(response.threadId)}`);
+  if (packet) {
+    lines.push(
+      "",
+      ...(packet.question ? ["**Review request:**", packet.question, ""] : []),
+      ...(reviewContextFor(packet) ? ["**Matter:**", reviewContextFor(packet)!, ""] : []),
+      "**Review summary**",
+      `- Findings: ${packet.findings.length}`,
+      `- Records reviewed: ${packet.recordIds.length}`,
+      "",
+      "**Key findings**",
+    );
+  } else {
+    lines.push(`**Thread:** ${response.threadId}`);
+  }
+  if (packet?.findings.length) {
+    lines.push(...packet.findings.map((finding, index) => `${index + 1}. ${humanizeSubject(finding.subject)} — ${humanizeAssertion(finding.assertion)}`));
+  }
+  lines.push(
+    "",
+    `**Recommendation:** ${recommendationFor(packet, response)}`,
+    `_*Human review required:* ${humanBoundaryFor(packet, response)}_`,
+  );
   return { text: lines.join("\n") };
+}
+
+function recommendationFor(packet: WorkroomReviewPacket | undefined, response: LandOpsWorkroomResponse): string {
+  if (packet?.scenarioId === "land-ownership-gaps") {
+    return "Have a person decide whether the Harrison South Unit / Tract 14 evidence supports requesting missing title or ownership records before relying on the recorded interest.";
+  }
+  if (packet?.proposedRoute === "human-review" || !packet) {
+    return "Have a person review the evidence before taking a consequential action.";
+  }
+  return `${packet.proposedRoute}.`;
+}
+
+function reviewContextFor(packet: WorkroomReviewPacket): string | undefined {
+  if (packet.scenarioId === "land-ownership-gaps") {
+    return "Harrison South Unit / Tract 14 — ownership evidence and recorded interest";
+  }
+  return undefined;
+}
+
+function humanBoundaryFor(packet: WorkroomReviewPacket | undefined, response: LandOpsWorkroomResponse): string {
+  if (packet?.scenarioId === "land-ownership-gaps") {
+    return "This review organizes evidence for the ownership question. It does not issue a title opinion, change payment status, or approve development.";
+  }
+  return packet?.humanBoundary ?? response.humanBoundary;
+}
+
+function humanizeSubject(subject: string): string {
+  if (subject.toLowerCase() === "ocr") return "OCR";
+  return subject
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function humanizeAssertion(assertion: string): string {
+  const separator = assertion.indexOf(":");
+  if (separator < 1) return assertion;
+  const key = assertion.slice(0, separator).replace(/([a-z])([A-Z])/g, "$1 $2");
+  return `${key.charAt(0).toUpperCase()}${key.slice(1)}:${assertion.slice(separator + 1)}`;
 }
 
 function roleIdForChannel(channel: TeamsChannel): string {

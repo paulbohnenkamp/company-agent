@@ -28,10 +28,42 @@ if (entraMode)
             options.Authority = authority;
             options.Audience = audience;
             options.MapInboundClaims = false;
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    var logger = context.HttpContext.RequestServices
+                        .GetRequiredService<ILoggerFactory>()
+                        .CreateLogger("LandOps.Api.Authentication");
+                    logger.LogWarning(
+                        "JWT authentication failed for {Path}: {ErrorType}",
+                        context.HttpContext.Request.Path,
+                        context.Exception.GetType().Name);
+                    return Task.CompletedTask;
+                },
+                OnChallenge = context =>
+                {
+                    var logger = context.HttpContext.RequestServices
+                        .GetRequiredService<ILoggerFactory>()
+                        .CreateLogger("LandOps.Api.Authentication");
+                    logger.LogWarning(
+                        "JWT challenge for {Path}: {Error} {ErrorDescription}",
+                        context.HttpContext.Request.Path,
+                        context.Error ?? "none",
+                        context.ErrorDescription ?? "none");
+                    return Task.CompletedTask;
+                },
+            };
         });
 }
 
-builder.Services.AddDbContext<LandOpsDbContext>(options => options.UseSqlServer(connectionString));
+// Azure SQL can reset a managed-identity login while the platform is warming
+// or recycling an App Service instance. Keep the SQL boundary resilient to
+// those transient connection failures without moving persistence into the
+// Teams adapter.
+builder.Services.AddDbContext<LandOpsDbContext>(options => options.UseSqlServer(
+    connectionString,
+    sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)));
 builder.Services.AddScoped<ILandCaseRepository, LandCaseRepository>();
 builder.Services.AddScoped<CaseQuery>();
 builder.Services.AddScoped<ReconciliationPersistence>();
@@ -117,18 +149,31 @@ app.MapPost("/api/v1/cases/{caseId}/scenario-runs", (string caseId, FictionalRev
     return packet is null ? Results.NotFound(new { error = "case or scenario not found" }) : Results.Ok(packet);
 });
 
-app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, WorkroomThreadRequest request, IWorkroomThreadStore store, CancellationToken cancellationToken) =>
+app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, WorkroomThreadRequest request, IWorkroomThreadStore store, ILoggerFactory loggerFactory, CancellationToken cancellationToken) =>
 {
+    var logger = loggerFactory.CreateLogger("LandOps.Api.WorkroomAuthorization");
     if (string.IsNullOrWhiteSpace(request.CaseId) || string.IsNullOrWhiteSpace(request.ScenarioId) || string.IsNullOrWhiteSpace(request.Question))
         return Results.BadRequest(new { error = "caseId, scenarioId, and question are required" });
-    var identity = LandOpsIdentityResolver.Resolve(httpContext, request, app.Configuration["LandOps:IdentityMode"]);
+    var identity = LandOpsIdentityResolver.Resolve(
+        httpContext,
+        request,
+        app.Configuration["LandOps:IdentityMode"],
+        app.Configuration["Entra:TrustedAdapterAppId"]);
     if (!identity.IsAuthenticated) return Results.Unauthorized();
-    if (identity.Roles.Count == 0 || string.IsNullOrWhiteSpace(identity.Subject)) return Results.StatusCode(StatusCodes.Status403Forbidden);
+    if (identity.Roles.Count == 0 || string.IsNullOrWhiteSpace(identity.Subject))
+    {
+        logger.LogWarning("Workroom authorization denied: missing resolved identity (mode={Mode}, trustedAdapter={TrustedAdapter}, roles={Roles})", identity.Mode, identity.IsTrustedAdapter, string.Join(",", identity.Roles));
+        return Results.StatusCode(StatusCodes.Status403Forbidden);
+    }
     var scenario = RoleScenarioSeed.Current.SingleOrDefault(item => item.Id == request.ScenarioId);
     var plan = scenario is null ? null : RoleScenarioSeed.PlanFor(request.ScenarioId);
     if (scenario is null || plan is null) return Results.NotFound(new { error = "scenario not found" });
     if (!scenario.EscalatesToWorkroom) return Results.BadRequest(new { error = "scenario does not require an agent review" });
-    if (!identity.Roles.Any(role => CollaborationAuthorization.CanStart(scenario, plan, role, identity.Groups))) return Results.StatusCode(StatusCodes.Status403Forbidden);
+    if (!identity.Roles.Any(role => CollaborationAuthorization.CanStart(scenario, plan, role, identity.Groups)))
+    {
+        logger.LogWarning("Workroom authorization denied: scenario policy mismatch (scenario={Scenario}, role={Role}, groups={Groups}, mode={Mode}, trustedAdapter={TrustedAdapter})", scenario.Id, identity.PrimaryRole, string.Join(",", identity.Groups), identity.Mode, identity.IsTrustedAdapter);
+        return Results.StatusCode(StatusCodes.Status403Forbidden);
+    }
     var context = WorkroomContextAnalyzer.Analyze(request.ThreadMessages);
     var thread = await store.CreateAsync(request.CaseId, scenario, plan, request.Question, context, identity.Subject, identity.PrimaryRole, cancellationToken);
     return Results.Created($"/api/v1/workroom/threads/{thread.ThreadId}", thread);
@@ -137,7 +182,7 @@ app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, Workroom
 app.MapGet("/api/v1/workroom/threads/{threadId}", async (string threadId, IWorkroomThreadStore store, CancellationToken cancellationToken) =>
     await store.GetAsync(threadId, cancellationToken) is { } thread ? Results.Ok(thread) : Results.NotFound());
 
-app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, IWorkroomThreadStore store, IWorkroomRunService runner, CancellationToken cancellationToken) =>
+app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, IWorkroomThreadStore store, IWorkroomRunService runner, ILoggerFactory loggerFactory, CancellationToken cancellationToken) =>
 {
     var thread = await store.GetAsync(threadId, cancellationToken);
     if (thread is null) return Results.NotFound(new { error = "agent request not found" });
@@ -147,6 +192,13 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, I
     }
     catch (WorkroomRunException error)
     {
+        loggerFactory.CreateLogger("LandOps.Api.WorkroomExecution").LogError(
+            "Workroom execution failed (thread={ThreadId}, case={CaseId}, scenario={ScenarioId}, provider={Provider}): {Error}",
+            thread.ThreadId,
+            thread.CaseId,
+            thread.ScenarioId,
+            app.Configuration["LandOps:WorkroomExecutionProvider"] ?? "deterministic",
+            error.Message);
         return Results.Problem(error.Message, statusCode: StatusCodes.Status502BadGateway);
     }
 });
@@ -158,8 +210,9 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/actions", async (string threadI
     if (request.Action is not ("approve-next-step" or "request-evidence" or "reject-recommendation" or "assign-task"))
         return Results.BadRequest(new { error = "action must be approve-next-step, request-evidence, reject-recommendation, or assign-task" });
     if (string.IsNullOrWhiteSpace(request.Reason)) return Results.BadRequest(new { error = "reason is required" });
-    var identity = LandOpsIdentityResolver.Resolve(httpContext, new WorkroomThreadRequest(thread.CaseId, thread.ScenarioId, thread.Question, thread.RequestedBy, thread.RoleId, [thread.RequiredGroup], thread.Context.Messages.ToArray()), app.Configuration["LandOps:IdentityMode"]);
+    var identity = LandOpsIdentityResolver.Resolve(httpContext, new WorkroomThreadRequest(thread.CaseId, thread.ScenarioId, thread.Question, thread.RequestedBy, thread.RoleId, [thread.RequiredGroup], thread.Context.Messages.ToArray()), app.Configuration["LandOps:IdentityMode"], app.Configuration["Entra:TrustedAdapterAppId"]);
     if (!identity.IsAuthenticated || string.IsNullOrWhiteSpace(identity.Subject)) return Results.Unauthorized();
+    if (identity.IsTrustedAdapter) return Results.StatusCode(StatusCodes.Status403Forbidden);
     if (!identity.Roles.Any(role => string.Equals(role, thread.RoleId, StringComparison.OrdinalIgnoreCase))) return Results.StatusCode(StatusCodes.Status403Forbidden);
     var action = new WorkroomAction($"action-{Guid.NewGuid():N}", thread.ThreadId, thread.CaseId, request.Action, identity.Subject, request.Assignee, request.Reason);
     dbContext.WorkroomActions.Add(action);

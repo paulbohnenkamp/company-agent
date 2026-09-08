@@ -57,7 +57,7 @@ public static class FictionalDataRoomSeed
                 ["exception"] = "Probate reference requires document review",
                 ["effectiveDate"] = "2024-04-12"
             },
-            ["title-curative-analyst", "ownership-reviewer", "case-synthesizer"],
+            ["title-curative-analyst", "title-chain-reviewer", "ownership-reviewer", "case-synthesizer"],
             ["This abstract is not a title opinion or ownership determination."]),
         new(
             "br-division-order-001",

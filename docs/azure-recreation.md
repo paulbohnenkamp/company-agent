@@ -37,7 +37,10 @@ API role exist:
   `api://<api-app-id>/.default`.
 - `teamsBotClientSecretName`: Key Vault secret name, defaulting to
   `teams-bot-client-secret`.
-- `entraAudience`: the API JWT audience, normally the API identifier URI.
+- `entraAudience`: the API client application ID used as the JWT audience. Entra v2 access tokens use the API client GUID as `aud`.
+- `trustedAdapterAppId`: the adapter workload client ID assigned the
+  `LandOps.Workroom.Invoke` application role. The API uses this to distinguish
+  the known adapter from another app-only caller; it is not a human identity.
 
 The bot secret itself is written to Key Vault outside source control:
 
@@ -64,7 +67,8 @@ azd env set AZURE_SUBSCRIPTION_ID <subscription-id>
 azd env set AZURE_RESOURCE_GROUP <resource-group>
 azd env set AZURE_LOCATION westus2
 azd env set SQL_ADMIN_OBJECT_ID <entra-sql-admin-object-id>
-azd env set ENTRA_AUDIENCE api://<api-app-id>
+azd env set ENTRA_AUDIENCE <api-app-client-id>
+azd env set TRUSTED_ADAPTER_APP_ID <adapter-app-client-id>
 azd env set TEAMS_BOT_APP_ID <bot-app-id>
 azd env set LANDOPS_API_SCOPE api://<api-app-id>/.default
 azd provision --preview

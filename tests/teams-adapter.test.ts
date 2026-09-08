@@ -26,24 +26,30 @@ test("suppresses duplicate activity IDs", () => {
 test("formats the human boundary and delegation path", () => {
   const reply = formatTeamsReply({ threadId: "thread-1", status: "Ready", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", agentName: "Ownership Agent", kind: "requested", order: 1 }, { agentId: "title-chain-reviewer", agentName: "Title Review Agent", kind: "delegated", order: 2, delegatedFrom: "ownership-reviewer" }] });
   assert.match(reply.text, /Ownership Agent → Title Review Agent/);
-  assert.match(reply.text, /Human review required/);
+  assert.match(reply.text, /_\*Human review required:\* /);
 });
 
 test("formats a bounded evidence-linked review for Teams", () => {
   const reply = formatTeamsReply(
     { threadId: "thread-1", status: "planned", humanBoundary: "Human review required", steps: [{ agentId: "ownership-reviewer", agentName: "Ownership Agent", kind: "requested", order: 1 }] },
-    { recordIds: ["record-1"], findings: [{ recordId: "record-1", subject: "ownership", assertion: "The ownership package is incomplete.", status: "inconclusive", confidence: "medium" }], unknowns: ["Missing recorded conveyance"], proposedRoute: "human-review", humanBoundary: "A person must approve title or payment actions." },
-    "http://localhost:3000",
+    { scenarioId: "land-ownership-gaps", question: "Is the ownership evidence sufficient?", recordIds: ["record-1"], findings: [{ recordId: "record-1", subject: "ownership", assertion: "The ownership package is incomplete.", status: "inconclusive", confidence: "medium" }], unknowns: ["Missing recorded conveyance"], contributions: [{ agentId: "ownership-reviewer", agentName: "Ownership Agent", summary: "Reviewed ownership evidence.", recordIds: ["record-1"], unknowns: ["Missing recorded conveyance"] }], proposedRoute: "human-review", humanBoundary: "A person must approve title or payment actions." },
   );
-  assert.match(reply.text, /Findings: 1 · Sources: 1 · Unknowns: 1/);
-  assert.match(reply.text, /ownership: The ownership package is incomplete\./);
-  assert.match(reply.text, /Review packet: http:\/\/localhost:3000\/teams\?threadId=thread-1/);
+  assert.match(reply.text, /- Findings: 1/);
+  assert.match(reply.text, /- Records reviewed: 1/);
+  assert.doesNotMatch(reply.text, /Disclaimers|Open questions/);
+  assert.match(reply.text, /Ownership — The ownership package is incomplete\./);
+  assert.match(reply.text, /Agent contributions/);
+  assert.match(reply.text, /Ownership Agent.*Reviewed ownership evidence/);
+  assert.match(reply.text, /Review request/);
+  assert.match(reply.text, /Harrison South Unit \/ Tract 14/);
+  assert.match(reply.text, /requesting missing title or ownership records/);
+  assert.match(reply.text, /Human review required/);
 });
 
 test("older API responses remain readable without exposing routing IDs as names", () => {
   const reply = formatTeamsReply({ threadId: "thread-1", status: "planned", humanBoundary: "Human review", steps: [{ agentId: "ownership-reviewer", kind: "requested", order: 1 }] });
   assert.match(reply.text, /Business Agent review planned/);
-  assert.match(reply.text, /Agents: Agent/);
+  assert.match(reply.text, /Agent path:\*\* Agent/);
   assert.doesNotMatch(reply.text, /ownership-reviewer|LandOps|workroom/i);
 });
 
