@@ -11,11 +11,10 @@ references the following boundaries:
 
 | Resource | Purpose | Identity boundary |
 | --- | --- | --- |
-| Linux B1 App Service plan | Hosts web, API, and Teams adapter | Shared compute only |
-| `web` App Service | Next.js review surface | User-assigned web identity pulls its ACR image |
+| Linux B1 App Service plan | Hosts the API and Teams adapter | Shared compute only |
 | `api` App Service | ASP.NET Core application boundary | API identity accesses SQL, Foundry, and storage |
 | `teams` App Service | Teams protocol adapter | Teams identity reads one Key Vault secret and calls the API |
-| Azure Container Registry | Stores the three container images | Web, API, and Teams identities each have `AcrPull` |
+| Azure Container Registry | Stores the API and Teams images | API and Teams identities have `AcrPull` |
 | Azure SQL | Durable agent request persistence | API identity is the data-plane identity |
 | Storage account | Evidence/blob storage | API identity has blob read access |
 | Key Vault | Runtime secret references | API and Teams identities receive `Key Vault Secrets User` |
@@ -119,7 +118,7 @@ check for an already-created App Service.
 ## Verification and rollback
 
 Run the commands in the active spec before declaring the deployment complete.
-After deployment, verify `/health`, then `/api/messages`, then the Teams
-package and human-action path. If activation fails, disable the Bot Framework
-Teams channel, restore the prior adapter image, revoke the secret, and leave
-the existing web/API services unchanged.
+After deployment, verify the API and adapter `/health` endpoints, then
+`/api/messages`, the Teams package, and the human-action path. If activation
+fails, disable the Bot Framework Teams channel, restore the prior adapter image,
+revoke the secret, and leave the API unchanged.

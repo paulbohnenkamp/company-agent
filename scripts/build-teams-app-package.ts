@@ -10,7 +10,7 @@ type Options = {
   appId?: string;
   botAppId?: string;
   endpoint?: string;
-  webUrl?: string;
+  infoUrl?: string;
   colorIcon?: string;
   outlineIcon?: string;
   output?: string;
@@ -73,7 +73,7 @@ function parseOptions(args: string[]): Options & { help: boolean } {
     appId: required(values, "app-id"),
     botAppId: required(values, "bot-app-id"),
     endpoint: required(values, "endpoint"),
-    webUrl: required(values, "web-url"),
+    infoUrl: required(values, "info-url"),
     colorIcon: required(values, "color-icon"),
     outlineIcon: required(values, "outline-icon"),
     output: values.get("output"),
@@ -93,7 +93,7 @@ function renderManifest(options: Options): Record<string, unknown> {
   return JSON.parse(template
     .replaceAll("{{TEAMS_APP_ID}}", options.appId!)
     .replaceAll("{{TEAMS_BOT_APP_ID}}", options.botAppId!)
-    .replaceAll("{{LANDOPS_WEB_URL}}", options.webUrl!));
+    .replaceAll("{{BUSINESS_AGENT_INFO_URL}}", options.infoUrl!));
 }
 
 function validateManifest(manifest: Record<string, unknown>): void {
@@ -130,13 +130,13 @@ function validatePng(filePath: string, label: string): void {
 }
 
 function printHelp(): void {
-  console.log(`Build the minimal LandOps Teams app package.
+  console.log(`Build the minimal Business Agent Teams app package.
 
 Required options:
   --app-id <guid>          Teams app ID
   --bot-app-id <guid>      Entra bot application ID
   --endpoint <https-url>   Public bot messaging endpoint
-  --web-url <https-url>    LandOps web URL
+  --info-url <https-url>   Public information, privacy, and terms URL
   --color-icon <path>      Color PNG icon
   --outline-icon <path>    Outline PNG icon
 

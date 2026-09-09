@@ -1,7 +1,7 @@
 # Deployment overview
 
-The current deployment shape is a C#/.NET API, Next.js web surface, and
-separate Microsoft Teams adapter deployed as Azure App Service containers. The
+The current deployment shape is a C#/.NET API and separate Microsoft Teams
+adapter deployed as Azure App Service containers. The
 canonical recreation instructions are in [azure-recreation.md](azure-recreation.md);
 the Teams-specific operational checklist is in
 [teams-live-activation.md](teams-live-activation.md).
@@ -11,7 +11,6 @@ the Teams-specific operational checklist is in
 ```sh
 npm run typecheck
 npm test
-npm run build
 dotnet test dotnet/LandOps.sln
 ```
 
@@ -25,7 +24,7 @@ dotnet test dotnet/LandOps.sln
 | Identity | Microsoft Entra ID | `Identity` and security helpers |
 | Secrets | Azure Key Vault | environment configuration boundary |
 | Telemetry | Application Insights/OpenTelemetry | `TelemetrySink` and `RunTelemetry` |
-| Delivery | Teams/Copilot Studio/web app | Next.js surface and API boundary |
+| Delivery | Microsoft Teams | Teams adapter and API boundary |
 | Tools | MCP server or approved internal APIs | MCP handler and tool registry |
 
 Local deterministic execution remains the fastest verification path. Cloud

@@ -5,9 +5,9 @@
   "id": "{{TEAMS_APP_ID}}",
   "developer": {
     "name": "Sample Energy Company",
-    "websiteUrl": "{{LANDOPS_WEB_URL}}",
-    "privacyUrl": "{{LANDOPS_WEB_URL}}/privacy",
-    "termsOfUseUrl": "{{LANDOPS_WEB_URL}}/terms"
+    "websiteUrl": "{{BUSINESS_AGENT_INFO_URL}}",
+    "privacyUrl": "{{BUSINESS_AGENT_INFO_URL}}",
+    "termsOfUseUrl": "{{BUSINESS_AGENT_INFO_URL}}"
   },
   "name": {
     "short": "Business Agent",

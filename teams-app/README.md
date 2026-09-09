@@ -10,15 +10,16 @@ ASP.NET Core agent request API.
 
 ## Build a package
 
-Supply the real bot application ID, a separate Teams app ID, the public web
-URL, the HTTPS adapter endpoint, and two PNG icon files:
+Supply the real bot application ID, a separate Teams app ID, a public
+information/privacy/terms URL, the HTTPS adapter endpoint, and two PNG icon
+files. The repository no longer ships a web application:
 
 ```sh
 npm run teams:package -- \
   --app-id <teams-app-guid> \
   --bot-app-id <bot-app-guid> \
   --endpoint https://example.test/api/messages \
-  --web-url https://example.test \
+  --info-url https://example.test \
   --color-icon path/to/color.png \
   --outline-icon path/to/outline.png
 ```

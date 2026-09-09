@@ -30,8 +30,6 @@ param teamsBotTenantId string = subscription().tenantId
 param landOpsApiScope string = ''
 @description('The Key Vault secret name containing the Teams bot client secret.')
 param teamsBotClientSecretName string = 'teams-bot-client-secret'
-@description('The existing web container image tag supplied by AZD.')
-param serviceWebImageName string = ''
 @description('The existing API container image tag supplied by AZD.')
 param serviceApiImageName string = ''
 @description('The Teams adapter container image tag supplied by AZD.')
@@ -40,7 +38,6 @@ param serviceTeamsImageName string = ''
 var suffix = uniqueString(subscription().id, resourceGroup().id)
 var shortSuffix = toLower(substring(suffix, 0, 8))
 var prefix = 'landops-${shortSuffix}'
-var webName = '${prefix}-web'
 var apiName = '${prefix}-api'
 var teamsName = '${prefix}-teams'
 var botName = '${prefix}-bot'
@@ -51,7 +48,6 @@ var databaseName = 'LandOps'
 var storageName = replace('${prefix}storage', '-', '')
 var keyVaultName = '${prefix}-kv'
 var insightsName = '${prefix}-insights'
-var webImage = !empty(serviceWebImageName) ? serviceWebImageName : '${registryName}.azurecr.io/landops-web:latest'
 var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/landops-api:latest'
 var teamsImage = !empty(serviceTeamsImageName) ? serviceTeamsImageName : '${registryName}.azurecr.io/landops-teams:latest'
 
@@ -92,10 +88,6 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
 // User-assigned identities make the external permissions stable across App
 // Service restarts and deployments. App Service uses the client IDs below for
 // ACR image pulls; the API identity is also the SQL and Foundry workload identity.
-resource webIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: '${webName}-id'
-  location: location
-}
 resource apiIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: '${apiName}-id'
   location: location
@@ -103,37 +95,6 @@ resource apiIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-3
 resource teamsIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: '${teamsName}-id'
   location: location
-}
-
-resource web 'Microsoft.Web/sites@2023-12-01' = {
-  name: webName
-  location: location
-  kind: 'app,linux,container'
-  identity: { type: 'UserAssigned', userAssignedIdentities: { '${webIdentity.id}': {} } }
-  tags: { 'azd-env-name': environmentName, 'azd-service-name': 'web' }
-  properties: {
-    serverFarmId: plan.id
-    httpsOnly: true
-    // The Teams App Service uses this user-assigned identity for ACR pulls
-    // and Key Vault references. Keep the reference identity explicit so a
-    // restart resolves secrets through the same identity as deployment.
-    keyVaultReferenceIdentity: teamsIdentity.id
-    siteConfig: {
-      linuxFxVersion: 'DOCKER|${webImage}'
-      alwaysOn: true
-      acrUseManagedIdentityCreds: true
-      acrUserManagedIdentityID: webIdentity.properties.clientId
-      appSettings: [
-        { name: 'WEBSITES_PORT', value: '3000' }
-        { name: 'PORT', value: '3000' }
-        { name: 'WEBSITES_CONTAINER_START_TIME_LIMIT', value: '1800' }
-        { name: 'BUSINESS_AGENT_API_URL', value: 'https://${apiName}.azurewebsites.net' }
-        { name: 'NEXT_PUBLIC_BUSINESS_AGENT_MODE', value: 'true' }
-        { name: 'LANDOPS_API_URL', value: 'https://${apiName}.azurewebsites.net' }
-        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
-      ]
-    }
-  }
 }
 
 resource api 'Microsoft.Web/sites@2023-12-01' = {
@@ -223,7 +184,6 @@ resource teams 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'BUSINESS_AGENT_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
         { name: 'BUSINESS_AGENT_TEAMS_ROLE_ID', value: 'land-analyst' }
         { name: 'BUSINESS_AGENT_TEAMS_GROUP', value: 'case-management' }
-        { name: 'BUSINESS_AGENT_WEB_URL', value: 'https://${webName}.azurewebsites.net' }
         { name: 'LANDOPS_API_CLIENT_ID', value: trustedAdapterAppId }
         { name: 'LANDOPS_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
         { name: 'LANDOPS_API_TENANT_ID', value: subscription().tenantId }
@@ -232,7 +192,6 @@ resource teams 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'LANDOPS_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
         { name: 'LANDOPS_TEAMS_ROLE_ID', value: 'land-analyst' }
         { name: 'LANDOPS_TEAMS_GROUP', value: 'case-management' }
-        { name: 'LANDOPS_WEB_URL', value: 'https://${webName}.azurewebsites.net' }
         { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
       ]
     }
@@ -267,11 +226,6 @@ resource botTeamsChannel 'Microsoft.BotService/botServices/channels@2022-09-15' 
   }
 }
 
-resource registryWebPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(registry.id, webIdentity.id, 'AcrPull')
-  scope: registry
-  properties: { roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d'), principalId: webIdentity.properties.principalId, principalType: 'ServicePrincipal' }
-}
 resource registryApiPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(registry.id, apiIdentity.id, 'AcrPull')
   scope: registry
@@ -341,7 +295,6 @@ module foundryUser 'modules/foundry-role.bicep' = {
   }
 }
 
-output webUrl string = 'https://${web.properties.defaultHostName}'
 output apiUrl string = 'https://${api.properties.defaultHostName}'
 output teamsUrl string = 'https://${teams.properties.defaultHostName}'
 output botName string = botName

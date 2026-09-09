@@ -1,5 +1,9 @@
 # Business Agent project state
 
+This branch is the Teams-app core: the Next.js web and administration surface
+has been removed. The supported user path is the Teams adapter backed by the
+ASP.NET Core API.
+
 **Last reconciled:** 2026-09-08
 
 **First read for a new Codex or VS Code session**
@@ -15,9 +19,9 @@ Sample Energy Company supplies fictional people and records. Land is a departmen
 alongside Legal, Compliance, Accounting, and Operations. The current implementation
 covers specific case-based reviews; it does not yet support arbitrary workflows.
 
-Teams is the collaboration environment. Next.js provides focused review and local
-examples. ASP.NET Core/.NET owns authorization, evidence, persistence, agent
-execution, and human decisions. See [product naming](product-naming.md).
+Teams is the collaboration environment. ASP.NET Core/.NET owns authorization,
+evidence, persistence, agent execution, and human decisions. See [product
+naming](product-naming.md).
 
 `Workroom` and selected `LandOps` values remain legacy configuration, storage,
 route, database, and permission identifiers for compatibility. Business Agent
@@ -27,8 +31,7 @@ is used for current internal namespaces, modules, settings, and product copy.
 
 - **Application:** C#/.NET 10, ASP.NET Core minimal API, EF Core, SQL Server or
   Azure SQL.
-- **Web:** Next.js with React. The web surface is for focused case review,
-  administration, and local demonstration.
+- **Surface:** Microsoft Teams through the TypeScript/Bot Framework adapter.
 - **Agents:** Microsoft AgentSchema-compatible `agent.yaml` artifacts; the
   TypeScript loader projects them into a runtime contract.
 - **Skills:** `SKILL.md` bundles with YAML front matter.
@@ -39,7 +42,7 @@ is used for current internal namespaces, modules, settings, and product copy.
 - **Evidence:** immutable source snapshots, provenance, findings, conflicts, and
   explicit unknowns. Public WVDEP/WVGES data is never proof of mineral title.
 - **Teams:** `src/teams/` owns activity parsing, idempotency, channel mapping,
-  and transport. It calls the same ASP.NET Core API as the web app.
+  and transport. It calls the ASP.NET Core API.
 
 ## Verified implementation inventory
 

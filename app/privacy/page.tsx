@@ -1,3 +1,0 @@
-export default function PrivacyPage() {
-  return <main className="shell"><header className="topbar"><div><span className="eyebrow">BUSINESS AGENT</span><h1>Privacy</h1></div><span className="offline"><i /> PUBLIC INFORMATION</span></header><section className="card"><p>Business Agent is a demonstration application using fictional records and synthetic identities. It does not process real customer, title, payment, or employee data in this demonstration.</p><p>Teams messages are sent to the configured Business Agent adapter and are handled by the ASP.NET Core application boundary for the requested review. Do not submit confidential information to this demonstration.</p></section></main>;
-}

@@ -1,8 +1,8 @@
 /**
  * Real Microsoft Teams channel entrypoint.
  *
- * Run this service separately from Next.js. The web app is the portfolio
- * surface; this process is the Bot Framework/Teams transport surface.
+ * This process is the Bot Framework/Teams transport surface. The ASP.NET Core
+ * API is the application boundary behind this adapter.
  */
 import { App, ExpressAdapter } from "@microsoft/teams.apps";
 import type { Request, Response } from "express";

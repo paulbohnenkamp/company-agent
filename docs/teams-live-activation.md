@@ -50,7 +50,8 @@ package; no package upload is required for this response-only change.
 
 ## Azure and application setup
 
-The Azure subscription contains the Business Agent web and API services. The
+The Azure subscription contains the Business Agent API and Teams adapter
+services. The
 verified live resource/configuration set is:
 
 1. Configure the API app registration with a stable identifier URI and a

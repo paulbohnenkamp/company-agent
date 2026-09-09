@@ -8,8 +8,8 @@ remain existing specialist groups in the sample catalog; neither defines a
 separate product. Department names do not partition cases or agent capabilities.
 
 The application manages business records, agent execution, evidence, and human
-decisions through ASP.NET Core. Next.js provides focused review and local
-examples. Teams supplies conversations, teams, and channels. Existing implemented
+decisions through ASP.NET Core. Teams supplies conversations, teams, and
+channels. Existing implemented
 flows require a case; the broader product name does not imply that arbitrary
 business workflows are already implemented.
 

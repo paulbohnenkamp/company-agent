@@ -20,6 +20,8 @@ Current terminology and information architecture are defined by
 
 - `architecture.md`, `data-model.md`, `flow-runtime.md`, `evaluations.md`
 - `IMPLEMENTATION.md`, `quickstart.md`, `running.md`
+- `business-agent-learning-path.md`, `business-agent-code-tour.md`,
+  `business-agent-data-and-evidence.md`, `business-agent-development-workflow.md`
 - `land-administration-catalog.md`, `domain-authoring.md`,
   `LAND-ADMIN-RESEARCH.md`, `AI-FUNDAMENTALS.md`
 
@@ -31,6 +33,8 @@ application boundary is the C# API and the current user surface is Teams.
 
 - `azure-demo-a.md` — minimal single-App-Service proposal, not the current
   three-service Azure shape.
+- `azure-deployment.md` — earlier deployment detail retained as a reference;
+  current deployment is API plus Teams adapter.
 - `.azure/deployment-plan.md` — historical Teams adapter deployment record;
   current status is in `teams-live-activation.md` and `PROJECT_STATE.md`.
 

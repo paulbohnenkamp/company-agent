@@ -1,6 +1,6 @@
 # West Virginia land architecture
 
-This document is the architecture specification for the West Virginia oil-and-gas flagship built on the reusable `business-agent` runtime. It records the WV workflow, source boundaries, and flagship-specific contracts. The shared-versus-jurisdiction boundary is governed by the [multi-jurisdiction architecture](MULTI_JURISDICTION_ARCHITECTURE.md); this document does not promote WV concepts into the reusable runtime or shared land layer.
+This document is the architecture specification for the West Virginia oil-and-gas flagship built on the reusable `business-agent` runtime. It records the WV workflow, source boundaries, and flagship-specific contracts. The former multi-jurisdiction architecture is preserved in the checkpoint commit; this document does not promote WV concepts into the reusable runtime or shared land layer.
 
 ## Purpose and scope
 

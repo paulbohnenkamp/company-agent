@@ -56,7 +56,8 @@ Before modifying the land domain, West Virginia source integrations, evidence
 model, findings, or flagship flow, read:
 
 - [WV land architecture](docs/WV_LAND_ARCHITECTURE.md)
-- [WV land implementation plan](docs/WV_LAND_IMPLEMENTATION_PLAN.md)
+- The historical WV implementation plan is preserved in the checkpoint commit;
+  current branch work must be scoped by an approved spec in `specs/`.
 
 Agents own bounded evidence-based judgments. Skills own reusable procedures.
 Flows own sequencing and branching. Deterministic TypeScript services and tools

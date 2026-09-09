@@ -15,21 +15,14 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "src/**/*.ts",
-    "app/**/*.tsx",
+    "scripts/**/*.ts",
     "tests/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    "teams-app/**/*.ts"
   ],
   "exclude": [
     "node_modules"

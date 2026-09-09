@@ -1,216 +1,97 @@
-# Business Agent
+# Business Agent Teams app
 
-Business Agent is a full-stack, evidence-focused agent platform for teams that review records and make human decisions. It gives people one Business Agent entry point in Microsoft Teams, routes requests through bounded specialist agents, and returns findings with provenance, uncertainty, and a clear human-review boundary.
+Business Agent is a Microsoft Teams bot for bounded, evidence-grounded review.
+Teams is the product surface. The bot adapter receives a Teams activity, calls
+the ASP.NET Core API, and returns one concise review with findings, uncertainty,
+provenance, and a human decision boundary.
 
-The application is centered on C#/.NET, ASP.NET Core, EF Core, SQL Server, React, Next.js, Microsoft Entra ID, Azure, and Microsoft Foundry. The older TypeScript Business Agent runtime remains a temporary behavioral reference and offline fallback; it is not the product’s long-term application boundary.
+The repository does not include a web or administration application. The API
+owns authorization, evidence rules, persistence, agent execution, and human
+actions. The Teams adapter owns transport, mention parsing, idempotency, and
+response formatting.
 
-Sample Energy Company provides the fictional people, departments, cases, and records. The examples cover leases, title, ownership, division orders, and regulatory evidence. The product name is intentionally independent of any one department or industry.
+## Current scope
 
-## Portfolio summary
+- Personal chat, group chat, and channel activity handling.
+- Deterministic local review of the synthetic Sample Energy Company case.
+- Optional Entra workload authentication from adapter to API.
+- Append-only human review actions through the API boundary.
+- Versioned Teams app package generation.
+- Azure App Service deployment for the API and Teams adapter.
 
-This project demonstrates a .NET-centered agent application with a Teams
-integration, a Next.js review surface, deterministic evidence workflows, and
-explicit boundaries around identity, providers, persistence, and human action.
-The design keeps business rules in the C# application while Teams and the web
-application act as presentation and transport surfaces.
+Foundry execution is an explicit provider path. Deterministic mode remains the
+default for local verification. Public WVDEP/WVGES evidence is not proof of
+title, and consequential actions remain human-controlled.
 
-### Project brief
+## Run locally
 
-Designed and built a .NET 10 and C# agent platform that routes evidence-based
-work through bounded specialist agents and presents one auditable review in
-Microsoft Teams. Implemented the ASP.NET Core and EF Core application boundary,
-Next.js and React review surface, Teams and Bot Framework adapter, Entra ID
-identity controls, deterministic and Microsoft Foundry provider paths, and
-Azure infrastructure with Bicep, `azd`, App Service, Azure SQL, Key Vault, and
-managed identities. Added automated API, adapter, identity, artifact, and
-playbook tests with explicit provenance, uncertainty, and human-review limits.
-
-### What is implemented
-
-- C#/.NET application boundary with ASP.NET Core, EF Core, and SQL Server support.
-- Bounded specialist-agent flows with explicit delegation, evidence, conflicts, and human review.
-- Synthetic case data with immutable source snapshots and provenance.
-- Microsoft Teams channel adapter for personal chat, group chat, and channel messages.
-- Next.js and React review surfaces for focused case work and local demonstration.
-- Microsoft Entra ID, Azure, and Microsoft Foundry integration boundaries.
-- Deterministic local execution with automated API, adapter, identity, artifact, and end-to-end tests.
-
-### Current status
-
-The local application and the core Teams read-only review path are verified. A
-test tenant has the Teams package installed and can receive a Business Agent
-mention. The current demo uses a bounded fictional review flow rather than a
-general-purpose autonomous agent system. Naming cleanup and evidence-grounded
-review improvements are the next approved work. See [project state](docs/PROJECT_STATE.md)
-for verified work, limits, and the active specs.
-
-## Technology used
-
-This project demonstrates the following product stack:
-
-- **.NET 10 and C#** for the domain, application, infrastructure, and API layers.
-- **ASP.NET Core and Entity Framework Core** for HTTP boundaries, authorization, persistence, and migrations.
-- **SQL Server and Azure SQL** for local and deployed durable state.
-- **React, TypeScript, and Next.js** for the web surface and Teams transport adapter.
-- **Microsoft Teams and Bot Framework** for channel, group-chat, and personal-chat integration.
-- **Microsoft Entra ID** for application identity, roles, groups, and workload boundaries.
-- **Azure App Service, Azure Bot Service, Azure Container Registry, Azure SQL, Blob Storage, Key Vault, Application Insights, and Log Analytics** for the deployed PaaS foundation.
-- **Microsoft Foundry** as the replaceable provider boundary for model-backed agent execution.
-- **Bicep, Azure Developer CLI, Azure CLI, and Docker** for infrastructure, packaging, and deployment.
-- **Automated testing** across .NET unit and API tests, TypeScript tests, adapter contracts, artifact validation, and playbook flows.
-
-For continuation in a new Codex or VS Code session, read [the canonical project state](docs/PROJECT_STATE.md) first. It separates verified work from unfinished slices and identifies the next approved spec.
-
-## See the product
-
-Read the [approved naming and information architecture](docs/product-naming.md).
-Microsoft Teams is the collaboration environment. The web application provides
-focused review, administration, and local examples.
-
-Open [the Teams example](http://localhost:3001/teams) after starting the local
-application. It illustrates Sample Energy Company departments and contributions
-from Business Agent. It is not a screenshot of an installed Teams app.
-
-Earlier screenshots in `docs/images/business-agent-*.png` retain historical styling
-and are not current product illustrations. Spec 048 records the naming change.
-
-## Run the local application
-
-Prerequisites: Node.js, the .NET SDK selected in `dotnet/global.json`, and Docker Desktop if you want SQL Server persistence.
+Prerequisites: Node.js, the pinned .NET SDK in `dotnet/global.json`, and Docker
+for SQL Server persistence.
 
 ```sh
 npm install
 docker compose up -d sqlserver
 dotnet run --project dotnet/LandOps.Api --urls http://127.0.0.1:5006
-BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 NEXT_PUBLIC_BUSINESS_AGENT_MODE=true npm run dev -- --port 3001
+DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true \
+BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 \
+npm run teams:dev
 ```
 
-Open [http://localhost:3001](http://localhost:3001). The seeded Braxton County case is synthetic. The frozen WVDEP/WVGES evidence is included for repeatable local review and does not require live government endpoints.
+The adapter listens on port `3978`. Local unauthenticated mode is for local
+testing only. Deployed mode requires the Bot Framework credentials and the
+configured API workload token settings.
 
-## What “Business Agent” means
-
-Business Agent is the single user-facing application and Teams bot that people
-mention. It is an entry point and orchestrator, not a separate Teams account for
-every specialist. A request can be routed through a bounded flow such as:
-
-```text
-Intake Reviewer → Ownership Reviewer → Title Chain Reviewer
-                → Compliance Reviewer → Case Synthesizer
-```
-
-Each specialist agent owns one responsibility and contributes findings to the
-flow. The orchestrator controls sequencing, handoffs, persistence, conflicts,
-and the human-review boundary. Teams receives one Business Agent reply that
-shows the path and each specialist's contribution; the specialist names are
-not separate Teams users or bots. The ASP.NET Core API remains authoritative for
-authorization, evidence rules, durable requests, and actions; Teams and Next.js
-are collaboration and presentation surfaces. The current live Teams slice uses
-one configured review flow and sample case, while the repository models the
-broader specialist-agent and flow structure. Agent names are application
-contributions, not tenant user accounts.
-
-To run the separate Teams channel adapter locally, keep the API running and start another terminal:
+## Verify
 
 ```sh
-DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 npm run teams:dev
-```
-
-The adapter listens on port `3978` for the Microsoft Teams/Bot Framework endpoint. Real tenant registration, Bot configuration, Entra credentials, and Teams sideloading are deployment steps; the pure adapter tests run without those credentials.
-
-For a local receive-path smoke test without a Teams tenant, run the API and
-adapter with deterministic lease settings, then post a Bot Framework-shaped
-activity to `/api/messages`. The activity must include a local `serviceUrl`
-that accepts the adapter's typing and reply activities. A successful HTTP 200
-proves local adapter-to-agent request wiring only; it is not a Teams tenant test.
-
-## What the demo proves
-
-- A fictional company portfolio with Land, Land Administration, Legal, Compliance, Accounting, Operations, and IT/Platform departments.
-- Role-aware scenarios for land analysts, lease analysts, division-order analysts, legal reviewers, compliance reviewers, accounting reviewers, operations reviewers, and case managers.
-- Case questions and agent requests with explicit delegation, evidence, and human review.
-- Lease, title, division-order, ownership, and OCR sample records alongside frozen public WV evidence.
-- Evidence-linked findings, preserved conflicts, explicit unknowns presented as evidence disclaimers, provenance, production no-match semantics, and a human review decision.
-- Local deterministic execution and a replaceable Microsoft Foundry provider boundary.
-- A real Teams channel adapter that accepts personal chat, group chat, and channel messages and forwards them to the bounded agent request API.
-
-## Architecture in one picture
-
-```text
-Microsoft Teams channel / personal chat
-          │  Teams SDK activity
-          ▼
-src/teams/server.ts
-  mention parsing · identity context · idempotency
-          │  Agent request HTTP contract
-          ▼
-Next.js web surface ──► ASP.NET Core API
-                           │
-              ┌────────────┼────────────┐
-              ▼            ▼            ▼
-        Application      Domain    Infrastructure
-        workflows       contracts  EF Core + SQL Server
-              │
-              ▼
-       deterministic or Foundry agents
-              │
-              ▼
-       findings · conflicts · unknowns · human review
-```
-
-The Teams adapter owns transport concerns only. The C# application owns authorization, role scenarios, evidence, persistence, agent plans, and review boundaries. This prevents the Teams shell and the web shell from developing different business rules.
-
-## Learn the codebase
-
-Start with the [Business Agent learner path](docs/business-agent-learning-path.md), then read:
-
-1. [Architecture](docs/business-agent-architecture.md)
-2. [Data and evidence](docs/business-agent-data-and-evidence.md)
-3. [Code tour](docs/business-agent-code-tour.md)
-4. [Development workflow](docs/business-agent-development-workflow.md)
-5. [Glossary](docs/business-agent-glossary.md)
-6. [V1 product specification](docs/BUSINESS_AGENT_WORKBENCH_V1.md)
-7. [Documentation gap report](docs/business-agent-documentation-gap-report.md)
-8. [Microsoft Foundry standards](docs/microsoft-foundry-standards.md)
-
-The original reusable TypeScript runtime is documented in the [documentation map](docs/README.md). Read it as a behavioral reference while learning the newer .NET-centered application.
-
-For the reference runtime’s deeper concepts, see [architecture](docs/architecture.md), [data model](docs/data-model.md), [flow runtime](docs/flow-runtime.md), [evaluations](docs/evaluations.md), and [safety](docs/safety.md). The original command-line example also remains available through `npm run eval` and the [quickstart](docs/quickstart.md).
-
-## Verify changes
-
-```sh
+node --version
 npm run typecheck
 npm test
-npm run build
-npm run validate:naming
-npm run validate:identity-personas
-npm run validate:agent-artifacts
 dotnet test dotnet/LandOps.sln
+npm run validate:records
+npm run validate:agent-artifacts
+npm run validate:identity-personas
+npm run validate:naming
+az bicep build --file infra/main.bicep --stdout
 git diff --check
 ```
 
-The default local mode is deterministic and offline. Foundry, Entra ID, Azure SQL, Blob Storage, Application Insights, and production Teams registration are explicit provider/deployment boundaries rather than hidden assumptions.
+## Build the Teams package
 
-The local identity catalog is [`config/identity/personas.json`](config/identity/personas.json). It is synthetic demo data, not a list of real tenant users. The UI loads it through `/api/landops/personas`; `npm run validate:identity-personas` checks it, and `npm run provision:entra-personas` produces a dry-run Azure CLI plan. Real creation additionally requires `--apply`, a tenant ID, a verified `--upn-domain`, and `LANDOPS_TEMP_PASSWORD`.
+The canonical manifest template is
+`teams-app/manifest.template.json`.
+
+```sh
+npm run teams:package -- \
+  --app-id <teams-app-guid> \
+  --bot-app-id <bot-app-guid> \
+  --endpoint https://<adapter-host>/api/messages \
+  --info-url https://<public-information-url> \
+  --color-icon path/to/color.png \
+  --outline-icon path/to/outline.png
+```
+
+See [the Teams package guide](teams-app/README.md) for package and installation
+rules.
+
+## Documentation
+
+Start with [project state](docs/PROJECT_STATE.md), then read the
+[Teams architecture](docs/teams-architecture.md),
+[Teams development guide](docs/teams-development.md),
+[Azure recreation guide](docs/azure-recreation.md), and
+[Teams activation runbook](docs/teams-live-activation.md).
+
+The [documentation map](docs/README.md) identifies current guides. Older
+runtime, product-design, and domain-planning material remains preserved in
+Git history and is classified in [documentation history](docs/history.md).
 
 ## Repository map
 
-- `dotnet/LandOps.Domain` — business contracts and invariants.
-- `dotnet/LandOps.Application` — use cases, role scenarios, agent request, and execution boundaries.
-- `dotnet/LandOps.Infrastructure` — EF Core, SQL Server, fixtures, and Foundry integration.
-- `dotnet/LandOps.Api` — ASP.NET Core HTTP boundary.
-- `app/` — Next.js App Router and same-origin browser routes.
-- `src/business-agent/` — React view components and C# response adapters.
-- `src/teams/` — Microsoft Teams SDK channel adapter.
-- `src/` and `domains/` — older TypeScript reference runtime and WV source implementation.
-- `specs/` and `results/` — checkpoint specifications and verification records.
-
-## Current limits
-
-The Teams adapter has a deployed Azure foundation recorded in result 047. The
-Microsoft 365 bot identity, package installation, and read-only live mention
-path are verified in the test tenant. Human-action authorization and duplicate
-activity suppression remain separate live checks. See [project state](docs/PROJECT_STATE.md)
-and [tenant naming adoption](docs/tenant-naming-adoption.md). OCR extraction,
-live source ingestion, and consequential external actions remain outside the
-current verified scope.
+- `dotnet/LandOps.*` — API, domain, application, infrastructure, and tests.
+- `src/teams/` — Microsoft Teams transport adapter and API client.
+- `teams-app/` — Teams manifest template and package documentation.
+- `domains/`, `fixtures/`, and `evaluations/` — bounded review behavior and
+  deterministic evidence fixtures.
+- `infra/` and `teams.Dockerfile` — Azure deployment and adapter packaging.
+- `specs/` and `results/` — approved work and verification history.

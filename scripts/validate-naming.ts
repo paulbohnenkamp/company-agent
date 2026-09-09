@@ -34,9 +34,9 @@ assert.equal(manifest.name.short, "Business Agent");
 assert.equal(manifest.name.full, "Business Agent");
 assert.equal(manifest.developer.name, "Sample Energy Company");
 assert.doesNotMatch(JSON.stringify(manifest.name) + JSON.stringify(manifest.description), /LandOps|Workroom|Blue Ridge/i);
-await access("src/business-agent/adapter.ts");
+await access("src/teams/server.ts");
 await access("src/teams/teams-adapter.ts");
-for (const obsoletePath of ["src/landops", "src/teams/landops-adapter.ts", "src/teams/landops-client.ts"]) {
+for (const obsoletePath of ["src/landops", "src/business-agent", "src/teams/landops-adapter.ts", "src/teams/landops-client.ts"]) {
   await access(obsoletePath).then(() => { throw new Error(`Obsolete active path remains: ${obsoletePath}`); }).catch((error: unknown) => {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   });
