@@ -94,6 +94,8 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
 - `git diff --check` — passed.
 - Full `dotnet test` — blocked by unavailable local SQL Server; domain and
   application tests build successfully, while API tests require SQL.
+- Active API deployment validation — blocked by the same unavailable local SQL
+  Server. No `azd provision` or `azd deploy` mutation was run in this pass.
 - Copilot Studio schema/configuration, Preview/activity-map, Teams publication,
   routing evaluation, and live rollback checks — blocked by unavailable tenant.
 

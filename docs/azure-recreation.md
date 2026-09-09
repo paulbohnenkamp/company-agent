@@ -39,6 +39,21 @@ Inspect the preview and `azd config` before provisioning. Production API
 configuration uses the Foundry/provider path and Entra identity; Development
 alone may use deterministic fakes.
 
+## Current deployment status
+
+On 2026-09-09, the API-only Bicep and AZD preview passed. The preview showed
+the API update and skipped the retired Teams and web services; no Azure
+mutation was applied in that pass. The existing API health endpoint responded
+with `{"status":"ok"}`.
+
+The active deployment plan is local at `.azure/deployment-plan.md`. Full
+deployment remains gated by the SQL-backed API test suite: domain and
+application tests pass, but API tests require SQL Server at `localhost:1433`.
+Start the approved local SQL dependency or use the approved integration-test
+environment, rerun `azure-validate`, then run `azd provision --no-prompt` and
+`azd deploy --no-prompt`. Do not bypass this gate or treat the AZD preview as a
+deployment.
+
 ## Verification and rollback
 
 Verify API health, Entra authentication, SQL connectivity, provider health,

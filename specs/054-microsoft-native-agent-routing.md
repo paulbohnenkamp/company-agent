@@ -1,7 +1,7 @@
 ---
 id: 054-microsoft-native-agent-routing
 title: Adopt Microsoft-native Business Agent routing
-status: completed
+status: in-progress
 created: 2026-09-09
 updated: 2026-09-09
 result: results/054-microsoft-native-agent-routing.md
@@ -218,6 +218,9 @@ evaluations, Azure inspection, and a documented rollback/version check.
 - 2026-09-09: Retired the custom Teams adapter/package from the active
   repository deployment path and removed production deterministic provider
   defaults; Copilot Studio tenant verification remains external.
+- 2026-09-09: Kept the spec in progress because Copilot Studio tenant
+  capability, authoring, publication, Teams smoke testing, and rollback
+  evidence remain unverified.
 - 2026-09-09: Completed repository-side implementation and verification. Live
   Copilot Studio capability, publication, and routing checks remain blocked by
   unavailable tenant access.
