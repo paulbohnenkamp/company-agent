@@ -136,6 +136,12 @@ app.MapGet("/api/v1/cases/{caseId}", async (string caseId, CaseQuery query, Canc
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
+app.MapGet("/openapi.json", (IWebHostEnvironment environment) =>
+{
+    var path = Path.Combine(environment.ContentRootPath, "Resources", "copilot-studio-openapi.json");
+    return Results.File(path, "application/json");
+});
+
 // The portfolio shell is read-only seed context. Identity-aware write actions
 // use the explicit local or Entra boundary configured below.
 app.MapGet("/api/v1/company", () => Results.Ok(CompanyPortfolioSeed.Current));

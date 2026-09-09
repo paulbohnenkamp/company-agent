@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Business Agent API",
+    "version": "1.0.0",
+    "description": "Read-only evidence and land-operations context for the Mountaineer Copilot Studio agent. Public records are evidence, not proof of title."
+  },
+  "servers": [
+    {
+      "url": "https://mountaineer-7pxfuiyt-api.azurewebsites.net"
+    }
+  ],
+  "paths": {
+    "/api/v1/company": {
+      "get": {
+        "operationId": "getCompanyPortfolio",
+        "summary": "Get the Sample Energy Company portfolio context",
+        "responses": {
+          "200": {
+            "description": "Portfolio context",
+            "content": {
+              "application/json": { "schema": { "type": "object" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios": {
+      "get": {
+        "operationId": "listRoleScenarios",
+        "summary": "List supported land-operation scenarios",
+        "responses": {
+          "200": {
+            "description": "Supported scenarios",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios/{scenarioId}/plan": {
+      "get": {
+        "operationId": "getScenarioPlan",
+        "summary": "Get the plan for a supported scenario",
+        "parameters": [
+          { "name": "scenarioId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scenario plan",
+            "content": {
+              "application/json": { "schema": { "type": "object" } }
+            }
+          },
+          "404": { "description": "Scenario not found" }
+        }
+      }
+    },
+    "/api/v1/cases/{caseId}": {
+      "get": {
+        "operationId": "getLandCase",
+        "summary": "Get a case research summary",
+        "parameters": [
+          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Case summary",
+            "content": {
+              "application/json": { "schema": { "type": "object" } }
+            }
+          },
+          "404": { "description": "Case not found" }
+        }
+      }
+    },
+    "/api/v1/cases/{caseId}/data-room": {
+      "get": {
+        "operationId": "getCaseDataRoom",
+        "summary": "Get read-only data-room context for a case",
+        "parameters": [
+          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Case data-room records",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
+            }
+          },
+          "404": { "description": "Case not found" }
+        }
+      }
+    },
+    "/api/v1/cases/{caseId}/evidence": {
+      "get": {
+        "operationId": "getCaseEvidence",
+        "summary": "Get evidence records for a case",
+        "parameters": [
+          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Evidence records",
+            "content": {
+              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
+            }
+          },
+          "404": { "description": "Case not found" }
+        }
+      }
+    }
+  }
+}

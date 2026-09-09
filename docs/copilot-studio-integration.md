@@ -36,14 +36,25 @@ published versions in the result record.
 
 ## API tools
 
-The current authenticated application boundary is the workroom API:
+The current application boundary includes a narrow read-only Copilot Studio
+contract at:
+
+`GET https://mountaineer-7pxfuiyt-api.azurewebsites.net/openapi.json`
+
+The contract currently exposes these read-oriented operations:
 
 | Operation | Purpose |
 | --- | --- |
-| `POST /api/v1/workroom/threads` | Create an authorized case-scoped review request |
-| `POST /api/v1/workroom/threads/{threadId}/run` | Execute the configured provider-backed review |
-| `POST /api/v1/workroom/threads/{threadId}/actions` | Record an authorized human action |
 | `GET /api/v1/cases/{caseId}` | Read a case within the API boundary |
+| `GET /api/v1/company` | Read fictional company and department context |
+| `GET /api/v1/scenarios` | Read supported land-operation scenarios |
+| `GET /api/v1/scenarios/{scenarioId}/plan` | Read a scenario plan |
+| `GET /api/v1/cases/{caseId}/data-room` | Read case data-room context |
+| `GET /api/v1/cases/{caseId}/evidence` | Read case evidence and provenance |
+
+Write and approval operations remain outside the initial Copilot Studio tool
+allowlist until their authenticated contract and human-approval flow are
+verified.
 
 Expose these operations to Copilot Studio through the selected authenticated
 connector or API tool mechanism. The connector must pass the minimum required

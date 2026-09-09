@@ -94,22 +94,29 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
 - `git diff --check` — passed.
 - Full `dotnet test` — passed, 39/39 tests across Domain, Application, and API
   projects after restarting the existing local `landops-sqlserver` container.
-- Active API deployment validation — passed locally; Azure provisioning and
-  deployment completed for the isolated `mountaineer-dev` environment.
+- Active API deployment validation — passed; Azure provisioning and deployment
+  completed for the isolated `mountaineer-dev` environment.
 - `azd provision --no-prompt` — passed; created the API-only stack in
   `rg-mountaineer-dev`.
 - The initial API-only deployment at `https://landops-7pxfuiyt-api.azurewebsites.net`
   was intentionally removed because its generated names retained the legacy
   `landops` prefix.
 - Corrected Mountaineer naming is now in `azure.yaml` and `infra/main.bicep`.
-  The clean redeployment is in progress; completed resources use the
-  `mountaineer` prefix and the application database is `Mountaineer`.
-- The clean redeployment encountered Azure lifecycle delays: Key Vault
-  soft-delete name reuse and an in-progress SQL logical-server operation. The
-  stale deployment was cancelled and the remaining Azure operation is being
-  allowed to settle before retrying.
-- Copilot Studio schema/configuration, Preview/activity-map, Teams publication,
-  routing evaluation, and live rollback checks — blocked by unavailable tenant.
+  The deployed resources use the `mountaineer` prefix and the application
+  database is `Mountaineer`.
+- `azd provision --no-prompt` — passed; created the API App Service and
+  supporting resources in `rg-mountaineer-dev`.
+- `azd deploy --no-prompt` — passed; deployed image
+  `mountaineer-workbench/api-mountaineer-dev:azd-deploy-1788994995`.
+- Live endpoint: `https://mountaineer-7pxfuiyt-api.azurewebsites.net/`.
+- Live health check: `GET /health` returned HTTP 200 and `{"status":"ok"}`.
+- Added and verified the read-only OpenAPI contract at
+  `https://mountaineer-7pxfuiyt-api.azurewebsites.net/openapi.json`.
+- Copilot Studio agent `Mountaineer` was created in `DecisionForge (default)`
+  under the tenant-native account, with description and instructions saved.
+- Copilot Studio tool import, Preview/activity-map, Teams publication, routing
+  evaluation, and live rollback checks remain pending. The agent is intentionally
+  unpublished until the authenticated API tool is configured and tested.
 - On 2026-09-09, the Copilot Studio create screen returned HTTP 400 with
   `cdsBotId: The value 'new' is not valid.` and trace ID
   `0HNE08B3RK099N:00001249` when **Agent — Standard** was selected. The error
