@@ -15,6 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("BusinessAgent"
     ?? builder.Configuration.GetConnectionString("LandOps")
     ?? "Server=localhost,1433;Database=LandOps;User Id=sa;Password=LandOps_dev_2026!;TrustServerCertificate=True;Encrypt=False";
 var entraMode = string.Equals(businessAgentSetting("IdentityMode"), "entra", StringComparison.OrdinalIgnoreCase);
+var allowDeterministicConversation = builder.Environment.IsDevelopment();
 
 builder.Services.AddAuthorization();
 if (entraMode)
@@ -64,7 +65,7 @@ if (entraMode)
 // Azure SQL can reset a managed-identity login while the platform is warming
 // or recycling an App Service instance. Keep the SQL boundary resilient to
 // those transient connection failures without moving persistence into the
-// Teams adapter.
+// Copilot Studio API tool boundary.
 builder.Services.AddDbContext<BusinessAgentDbContext>(options => options.UseSqlServer(
     connectionString,
     sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)));
@@ -88,13 +89,23 @@ builder.Services.AddScoped<IAgentProvider>(services =>
             TimeSpan.FromSeconds(configuration.GetValue("Foundry:TimeoutSeconds", 30))));
 });
 builder.Services.AddScoped<ICaseConversation>(services =>
-    string.Equals(businessAgentSetting("ConversationProvider"), "foundry", StringComparison.OrdinalIgnoreCase)
-        ? new FoundryCaseConversation(services.GetRequiredService<IAgentProvider>())
-        : services.GetRequiredService<DeterministicCaseConversation>());
+{
+    var provider = businessAgentSetting("ConversationProvider");
+    if (string.Equals(provider, "foundry", StringComparison.OrdinalIgnoreCase))
+        return new FoundryCaseConversation(services.GetRequiredService<IAgentProvider>());
+    if (allowDeterministicConversation)
+        return services.GetRequiredService<DeterministicCaseConversation>();
+    throw new InvalidOperationException("ConversationProvider must be foundry outside Development.");
+});
 builder.Services.AddScoped<IWorkroomRunService>(services =>
-    string.Equals(businessAgentSetting("WorkroomExecutionProvider"), "foundry", StringComparison.OrdinalIgnoreCase)
-        ? new FoundryWorkroomRunService(services.GetRequiredService<IAgentProvider>())
-        : new DeterministicWorkroomRunService());
+{
+    var provider = businessAgentSetting("WorkroomExecutionProvider");
+    if (string.Equals(provider, "foundry", StringComparison.OrdinalIgnoreCase))
+        return new FoundryWorkroomRunService(services.GetRequiredService<IAgentProvider>());
+    if (allowDeterministicConversation)
+        return new DeterministicWorkroomRunService();
+    throw new InvalidOperationException("WorkroomExecutionProvider must be foundry outside Development.");
+});
 builder.Services.AddSingleton<WorkroomThreadStore>();
 if (string.Equals(businessAgentSetting("WorkroomPersistence"), "sql", StringComparison.OrdinalIgnoreCase))
     builder.Services.AddScoped<IWorkroomThreadStore, SqlWorkroomThreadStore>();
@@ -146,13 +157,6 @@ app.MapGet("/api/v1/scenarios/{scenarioId}/plan", (string scenarioId) =>
     return plan is null ? Results.NotFound() : Results.Ok(plan);
 });
 
-app.MapPost("/api/v1/cases/{caseId}/scenario-runs", (string caseId, FictionalReviewRequest request) =>
-{
-    if (string.IsNullOrWhiteSpace(request.ScenarioId)) return Results.BadRequest(new { error = "scenarioId is required" });
-    var packet = FictionalReviewPacketSeed.Create(caseId, request.ScenarioId);
-    return packet is null ? Results.NotFound(new { error = "case or scenario not found" }) : Results.Ok(packet);
-});
-
 app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, WorkroomThreadRequest request, IWorkroomThreadStore store, ILoggerFactory loggerFactory, CancellationToken cancellationToken) =>
 {
     var logger = loggerFactory.CreateLogger("BusinessAgent.Api.WorkroomAuthorization");
@@ -201,7 +205,7 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, I
             thread.ThreadId,
             thread.CaseId,
             thread.ScenarioId,
-            businessAgentSetting("WorkroomExecutionProvider") ?? "deterministic",
+            businessAgentSetting("WorkroomExecutionProvider") ?? "provider-not-configured",
             error.Message);
         return Results.Problem(error.Message, statusCode: StatusCodes.Status502BadGateway);
     }

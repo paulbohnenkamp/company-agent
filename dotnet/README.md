@@ -2,11 +2,11 @@
 
 Business Agent is a .NET 10/C# 14 ASP.NET Core application with EF Core
 10 and SQL Server persistence. Checkpoints A through E now cover the case
-foundation, evidence reconciliation, ordered workflow, Teams transport,
-case-scoped conversation, and append-only human review.
+foundation, evidence reconciliation, ordered workflow, API tools, case-scoped
+conversation, and append-only human review.
 
-Start with the [Teams development guide](../docs/teams-development.md) for
-current local run instructions. Use this file as a short .NET-specific
+Start with the [Mountaineer development guide](../docs/teams-development.md)
+for current local run instructions. Use this file as a short .NET-specific
 reference.
 
 ## Local run

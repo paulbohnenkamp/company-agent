@@ -5,14 +5,14 @@ business authority; Teams and Foundry are integration surfaces.
 
 | Technology | Use in this repository |
 | --- | --- |
-| Microsoft Teams / Bot Framework | User conversation, mentions, channels, and replies |
+| Microsoft Teams / Copilot Studio | User conversation, mentions, topics, and replies |
 | ASP.NET Core and .NET | API boundary, authorization, orchestration, and actions |
 | SQL Server / Azure SQL | Durable request threads, runs, and review state |
 | Azure Blob Storage | Evidence and source snapshots |
 | Microsoft Entra ID | Human claims and workload identity |
 | Azure Key Vault | Bot and service secrets through App Service references |
-| Azure App Service | Hosts the API and Teams adapter |
-| Azure Container Registry | Stores immutable service images |
+| Azure App Service | Hosts the Business Agent API |
+| Azure Container Registry | Stores immutable API images |
 | Application Insights / Log Analytics | Runtime telemetry and diagnostics |
 | Microsoft Foundry | Optional provider-backed agent execution and evaluations |
 | `azd`, `az`, and Bicep | Repeatable deployment, inspection, and infrastructure |

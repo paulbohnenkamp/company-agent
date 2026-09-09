@@ -53,11 +53,11 @@ public static class BusinessAgentIdentityResolver
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
 
-        // The Teams adapter uses an app-only token. It cannot carry the
-        // Teams user's department role or group claims, so the API accepts
-        // its transported context only after validating both the known
-        // adapter app identity and the dedicated workload role. Scenario and
-        // group policy is still enforced by the API endpoint.
+        // A trusted application tool may use an app-only token. It cannot carry
+        // the human user's department role or group claims, so the API accepts
+        // transported context only after validating both the known tool app
+        // identity and the dedicated workload role. Scenario and group policy
+        // is still enforced by the API endpoint.
         var appId = principal.FindFirst("azp")?.Value
             ?? principal.FindFirst("appid")?.Value
             ?? string.Empty;

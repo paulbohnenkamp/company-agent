@@ -24,19 +24,22 @@ public sealed class FoundryWorkroomRunService(IAgentProvider provider) : IWorkro
 
     public async Task<FictionalReviewPacket> RunAsync(WorkroomThread thread, CancellationToken cancellationToken = default)
     {
-        var baseline = FictionalReviewPacketSeed.Create(thread.CaseId, thread.ScenarioId)
-            ?? throw new WorkroomRunException("The requested case or scenario was not found.");
+        var scenario = RoleScenarioSeed.Current.SingleOrDefault(item => item.Id == thread.ScenarioId);
+        var plan = scenario is null ? null : RoleScenarioSeed.PlanFor(thread.ScenarioId);
+        if (scenario is null || plan is null)
+            throw new WorkroomRunException("The requested case or scenario was not found.");
         var records = FictionalDataRoomSeed.ForCase(thread.CaseId)
-            ?.Where(record => baseline.RecordIds.Contains(record.RecordId, StringComparer.Ordinal))
-            .ToArray() ?? [];
+            ?.ToArray() ?? [];
         var instructions = "Return only JSON with recordIds, findings, unknowns, and proposedRoute. "
             + "Use only the supplied record IDs. Every finding must use a supplied record ID. "
-            + "Preserve uncertainty and return proposedRoute as human-review. Do not issue title, payment, or development decisions.";
+            + "Preserve uncertainty and return proposedRoute as human-review. Do not issue title, payment, or development decisions. "
+            + "The selected review scope is defined by the requested scenario and question; do not invent a broader scope.";
         var input = JsonSerializer.Serialize(new
         {
             thread = new { thread.Question, thread.Context, thread.RoleId, thread.RequiredGroup },
             records,
-            plannedAgents = baseline.AgentSteps
+            scenario = new { scenario.Id, scenario.Description, scenario.EvidenceTypes },
+            plannedAgents = plan.Steps
         }, JsonOptions);
         var response = await provider.ExecuteAsync(new AgentProviderRequest("workroom-review", instructions, input), cancellationToken);
         if (!response.Succeeded) throw new WorkroomRunException(response.Error ?? "The Foundry agent provider failed.");
@@ -48,12 +51,25 @@ public sealed class FoundryWorkroomRunService(IAgentProvider provider) : IWorkro
             throw new WorkroomRunException("The Foundry agent response was incomplete.");
         if (payload.ProposedRoute is not "human-review")
             throw new WorkroomRunException("The Foundry agent response requested an unsupported route.");
-        if (payload.RecordIds.Any(recordId => !baseline.RecordIds.Contains(recordId, StringComparer.Ordinal)))
+        var availableRecordIds = records.Select(record => record.RecordId).ToHashSet(StringComparer.Ordinal);
+        if (payload.RecordIds.Any(recordId => !availableRecordIds.Contains(recordId)))
             throw new WorkroomRunException("The Foundry agent response cited a record outside the current case.");
         if (payload.Findings.Any(finding => !payload.RecordIds.Contains(finding.RecordId, StringComparer.Ordinal)))
             throw new WorkroomRunException("The Foundry agent response included a finding without a returned source record.");
 
-        return baseline with { Question = thread.Question, RecordIds = payload.RecordIds, Findings = payload.Findings, Unknowns = payload.Unknowns, ProposedRoute = payload.ProposedRoute };
+        return new FictionalReviewPacket(
+            $"packet-{Guid.NewGuid():N}",
+            thread.CaseId,
+            thread.ScenarioId,
+            thread.Question,
+            payload.RecordIds,
+            payload.Findings,
+            payload.Unknowns,
+            plan.Steps,
+            [],
+            payload.ProposedRoute,
+            plan.HumanBoundary,
+            DateTimeOffset.UtcNow);
     }
 
     private sealed record WorkroomAgentPayload(string[]? RecordIds, FictionalReviewFinding[]? Findings, string[]? Unknowns, string ProposedRoute);

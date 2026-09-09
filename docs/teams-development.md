@@ -1,24 +1,22 @@
-# Teams app development
+# Mountaineer development
 
-## Local services
+The repository-side development target is the Business Agent C# API and its
+authenticated tool boundary. Copilot Studio authoring and Teams publication
+require a connected tenant and are not part of the local test loop.
 
-Start SQL Server and the API using the commands in the root README. Then run:
+## Local API
 
-```sh
-DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true \
-BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 \
-npm run teams:dev
-```
-
-The adapter uses port `3978`. The API uses port `5006` in the development
-profile. Local unauthenticated mode must never be used for deployment.
+Start SQL Server and the API using the commands in the root README. Development
+configuration may use deterministic fakes for repeatable backend verification;
+production configuration requires the Foundry/provider path.
 
 ## Checks
 
 ```sh
+node --version
 npm run typecheck
 npm test
-dotnet test dotnet/LandOps.sln
+dotnet test dotnet/LandOps.sln --no-restore --disable-build-servers -m:1 --verbosity quiet /p:UseSharedCompilation=false
 npm run validate:records
 npm run validate:agent-artifacts
 npm run validate:identity-personas
@@ -26,16 +24,19 @@ npm run validate:naming
 ```
 
 Use deterministic fixtures and fake providers in tests. Do not require live
-Teams, Foundry, or government endpoints for unit and contract tests.
-The API integration tests require a reachable local SQL Server instance.
+Teams, Copilot Studio, Foundry, or government endpoints for unit and contract
+tests.
 
 ## Change ownership
 
-- Teams activity mapping and formatting belong in `src/teams/`.
-- Authorization, evidence, persistence, and actions belong in the C# API.
-- Manifest and package behavior belongs in `teams-app/` and the package script.
+- Copilot Studio agent/topic configuration belongs in the tenant authoring
+  experience and its versioned deployment record.
+- API tools, authorization, evidence, persistence, and actions belong in the
+  C# API.
+- Deterministic parsing, normalization, hashing, calculations, and evaluation
+  mechanics remain in the backend.
 - Azure resource changes belong in `infra/` and `azure.yaml`.
 
 For multi-step work, create an approved spec and matching result. Read
-`AGENTS.md`, `docs/PROJECT_STATE.md`, and the relevant Teams or WV architecture
-guide before editing.
+`AGENTS.md`, `docs/PROJECT_STATE.md`, and
+`docs/copilot-studio-integration.md` before editing.

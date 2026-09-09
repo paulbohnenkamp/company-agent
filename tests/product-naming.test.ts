@@ -18,9 +18,7 @@ test("persona dry-run uses dotted aliases and never prints a configured password
   assert.ok(!output.includes(password));
 });
 
-test("legacy HTTP identifiers remain transport contracts while product copy is current", async () => {
-  const client = await readFile("src/teams/business-agent-client.ts", "utf8");
-  assert.ok(client.includes("/api/v1/workroom/threads"));
+test("legacy API identifiers remain transport contracts while product copy is current", async () => {
   const naming = await readFile("docs/product-naming.md", "utf8");
   assert.match(naming, /Microsoft Teams is where people collaborate/);
 });

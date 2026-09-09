@@ -1,57 +1,50 @@
-# Teams app architecture
+# Mountaineer Teams architecture
 
-Business Agent has one user-facing surface: Microsoft Teams. The adapter is a
-transport boundary, not a second business application.
+Mountaineer is the user-facing Copilot Studio agent. Users address it in
+Teams as `@Mountaineer`; Teams does not select or orchestrate the business
+workflow.
 
 ```text
-Microsoft Teams activity
+Microsoft Teams
         ↓
-src/teams/server.ts
-  mention parsing · identity context · idempotency
-        ↓ HTTPS JSON + optional Entra workload token
-ASP.NET Core API
-  authorization · case scope · evidence · persistence · agent execution
+Copilot Studio Mountaineer agent
+  generative orchestration · topics · supported child/connected agents
+        ↓ authenticated API tools
+Business Agent ASP.NET Core API
+  authorization · evidence · persistence · deterministic domain mechanics
         ↓
-bounded deterministic or Foundry review
-        ↓
-Teams response with findings, provenance, uncertainty, and human boundary
+human-review result or approved action
 ```
 
 ## Boundaries
 
-- `src/teams/teams-adapter.ts` maps Teams activities and formats replies.
-- `src/teams/business-agent-client.ts` calls the typed API contract.
-- `dotnet/LandOps.Api` is the HTTP and authentication boundary.
-- `dotnet/LandOps.Application` owns review orchestration and actions.
-- `dotnet/LandOps.Domain` owns business contracts and invariants.
-- `dotnet/LandOps.Infrastructure` owns SQL Server, fixtures, and Foundry
-  provider integration.
-- `teams-app/` creates the installable manifest and icon package.
+- Copilot Studio owns the employee conversation and native orchestration.
+- Topics own bounded conversational flows and clarification.
+- Child or connected agents are optional specialized conversation surfaces.
+- API tools expose only governed operations.
+- `dotnet/LandOps.Api` and `dotnet/LandOps.Application` own identity,
+  authorization, case scope, evidence, persistence, agent workflows, and human
+  actions.
+- The WV workflow remains a deterministic backend process for exact evidence
+  mechanics and repeatable evaluation. It is not the conversational router.
 
-The adapter never decides authorization, title, ownership, payment, filing, or
-other consequential business outcomes. The API validates all returned evidence
-references and keeps human approval explicit.
+Agent and topic descriptions influence selection; they never grant access.
+The API validates every caller, case, evidence reference, and consequential
+action.
 
-## Request lifecycle
+## Conversation lifecycle
 
-1. Teams sends a personal, group-chat, or channel activity.
-2. The adapter strips only the bot mention and normalizes the actor/context.
-3. The adapter suppresses duplicate activity IDs for the lifetime of its
-   process.
-4. The API creates an agent-request thread and applies authorization.
-5. The API runs the bounded review and persists the structured packet.
-6. The adapter formats the packet for Teams.
-7. Explicit action commands are sent back through the API and recorded there.
+1. A person mentions `@Mountaineer` in Teams.
+2. Copilot Studio evaluates the message, context, primary-agent instructions,
+   topic descriptions, tools, and supported child/connected-agent descriptions.
+3. The selected topic or agent gathers required information and calls an
+   authenticated API tool.
+4. The API performs the exact business operation and returns structured output.
+5. Copilot Studio presents findings, uncertainty, provenance, and the human
+   decision boundary in Teams.
+6. Any consequential action is sent back to the API and requires authorization
+   and human approval.
 
-Local deterministic mode is the repeatable baseline. Foundry is opt-in and
-must remain behind the same API validation and human-review boundary.
-
-## What the Teams model means here
-
-The intended experience is one Business Agent in Teams with several bounded
-specialist contributions behind it. That is not one bot per specialist. The
-repository uses configured API scenarios and delegation plans; it does not yet
-route arbitrary requests by reading each agent description. Teams publishing
-and Microsoft 365 group membership help distribute the app, while Entra claims
-and API policy remain the authorization source. This keeps custom routing in
-one application boundary and the adapter small.
+The former custom Bot Framework adapter and Teams package are not the active
+orchestration path. Live Copilot Studio tenant configuration is still an
+external verification gate.

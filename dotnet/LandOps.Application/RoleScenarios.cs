@@ -26,7 +26,7 @@ public sealed record RoleScenario(
     };
 }
 
-/// <summary>Stable routing IDs with current catalog labels for web and Teams presentation.</summary>
+/// <summary>Stable workflow IDs with current catalog labels for API tools and agent output.</summary>
 public sealed record CollaborationStep(string AgentId, string Kind, int Order, string? DelegatedFrom)
 {
     public string AgentName => CompanyPortfolioSeed.AgentName(AgentId);

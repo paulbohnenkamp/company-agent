@@ -1,12 +1,16 @@
 # Business Agent naming
 
-Business Agent is the application and Microsoft Teams app. Microsoft Teams is where people collaborate. Sample Energy Company is fictional context. Land, Legal,
+Business Agent is the application boundary. **Mountaineer** is the user-facing
+Copilot Studio agent published in Microsoft Teams, so users address it as
+`@Mountaineer`. Microsoft Teams is where people collaborate. Sample Energy
+Company is fictional context. Land, Legal,
 Compliance, Accounting, and Operations are departments, not products or
 separate collaboration spaces.
 
 | Item | Current name |
 | --- | --- |
-| Application and Teams app | Business Agent |
+| Application/API boundary | Business Agent |
+| Teams agent display name | Mountaineer |
 | Fictional organization | Sample Energy Company |
 | Collaboration surface | Microsoft Teams |
 | Specialist capability | `<Capability> Agent`, for example Case Intake Agent |

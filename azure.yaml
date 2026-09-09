@@ -11,10 +11,3 @@ services:
       path: ./Dockerfile
       context: ..
       remoteBuild: true
-  teams:
-    project: .
-    language: docker
-    host: appservice
-    docker:
-      path: ./teams.Dockerfile
-      remoteBuild: true

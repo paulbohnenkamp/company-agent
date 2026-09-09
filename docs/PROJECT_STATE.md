@@ -2,53 +2,46 @@
 
 **Last reconciled:** 2026-09-09
 
-This branch is the Teams app core. Business Agent is one Microsoft Teams app
-backed by an ASP.NET Core API. There is no web or administration surface.
+This branch adopts Mountaineer as the user-facing Copilot Studio agent. Users
+mention `@Mountaineer` in Teams. Business Agent is the C# application/API
+boundary behind the agent. The custom Bot Framework adapter and Teams package
+are no longer the active orchestration path.
 
 ## Current shape
 
-- `src/teams/` receives Teams activities, handles mentions and idempotency, and
-  formats replies.
+- Copilot Studio owns conversation, generative orchestration, topics, and
+  supported child/connected agents.
 - `dotnet/LandOps.*` owns authorization, case scope, evidence, persistence,
-  agent plans, and human actions.
-- `domains/`, `fixtures/`, and `evaluations/` define bounded deterministic
-  behavior and evidence fixtures.
-- `agent.yaml` and `SKILL.md` are the canonical agent and skill artifacts.
-- `infra/`, `azure.yaml`, and the two App Services deploy the API and adapter.
+  agent workflows, API tools, and human actions.
+- `domains/`, `fixtures/`, and `evaluations/` define bounded behavior and
+  deterministic backend verification.
+- `agent.yaml` and `SKILL.md` remain the canonical repository artifacts.
+- `infra/` and `azure.yaml` deploy the C# API and its supporting Azure
+  resources.
 
-The local baseline is deterministic. Microsoft Foundry is an opt-in provider
-behind the API boundary. WVDEP and WVGES are independent evidence sources;
-public evidence is not proof of title, and consequential actions require a
-human.
+The production conversation path must not use fixed Teams scenario defaults or
+canned seeded responses. Deterministic parsing, normalization, hashing,
+calculations, validation, persistence, fixtures, and evaluation remain backend
+mechanics and test assets.
 
-## Teams flow
-
-Teams sends one activity to the Business Agent app. The adapter normalizes the
-actor and conversation, then calls the API. The API authorizes the request,
-creates a durable thread, runs a bounded scenario and specialist plan, stores
-the structured result, and returns a concise reply. Explicit human actions go
-back through the API.
-
-The current implementation uses configured scenarios and delegation plans. It
-does not claim automatic routing across arbitrary agents, Teams topics, or
-Microsoft 365 group-based business authorization.
+WVDEP and WVGES are independent evidence sources. Public evidence is not proof
+of title, and consequential actions require a human.
 
 ## Records and continuation
 
 Read [AGENTS.md](../AGENTS.md), this page, and the relevant current guide before
 making changes. Every multi-step change needs an approved spec in `specs/` and
 a matching result in `results/`; [execution-records.md](execution-records.md)
-defines the format. The latest completed slice is
-[spec 052](../specs/052-teams-app-core.md) with
-[result 052](../results/052-teams-app-core.md). The documentation minimum is
-tracked by [spec 053](../specs/053-teams-documentation-minimum.md).
+defines the format. Spec 050 is preserved as a superseded historical record.
+The active implementation is [spec 054](../specs/054-microsoft-native-agent-routing.md).
 
 Compatibility identifiers such as `LandOps` and `Workroom` may remain in
 storage, routes, permissions, or deployment settings; they are not product or
 collaboration-space names.
 
-## Known verification boundary
+## Verification boundary
 
-TypeScript and .NET builds are repeatable locally. API integration tests need a
-reachable SQL Server; unit and application tests do not require live Teams,
-Foundry, or government endpoints.
+Local deterministic fakes verify backend contracts. Copilot Studio tenant
+capability, native agent/topic configuration, Teams publication, routing
+behavior, and activity-map inspection require external tenant access and are
+not claimed until verified.

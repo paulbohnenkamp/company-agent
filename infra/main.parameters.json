@@ -4,6 +4,5 @@
   "parameters": {
     "sqlAdminObjectId": { "value": "${SQL_ADMIN_OBJECT_ID}" },
     "entraAudience": { "value": "${ENTRA_AUDIENCE}" }
-    ,"trustedAdapterAppId": { "value": "${TRUSTED_ADAPTER_APP_ID}" }
   }
 }

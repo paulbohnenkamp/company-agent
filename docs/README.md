@@ -1,16 +1,17 @@
 # Business Agent Teams documentation
 
-This is the current documentation surface for the Teams app. The product is a
-Teams bot backed by the C#/.NET API. There is no web or administration surface
-in this branch.
+This is the current documentation surface for the Mountaineer Copilot Studio
+agent and its Business Agent C#/.NET API. Teams is the conversation channel;
+there is no web or administration surface in this branch.
 
 ## Start here
 
 1. [Project state](PROJECT_STATE.md) — verified status and next approved work.
-2. [Teams architecture](teams-architecture.md) — boundaries and request flow.
-3. [Teams development](teams-development.md) — local run, tests, and changes.
-4. [Azure recreation](azure-recreation.md) — current API and adapter deployment.
-5. [Teams live activation](teams-live-activation.md) — tenant operations.
+2. [Copilot Studio integration](copilot-studio-integration.md) — native agent,
+   topic, tool, and Teams boundary.
+3. [Teams architecture](teams-architecture.md) — API and conversation boundaries.
+4. [Teams development](teams-development.md) — local API run and checks.
+5. [Azure recreation](azure-recreation.md) — current API deployment.
 6. [Product naming](product-naming.md) — current names and compatibility terms.
 
 ## Current guides
@@ -19,6 +20,7 @@ in this branch.
 | --- | --- |
 | [Microsoft Foundry standards](microsoft-foundry-standards.md) | Provider, artifact, MCP, and versioning rules |
 | [Teams tenant settings](teams-tenant-settings.md) | Safe controlled-tenant configuration |
+| [Teams live activation](teams-live-activation.md) | Mountaineer publication and tenant checks |
 | [Execution records](execution-records.md) | Specs, results, approvals, and verification |
 | [Safety](safety.md) | Evidence, identity, authorization, and human control |
 | [Glossary](business-agent-glossary.md) | Product and evidence terminology |

@@ -96,41 +96,6 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Runs_lease_scenario_against_relevant_seed_records()
-    {
-        var response = await client.PostAsJsonAsync("/api/v1/cases/synthetic-blue-ridge-lease-001/scenario-runs", new
-        {
-            scenarioId = "lease-development-obligations"
-        });
-
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<FictionalReviewPacket>();
-        Assert.NotNull(body);
-        Assert.Equal("human-review", body!.ProposedRoute);
-        Assert.Contains("br-lease-001", body.RecordIds);
-        Assert.Contains("br-ocr-001", body.RecordIds);
-        Assert.NotEmpty(body.Findings);
-        Assert.NotEmpty(body.Unknowns);
-        Assert.NotEmpty(body.Contributions);
-        Assert.Contains(body.Contributions, contribution => contribution.AgentId == "compliance-reviewer");
-        Assert.Contains(body.AgentSteps, step => step.Kind == "delegated");
-        Assert.Contains(body.AgentSteps, step => step.Kind == "requested" && step.DelegatedFrom is null);
-        Assert.Contains(body.AgentSteps, step => step.AgentId == "lease-obligation-reviewer" && step.DelegatedFrom == "lease-lifecycle-reviewer");
-        Assert.Contains("does not issue a title opinion", body.HumanBoundary);
-    }
-
-    [Fact]
-    public async Task Does_not_run_seeded_review_for_another_case()
-    {
-        var response = await client.PostAsJsonAsync("/api/v1/cases/other-case/scenario-runs", new
-        {
-            scenarioId = "lease-development-obligations"
-        });
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    [Fact]
     public async Task Returns_role_scenarios_with_agent_routes_and_human_boundaries()
     {
         var response = await client.GetAsync("/api/v1/scenarios");

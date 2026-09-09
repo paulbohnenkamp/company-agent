@@ -20,27 +20,13 @@ param existingFoundryAccountName string = 'ai-account-7b7o3sct37fgg'
 param foundryModelName string = 'land-model'
 @description('Optional Entra API client ID used by the API JWT validation. v2 access tokens use the API client GUID as aud.')
 param entraAudience string = ''
-@description('The Entra client ID of the adapter workload allowed to invoke the demo review boundary.')
-param trustedAdapterAppId string = ''
-@description('The single-tenant Teams bot application ID. Set during live Teams activation.')
-param teamsBotAppId string = ''
-@description('The Entra tenant that owns the Teams bot application.')
-param teamsBotTenantId string = subscription().tenantId
-@description('The API scope requested by the Teams adapter workload identity.')
-param landOpsApiScope string = ''
-@description('The Key Vault secret name containing the Teams bot client secret.')
-param teamsBotClientSecretName string = 'teams-bot-client-secret'
 @description('The existing API container image tag supplied by AZD.')
 param serviceApiImageName string = ''
-@description('The Teams adapter container image tag supplied by AZD.')
-param serviceTeamsImageName string = ''
 
 var suffix = uniqueString(subscription().id, resourceGroup().id)
 var shortSuffix = toLower(substring(suffix, 0, 8))
 var prefix = 'landops-${shortSuffix}'
 var apiName = '${prefix}-api'
-var teamsName = '${prefix}-teams'
-var botName = '${prefix}-bot'
 var planName = '${prefix}-plan'
 var registryName = replace('${prefix}cr', '-', '')
 var sqlServerName = '${prefix}-sql'
@@ -49,7 +35,6 @@ var storageName = replace('${prefix}storage', '-', '')
 var keyVaultName = '${prefix}-kv'
 var insightsName = '${prefix}-insights'
 var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/landops-api:latest'
-var teamsImage = !empty(serviceTeamsImageName) ? serviceTeamsImageName : '${registryName}.azurecr.io/landops-teams:latest'
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${prefix}-logs'
@@ -92,10 +77,6 @@ resource apiIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-3
   name: '${apiName}-id'
   location: location
 }
-resource teamsIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
-  name: '${teamsName}-id'
-  location: location
-}
 
 resource api 'Microsoft.Web/sites@2023-12-01' = {
   name: apiName
@@ -132,7 +113,6 @@ resource api 'Microsoft.Web/sites@2023-12-01' = {
         #disable-next-line no-hardcoded-env-urls
         { name: 'Entra__Authority', value: 'https://login.microsoftonline.com/${subscription().tenantId}/v2.0' }
         { name: 'Entra__Audience', value: entraAudience }
-        { name: 'Entra__TrustedAdapterAppId', value: trustedAdapterAppId }
         { name: 'Foundry__Endpoint', value: foundry.properties.endpoint }
         { name: 'Foundry__Model', value: foundryModelName }
         { name: 'Foundry__UseManagedIdentity', value: 'true' }
@@ -147,94 +127,10 @@ resource api 'Microsoft.Web/sites@2023-12-01' = {
   }
 }
 
-// The Teams transport is a separate App Service so Teams protocol concerns
-// cannot become part of the ASP.NET Core application boundary. The bot secret
-// is supplied by a Key Vault reference; it is never a Bicep literal.
-resource teams 'Microsoft.Web/sites@2023-12-01' = {
-  name: teamsName
-  location: location
-  kind: 'app,linux,container'
-  identity: { type: 'UserAssigned', userAssignedIdentities: { '${teamsIdentity.id}': {} } }
-  tags: { 'azd-env-name': environmentName, 'azd-service-name': 'teams' }
-  properties: {
-    serverFarmId: plan.id
-    httpsOnly: true
-    siteConfig: {
-      linuxFxVersion: 'DOCKER|${teamsImage}'
-      alwaysOn: true
-      acrUseManagedIdentityCreds: true
-      acrUserManagedIdentityID: teamsIdentity.properties.clientId
-      appSettings: [
-        { name: 'WEBSITES_PORT', value: '3978' }
-        { name: 'PORT', value: '3978' }
-        { name: 'TEAMS_PORT', value: '3978' }
-        { name: 'WEBSITES_CONTAINER_START_TIME_LIMIT', value: '1800' }
-        { name: 'CLIENT_ID', value: teamsBotAppId }
-        { name: 'TENANT_ID', value: teamsBotTenantId }
-        { name: 'CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
-        { name: 'BUSINESS_AGENT_API_URL', value: 'https://${apiName}.azurewebsites.net' }
-        { name: 'LANDOPS_API_URL', value: 'https://${apiName}.azurewebsites.net' }
-        // The API workload token is issued to the trusted adapter app, which
-        // is separate from the Bot Framework app used for Teams delivery.
-        { name: 'BUSINESS_AGENT_API_CLIENT_ID', value: trustedAdapterAppId }
-        { name: 'BUSINESS_AGENT_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
-        { name: 'BUSINESS_AGENT_API_TENANT_ID', value: subscription().tenantId }
-        { name: 'BUSINESS_AGENT_API_SCOPE', value: landOpsApiScope }
-        { name: 'BUSINESS_AGENT_TEAMS_CASE_ID', value: 'synthetic-blue-ridge-lease-001' }
-        { name: 'BUSINESS_AGENT_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
-        { name: 'BUSINESS_AGENT_TEAMS_ROLE_ID', value: 'land-analyst' }
-        { name: 'BUSINESS_AGENT_TEAMS_GROUP', value: 'case-management' }
-        { name: 'LANDOPS_API_CLIENT_ID', value: trustedAdapterAppId }
-        { name: 'LANDOPS_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
-        { name: 'LANDOPS_API_TENANT_ID', value: subscription().tenantId }
-        { name: 'LANDOPS_API_SCOPE', value: landOpsApiScope }
-        { name: 'LANDOPS_TEAMS_CASE_ID', value: 'synthetic-blue-ridge-lease-001' }
-        { name: 'LANDOPS_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
-        { name: 'LANDOPS_TEAMS_ROLE_ID', value: 'land-analyst' }
-        { name: 'LANDOPS_TEAMS_GROUP', value: 'case-management' }
-        { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
-      ]
-    }
-  }
-}
-
-// Azure Bot owns the Bot Framework registration and forwards Teams activities
-// to the separately hosted transport. This resource is conditional so a
-// reusable environment can be provisioned before an app registration exists.
-resource bot 'Microsoft.BotService/botServices@2022-09-15' = if (!empty(teamsBotAppId)) {
-  name: botName
-  location: 'global'
-  kind: 'azurebot'
-  sku: { name: 'F0' }
-  tags: { 'azd-env-name': environmentName }
-  properties: {
-    displayName: 'LandOps Teams Adapter'
-    endpoint: 'https://${teamsName}.azurewebsites.net/api/messages'
-    msaAppId: teamsBotAppId
-    msaAppType: 'SingleTenant'
-    msaAppTenantId: teamsBotTenantId
-  }
-}
-resource botTeamsChannel 'Microsoft.BotService/botServices/channels@2022-09-15' = if (!empty(teamsBotAppId)) {
-  parent: bot
-  name: 'MsTeamsChannel'
-  location: 'global'
-  kind: 'azurebot'
-  properties: {
-    channelName: 'MsTeamsChannel'
-    properties: { acceptedTerms: true, isEnabled: true }
-  }
-}
-
 resource registryApiPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(registry.id, apiIdentity.id, 'AcrPull')
   scope: registry
   properties: { roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d'), principalId: apiIdentity.properties.principalId, principalType: 'ServicePrincipal' }
-}
-resource registryTeamsPull 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(registry.id, teamsIdentity.id, 'AcrPull')
-  scope: registry
-  properties: { roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d'), principalId: teamsIdentity.properties.principalId, principalType: 'ServicePrincipal' }
 }
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-05-01' = {
@@ -259,11 +155,6 @@ resource keyVaultSecrets 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
   name: guid(keyVault.id, apiIdentity.id, 'KeyVaultSecretsUser')
   scope: keyVault
   properties: { roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6'), principalId: apiIdentity.properties.principalId, principalType: 'ServicePrincipal' }
-}
-resource keyVaultTeamsSecret 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(keyVault.id, teamsIdentity.id, 'KeyVaultSecretsUser')
-  scope: keyVault
-  properties: { roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6'), principalId: teamsIdentity.properties.principalId, principalType: 'ServicePrincipal' }
 }
 
 resource sqlServer 'Microsoft.Sql/servers@2023-08-01-preview' = {
@@ -296,10 +187,7 @@ module foundryUser 'modules/foundry-role.bicep' = {
 }
 
 output apiUrl string = 'https://${api.properties.defaultHostName}'
-output teamsUrl string = 'https://${teams.properties.defaultHostName}'
-output botName string = botName
 output foundryEndpoint string = foundry.properties.endpoint
 output sqlServerName string = sqlServer.name
 output keyVaultName string = keyVault.name
 output apiManagedIdentityPrincipalId string = apiIdentity.properties.principalId
-output teamsManagedIdentityPrincipalId string = teamsIdentity.properties.principalId

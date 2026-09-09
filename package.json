@@ -12,15 +12,10 @@
     "provision:entra-personas": "tsx scripts/provision-entra-personas.ts",
     "test": "node --import tsx --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "eval": "tsx scripts/run-evals.ts",
-    "teams:dev": "tsx src/teams/server.ts",
-    "teams:start": "tsx src/teams/server.ts",
-    "teams:package": "tsx scripts/build-teams-app-package.ts"
+    "eval": "tsx scripts/run-evals.ts"
   },
   "dependencies": {
     "@azure/identity": "4.13.2",
-    "@microsoft/teams.api": "2.0.15",
-    "@microsoft/teams.apps": "2.0.15",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
