@@ -19,15 +19,13 @@ in this branch.
 | --- | --- |
 | [Microsoft Foundry standards](microsoft-foundry-standards.md) | Provider, artifact, MCP, and versioning rules |
 | [Teams tenant settings](teams-tenant-settings.md) | Safe controlled-tenant configuration |
-| [Tenant naming adoption](tenant-naming-adoption.md) | External Microsoft 365 naming targets |
 | [Execution records](execution-records.md) | Specs, results, approvals, and verification |
 | [Safety](safety.md) | Evidence, identity, authorization, and human control |
 | [Glossary](business-agent-glossary.md) | Product and evidence terminology |
 | [WV land architecture](WV_LAND_ARCHITECTURE.md) | Flagship evidence and source boundaries |
 
-## Preserved reference material
+## History
 
-The [history index](history.md) identifies older TypeScript runtime guides,
-product research, UI proposals, deployment alternatives, and archived domain
-plans. They remain available for audit and comparison but are not current
-implementation instructions.
+The [history index](history.md) explains where superseded material went. The
+numbered files in `specs/` and `results/` are the durable execution record and
+are intentionally retained.

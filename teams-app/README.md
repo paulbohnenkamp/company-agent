@@ -33,4 +33,4 @@ by Git.
 
 The current template is version 1.0.1 and displays Business Agent. Preserve app
 and bot IDs when updating an existing installation. A generated ZIP is not proof
-of tenant installation; follow [tenant adoption](../docs/tenant-naming-adoption.md).
+of tenant installation; follow the [Teams activation runbook](../docs/teams-live-activation.md).

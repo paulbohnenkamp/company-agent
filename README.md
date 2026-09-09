@@ -30,7 +30,11 @@ for SQL Server persistence.
 
 ```sh
 npm install
-docker compose up -d sqlserver
+docker run --detach --name landops-sqlserver \
+  --env ACCEPT_EULA=Y \
+  --env MSSQL_SA_PASSWORD='LandOps_dev_2026!' \
+  --publish 1433:1433 \
+  mcr.microsoft.com/mssql/server:2022-latest
 dotnet run --project dotnet/LandOps.Api --urls http://127.0.0.1:5006
 DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true \
 BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 \
@@ -40,6 +44,21 @@ npm run teams:dev
 The adapter listens on port `3978`. Local unauthenticated mode is for local
 testing only. Deployed mode requires the Bot Framework credentials and the
 configured API workload token settings.
+
+## Teams flow
+
+1. One Business Agent Teams app receives the message.
+2. The API can plan bounded specialist steps and connected agents for a case.
+3. Today, routing is bounded by the configured scenario and API plan; natural
+   language selects the request text, not an arbitrary agent by description.
+4. Teams packages publish the app to a tenant, where an administrator can
+   share it through the app catalog and Teams.
+5. Predictable requests are represented by API scenarios; Teams topics are a
+   possible future presentation of those scenarios.
+6. Teams membership and Microsoft 365 groups help share the app, while Entra
+   claims and API authorization decide what a person or trusted adapter can do.
+7. Keeping routing and business rules in the API leaves the Teams adapter small
+   and reduces custom transport routing, but does not remove it entirely.
 
 ## Verify
 

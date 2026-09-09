@@ -4,8 +4,6 @@ This runbook connects the existing `src/teams/server.ts` transport to a small
 real Microsoft 365 tenant for a controlled Business Agent demo. It does not replace
 the ASP.NET Core agent request API or authorize actions in the Teams adapter.
 
-For a browser-assisted tenant setup, use the [ChatGPT Work handoff](chatgpt-work-teams-handoff.md).
-
 ## Current status
 
 Local adapter readiness is verified in [result 043](../results/043-teams-activation-readiness.md).
@@ -22,9 +20,8 @@ the internet.
 
 A Microsoft 365 Business Basic trial tenant with Teams already exists. Do not
 create another tenant or purchase additional licenses to apply these names.
-Two licensed test users and the original Team/channel are recorded in
-[tenant naming adoption](tenant-naming-adoption.md), together with the approved
-target names. A repository persona is not a licensed tenant account.
+Two licensed test users and the original Team/channel are recorded in the
+activation result. A repository persona is not a licensed tenant account.
 
 The deployed adapter foundation is recorded in
 [result 047](../results/047-teams-bot-activation.md). The original Azure Bot

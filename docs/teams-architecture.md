@@ -45,3 +45,13 @@ references and keeps human approval explicit.
 
 Local deterministic mode is the repeatable baseline. Foundry is opt-in and
 must remain behind the same API validation and human-review boundary.
+
+## What the Teams model means here
+
+The intended experience is one Business Agent in Teams with several bounded
+specialist contributions behind it. That is not one bot per specialist. The
+repository uses configured API scenarios and delegation plans; it does not yet
+route arbitrary requests by reading each agent description. Teams publishing
+and Microsoft 365 group membership help distribute the app, while Entra claims
+and API policy remain the authorization source. This keeps custom routing in
+one application boundary and the adapter small.
