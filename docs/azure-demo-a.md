@@ -1,4 +1,7 @@
-# Azure Demo A
+# Azure Demo A (historical proposal)
+
+> Historical alternative. This document describes a minimal single-App-Service
+> deployment and is not the current Teams-first three-service Azure shape.
 
 Demo A hosts the existing deterministic Business Agent demo. It does not
 replace the local/demo agents with Foundry agents and does not add a new
@@ -108,4 +111,3 @@ Required approval before execution:
 2. Create Linux App Service plan `asp-business-agent-demo` at B1.
 3. Create one Node `24-lts` Web App with a globally unique name supplied at
    deployment time.
-

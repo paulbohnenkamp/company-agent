@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 /// <summary>Append-only human action recorded against a Teams/Workroom thread.</summary>
 public sealed class WorkroomAction

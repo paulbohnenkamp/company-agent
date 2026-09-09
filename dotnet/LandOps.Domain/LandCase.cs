@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 /// <summary>The review package that anchors every well, evidence record, and workflow run.</summary>
 public sealed class LandCase

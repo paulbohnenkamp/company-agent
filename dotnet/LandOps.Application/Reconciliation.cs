@@ -1,7 +1,7 @@
 using System.Text.Json;
-using LandOps.Domain;
+using BusinessAgent.Domain;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>One normalized public record supplied to the deterministic reconciler.</summary>
 public sealed record EvidenceInput(

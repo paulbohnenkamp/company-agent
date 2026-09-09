@@ -1,5 +1,5 @@
-import { dotnetBaseUrl } from "../../../../src/landops/adapter";
-import { upstreamHeaders } from "../../../../src/landops/proxy";
+import { dotnetBaseUrl } from "../../../../src/business-agent/adapter";
+import { upstreamHeaders } from "../../../../src/business-agent/proxy";
 
 // Review decisions are written by the C# API, not by the browser or this proxy.
 export async function POST(request: Request): Promise<Response> {

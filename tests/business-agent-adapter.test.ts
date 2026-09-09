@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { mapRun } from "../src/landops/adapter";
+import { mapRun } from "../src/business-agent/adapter";
 
 test("LandOps adapter maps structured C# run JSON", () => {
   const result = mapRun({

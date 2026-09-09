@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CompanyPortfolio, type CompanyPortfolioData } from "../src/landops/CompanyPortfolio";
-import { CaseCopilot, type RoleScenarioData } from "../src/landops/CaseCopilot";
-import { DataRoom, type FictionalCaseRecord } from "../src/landops/DataRoom";
-import { TeamsCollaborationView } from "../src/landops/TeamsCollaborationView";
-import { PeopleDirectory } from "../src/landops/PeopleDirectory";
-import type { IdentityCatalog } from "../src/landops/IdentityCatalog";
+import { CompanyPortfolio, type CompanyPortfolioData } from "../src/business-agent/CompanyPortfolio";
+import { CaseCopilot, type RoleScenarioData } from "../src/business-agent/CaseCopilot";
+import { DataRoom, type FictionalCaseRecord } from "../src/business-agent/DataRoom";
+import { TeamsCollaborationView } from "../src/business-agent/TeamsCollaborationView";
+import { PeopleDirectory } from "../src/business-agent/PeopleDirectory";
+import type { IdentityCatalog } from "../src/business-agent/IdentityCatalog";
 
 type Evidence = { evidenceId: string; source: { id: string; publisher: string; dataset: string; authorityScope: string }; sourceRecordId: string; sourceUrl: string; normalizedFacts: Record<string, unknown>; warnings: string[] };
 type DemoCase = { caseId: string; fixtureId: string; submittedPackage: { synthetic: true; clues: Record<string, string> }; snapshots: { snapshotId: string; source: { publisher: string }; retrievedAt: string; contentHash: string; rawSnapshotRef: string }[]; evidence: Evidence[]; production: { explanation: string }; titleBoundary: string };
@@ -18,7 +18,8 @@ type WorkroomThread = { threadId: string; caseId: string; scenarioId: string; su
 type ReviewPacket = { packetId: string; caseId: string; scenarioId: string; question: string; recordIds: string[]; findings: { findingId: string; recordId: string; subject: string; assertion: string; status: string; confidence: string }[]; unknowns: string[]; agentSteps: { agentId: string; kind: string; order: number }[]; proposedRoute: string; humanBoundary: string };
 
 const sourceColors: Record<string, string> = { WVDEP: "#f59e0b", WVGES: "#38bdf8" };
-const landOpsMode = process.env.NEXT_PUBLIC_LANDOPS_MODE === "true";
+// The old variable remains a compatibility input for deployed web clients.
+const landOpsMode = (process.env.NEXT_PUBLIC_BUSINESS_AGENT_MODE ?? process.env.NEXT_PUBLIC_LANDOPS_MODE) === "true";
 
 export default function HomePage() {
   const [caseData, setCaseData] = useState<DemoCase>();

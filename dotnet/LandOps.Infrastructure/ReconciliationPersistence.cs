@@ -1,10 +1,10 @@
-using LandOps.Application;
+using BusinessAgent.Application;
 using Microsoft.EntityFrameworkCore;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 /// <summary>Loads the frozen fixture, runs the workflow, and persists its result.</summary>
-public sealed class ReconciliationPersistence(LandOpsDbContext dbContext)
+public sealed class ReconciliationPersistence(BusinessAgentDbContext dbContext)
 {
     public async Task<WorkflowOutput> SaveBraxtonAsync(string caseId, string runId, CancellationToken cancellationToken = default)
     {

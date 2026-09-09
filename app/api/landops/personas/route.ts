@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { IdentityCatalog } from "../../../../src/landops/IdentityCatalog";
+import type { IdentityCatalog } from "../../../../src/business-agent/IdentityCatalog";
 
 /** Reads the checked-in synthetic identity catalog for the local workbench. */
 export async function GET() {

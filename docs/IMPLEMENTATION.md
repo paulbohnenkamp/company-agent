@@ -1,5 +1,8 @@
 # Implementation status
 
+> Reference runtime status for the older TypeScript implementation. For the
+> current product status, read [PROJECT_STATE.md](PROJECT_STATE.md).
+
 The repository now has a provider-neutral foundation and an opt-in Microsoft
 path.
 

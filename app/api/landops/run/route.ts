@@ -1,4 +1,4 @@
-import { dotnetBaseUrl, mapCase, mapRun } from "../../../../src/landops/adapter";
+import { dotnetBaseUrl, mapCase, mapRun } from "../../../../src/business-agent/adapter";
 
 // The browser starts a run through this proxy. The C# API owns the workflow.
 export async function POST(): Promise<Response> {

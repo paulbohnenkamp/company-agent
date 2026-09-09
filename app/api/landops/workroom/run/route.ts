@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { dotnetBaseUrl } from "../../../../../src/landops/adapter";
-import { upstreamHeaders } from "../../../../../src/landops/proxy";
+import { dotnetBaseUrl } from "../../../../../src/business-agent/adapter";
+import { upstreamHeaders } from "../../../../../src/business-agent/proxy";
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}));

@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 /// <summary>Identifies a publisher and dataset without storing a retrieved record.</summary>
 public sealed class SourceIdentity

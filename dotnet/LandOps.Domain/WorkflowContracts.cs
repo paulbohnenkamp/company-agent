@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 /// <summary>Durable handoff produced by one ordered workflow step.</summary>
 public sealed class AgentStep

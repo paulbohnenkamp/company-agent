@@ -108,6 +108,6 @@ export function mapRun(value: DotnetRun) {
 }
 
 export function dotnetBaseUrl(): string | undefined {
-  const value = process.env.LANDOPS_API_URL?.trim().replace(/\/$/, "");
+  const value = (process.env.BUSINESS_AGENT_API_URL ?? process.env.LANDOPS_API_URL)?.trim().replace(/\/$/, "");
   return value || undefined;
 }

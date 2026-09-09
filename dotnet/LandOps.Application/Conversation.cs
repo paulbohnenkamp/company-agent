@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 public sealed record ConversationResponse(string Answer, string Topic, string Grounding, IReadOnlyList<string> EvidenceRefs);
 

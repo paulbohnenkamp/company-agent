@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 public interface IWorkroomRunService
 {

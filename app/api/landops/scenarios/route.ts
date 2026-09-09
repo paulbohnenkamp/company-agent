@@ -1,4 +1,4 @@
-import { dotnetBaseUrl, mapScenarios } from "../../../../src/landops/adapter";
+import { dotnetBaseUrl, mapScenarios } from "../../../../src/business-agent/adapter";
 
 /** Returns the role-aware question catalog through the same-origin boundary. */
 export async function GET(): Promise<Response> {

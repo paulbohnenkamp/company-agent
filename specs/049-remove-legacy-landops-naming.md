@@ -1,7 +1,7 @@
 ---
 id: 049-remove-legacy-landops-naming
 title: Remove legacy LandOps naming from active code and documentation
-status: approved
+status: completed
 created: 2026-09-08
 updated: 2026-09-08
 result: results/049-remove-legacy-landops-naming.md
@@ -143,6 +143,15 @@ changing deployment identifiers.
 
 - 2026-09-08: Approved after concluding that LandOps is too narrow for the
   Business Agent product and the current documentation is too large.
+- 2026-09-08: Migrated internal TypeScript module paths, Teams adapter/client
+  names, C# namespaces, identity resolver, and EF context to Business Agent
+  names. Preserved legacy routes, configuration fallbacks, role identifiers,
+  database names, and migration compatibility types.
+- 2026-09-08: Renamed the current learning/documentation paths, reduced the
+  documentation map to current guides plus clearly separated references, and
+  removed resume/interview/company-branding language from public content.
+- 2026-09-08: Verification loop passed after restoring the compiled EF context
+  compatibility alias required by historical migration snapshots.
 
 ## Decision log
 
@@ -150,3 +159,5 @@ changing deployment identifiers.
   replacement.
 - 2026-09-08: Preserve immutable external identifiers only when required for
   recreation, migration, or historical integrity.
+- 2026-09-08: Keep `LandOpsDbContext` as a narrow compile-time migration alias;
+  runtime dependency injection uses `BusinessAgentDbContext`.

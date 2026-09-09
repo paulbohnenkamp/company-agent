@@ -4,7 +4,7 @@ Use this guide when you change the C# application or its React integration.
 
 ## Choose the owning project
 
-Start with the [Business Agent code tour](landops-code-tour.md). Put the change in the layer that owns the behavior. Keep the public API and database concerns at their boundaries.
+Start with the [Business Agent code tour](business-agent-code-tour.md). Put the change in the layer that owns the behavior. Keep the public API and database concerns at their boundaries.
 
 ## Local identity and Azure identity
 
@@ -105,7 +105,7 @@ Add the application behavior before adding the HTTP route:
 3. Add a route in `dotnet/LandOps.Api/Program.cs`.
 4. Add an API test in `dotnet/LandOps.Api.Tests`.
 5. Add a same-origin Next.js route only when the browser needs the endpoint.
-6. Add the response mapping in `src/landops/adapter.ts`.
+6. Add the response mapping in `src/business-agent/adapter.ts`.
 
 ## Keep deterministic tests
 

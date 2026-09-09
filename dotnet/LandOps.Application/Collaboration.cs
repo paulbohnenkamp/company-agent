@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 // Workroom is the legacy wire/storage name for agent-request context, not a
 // collaboration product. Teams hosts conversations. Preserve these contracts

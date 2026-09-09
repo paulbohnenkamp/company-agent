@@ -37,7 +37,7 @@ The TypeScript implementation remains available as a behavioral reference and a 
 
 ### React and Next.js
 
-The React page displays the case workspace and collects user actions. The Next.js routes keep browser requests same-origin and hide the C# API URL from browser code. `src/landops/adapter.ts` translates C# responses into the existing page view model.
+The React page displays the case workspace and collects user actions. The Next.js routes keep browser requests same-origin and hide the C# API URL from browser code. `src/business-agent/adapter.ts` translates C# responses into the existing page view model.
 
 The React layer does not decide whether a finding is supported or whether a conflict is real. It renders the structured result that the API returns.
 
@@ -66,7 +66,7 @@ Constructors enforce basic invariants such as required identifiers. This keeps i
 
 ### Infrastructure layer
 
-`dotnet/LandOps.Infrastructure` connects the application to SQL Server. `LandOpsDbContext` maps domain objects to tables. EF Core migrations describe schema changes. `ReconciliationPersistence` loads the fixture, runs the workflow, and stores the complete result.
+`dotnet/LandOps.Infrastructure` connects the application to SQL Server. `BusinessAgentDbContext` maps domain objects to tables. EF Core migrations describe schema changes. `ReconciliationPersistence` loads the fixture, runs the workflow, and stores the complete result.
 
 Infrastructure can change without changing the meaning of a `Finding` or `Conflict`.
 

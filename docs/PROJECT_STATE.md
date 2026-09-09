@@ -4,7 +4,7 @@
 
 **First read for a new Codex or VS Code session**
 
-**Latest approved slices:** [spec 049](../specs/049-remove-legacy-landops-naming.md), then [spec 050](../specs/050-evidence-grounded-teams-review.md)
+**Latest approved slice:** [spec 050](../specs/050-evidence-grounded-teams-review.md). Spec 049 is completed in [its result](../results/049-remove-legacy-landops-naming.md).
 
 **External activation work:** [spec 044](../specs/044-teams-live-activation.md) and [tenant naming adoption](tenant-naming-adoption.md)
 
@@ -19,8 +19,9 @@ Teams is the collaboration environment. Next.js provides focused review and loca
 examples. ASP.NET Core/.NET owns authorization, evidence, persistence, agent
 execution, and human decisions. See [product naming](product-naming.md).
 
-`LandOps` and `Workroom` remain legacy code, configuration, storage, and wire
-identifiers for compatibility. Neither names a separate collaboration product.
+`Workroom` and selected `LandOps` values remain legacy configuration, storage,
+route, database, and permission identifiers for compatibility. Business Agent
+is used for current internal namespaces, modules, settings, and product copy.
 
 ## Current architecture
 
@@ -51,7 +52,7 @@ identifiers for compatibility. Neither names a separate collaboration product.
 | Local/Azure runtime configuration | Implemented | `results/018`, `results/021`, `results/036–037` |
 | Sample Energy Company/data room | Verified local seed/read paths | `results/022`, `results/028-fictional-company-data-room.md`, `results/048-business-agent-naming.md` |
 | Role scenarios and delegation plans | Verified local contracts | `results/024–027`, `results/035` |
-| Durable agent request threads | Implemented and SQL-tested; legacy Workroom identifiers retained for compatibility | `results/032`, `results/048-business-agent-naming.md` |
+| Durable agent request threads | Implemented and SQL-tested; legacy Workroom identifiers retained for compatibility | `results/032`, `results/049-remove-legacy-landops-naming.md` |
 | Entra identity boundary | Implemented; tenant activation remains external | `results/030`, `results/034` |
 | AgentSchema YAML artifacts | Validated locally | `results/039`, `npm run validate:agent-artifacts` |
 | Synthetic identity catalog | Validated locally | `results/040`, `npm run validate:identity-personas` |
@@ -98,10 +99,7 @@ successfully, returning five evidence findings from five sources with the
 human-review boundary. The adapter deployment foundation is recorded in
 [result 047](../results/047-teams-bot-activation.md).
 
-The next approved work is ordered deliberately: complete the compatibility-aware
-naming and documentation cleanup in [spec 049](../specs/049-remove-legacy-landops-naming.md),
-then make the Teams review evidence-grounded and finish activation follow-ups in
-[spec 050](../specs/050-evidence-grounded-teams-review.md).
+The compatibility-aware naming and documentation cleanup in [spec 049](../specs/049-remove-legacy-landops-naming.md) is complete. The next approved work is to make the Teams review evidence-grounded and finish activation follow-ups in [spec 050](../specs/050-evidence-grounded-teams-review.md).
 
 Local evidence includes the adapter receive-path smoke test, all four
 append-only action contracts, an Entra-style wrong-role denial, a trusted
@@ -113,13 +111,11 @@ suppression remain external verification gates.
 
 ### Product-name compatibility migration
 
-`Business Agent` is the product name. `LandOps` remains in namespaces, Azure
-resource names, environment variables, routes, tables, and application-role
-values so the current deployment and persisted data remain stable. A future
-migration must move callers first and preserve those resources and records;
-it is not a search-and-replace task and is not part of the current Teams repair.
-Spec 049 defines the approved migration and documentation cleanup; until it is
-completed, this compatibility state remains intentional.
+`Business Agent` is the product name. `LandOps` remains only where it is an
+operational compatibility identifier: Azure resource names, legacy environment
+aliases, routes, tables, migration metadata, and application-role values. The
+new internal callers and canonical settings use Business Agent names. A future
+wire or storage migration still requires a separate approved plan.
 
 ### After Teams activation: product workflow depth
 

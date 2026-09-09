@@ -1,6 +1,6 @@
-using LandOps.Domain;
+using BusinessAgent.Domain;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>Reads a case without exposing the database implementation to the API.</summary>
 public interface ILandCaseRepository

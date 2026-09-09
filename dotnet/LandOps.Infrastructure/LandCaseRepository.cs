@@ -1,10 +1,10 @@
-using LandOps.Application;
-using LandOps.Domain;
+using BusinessAgent.Application;
+using BusinessAgent.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
-public sealed class LandCaseRepository(LandOpsDbContext dbContext) : ILandCaseRepository
+public sealed class LandCaseRepository(BusinessAgentDbContext dbContext) : ILandCaseRepository
 {
     public Task<LandCase?> GetAsync(string caseId, CancellationToken cancellationToken = default) =>
         dbContext.LandCases

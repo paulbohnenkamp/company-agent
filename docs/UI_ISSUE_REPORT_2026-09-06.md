@@ -43,7 +43,7 @@ These should be fixed locally before another Azure deployment. The report does n
 
 **Recommendation:** Make the portfolio identity block an explicit vertical stack. Give the company name and active case title separate block-level rows, constrain the text column, and test with long company and case names.
 
-**Source:** `src/landops/CompanyPortfolio.tsx`, `.portfolio-context-bar` in `app/globals.css`.
+**Source:** `src/business-agent/CompanyPortfolio.tsx`, `.portfolio-context-bar` in `app/globals.css`.
 
 ### P1-02 — Light-theme Fluent UI island
 
@@ -55,7 +55,7 @@ These should be fixed locally before another Azure deployment. The report does n
 
 **Recommendation:** Use one application-level Fluent theme configured for the LandOps dark palette, or remove the nested provider and style the metrics using the existing tokens. Do not mix a light provider into the dark shell.
 
-**Source:** `src/landops/CompanyPortfolio.tsx`.
+**Source:** `src/business-agent/CompanyPortfolio.tsx`.
 
 ### P1-03 — Case Copilot content collapse
 
@@ -67,7 +67,7 @@ These should be fixed locally before another Azure deployment. The report does n
 
 **Recommendation:** Add a deliberate Copilot layout: header, role selector, thread-context field, scenario rows, question/description/agent route hierarchy, and a right-aligned action group. Add visible labels and spacing between every semantic unit. Verify long scenario text and narrow widths.
 
-**Source:** `src/landops/CaseCopilot.tsx`, `app/globals.css`.
+**Source:** `src/business-agent/CaseCopilot.tsx`, `app/globals.css`.
 
 ### P1-04 — Primary workflow is buried below showcase content
 
@@ -85,7 +85,7 @@ These should be fixed locally before another Azure deployment. The report does n
 
 **Recommendation:** Either make the composer a clearly labeled “Preview” element, or implement a bounded local interaction that accepts a message and appends a simulated response. Keep real Teams integration status separate from the visual preview.
 
-**Source:** `src/landops/TeamsCollaborationView.tsx`, `.teams-composer` in `app/globals.css`.
+**Source:** `src/business-agent/TeamsCollaborationView.tsx`, `.teams-composer` in `app/globals.css`.
 
 ### P1-06 — Environment and product identity are inconsistent
 

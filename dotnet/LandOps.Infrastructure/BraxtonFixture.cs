@@ -1,7 +1,7 @@
-using LandOps.Application;
-using LandOps.Domain;
+using BusinessAgent.Application;
+using BusinessAgent.Domain;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 public sealed record BraxtonFixtureData(
     IReadOnlyList<SourceIdentity> SourceIdentities,

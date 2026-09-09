@@ -1,4 +1,4 @@
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>
 /// A role-aware question and its agent-review path. Workroom remains the

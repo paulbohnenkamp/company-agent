@@ -1,5 +1,8 @@
 # Flow runtime
 
+> Reference runtime documentation for the older TypeScript runner. The current
+> Teams path is owned by the ASP.NET Core application boundary.
+
 ## Execution sequence
 
 The current runner executes declared agents in order. After each successful

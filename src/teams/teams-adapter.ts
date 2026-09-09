@@ -19,7 +19,7 @@ export type TeamsActivity = {
   conversation?: { id?: string; conversationType?: string };
 };
 
-export type LandOpsWorkroomRequest = {
+export type BusinessAgentWorkroomRequest = {
   caseId: string;
   scenarioId: string;
   question: string;
@@ -30,7 +30,7 @@ export type LandOpsWorkroomRequest = {
   actor: { tenantId: string; userId: string; aadObjectId: string | null };
 };
 
-export type LandOpsWorkroomResponse = {
+export type BusinessAgentWorkroomResponse = {
   threadId: string;
   status: string;
   humanBoundary: string;
@@ -50,8 +50,8 @@ export type WorkroomReviewPacket = {
   humanBoundary?: string;
 };
 
-export type LandOpsClient = {
-  createWorkroom(request: LandOpsWorkroomRequest, identity: { tenantId: string; userId: string }): Promise<LandOpsWorkroomResponse>;
+export type BusinessAgentClient = {
+  createWorkroom(request: BusinessAgentWorkroomRequest, identity: { tenantId: string; userId: string }): Promise<BusinessAgentWorkroomResponse>;
   runWorkroom(threadId: string, identity: { tenantId: string; userId: string }): Promise<WorkroomReviewPacket>;
   recordAction(request: WorkroomActionRequest, identity: { tenantId: string; userId: string }): Promise<{ action: string; actorId: string; assignee?: string; reason: string }>;
 };
@@ -87,7 +87,7 @@ export class TeamsIdempotencyStore {
 }
 
 /** Converts a Teams activity into the bounded LandOps request contract. */
-export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: string; scenarioId: string; roleId: string; requiredGroup: string }): { activityId: string; tenantId: string; userId: string; channel: TeamsChannel; request: LandOpsWorkroomRequest } {
+export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: string; scenarioId: string; roleId: string; requiredGroup: string }): { activityId: string; tenantId: string; userId: string; channel: TeamsChannel; request: BusinessAgentWorkroomRequest } {
   const activityId = String(activity.id ?? `${activity.timestamp ?? Date.now()}:${activity.text ?? ""}`);
   const tenantId = String(activity.channelData?.tenant?.id ?? "unknown-tenant");
   const userId = String(activity.from?.id ?? "unknown-user");
@@ -112,7 +112,7 @@ export function toWorkroomRequest(activity: TeamsActivity, options: { caseId: st
 }
 
 /** Formats a Workroom result for a concise, safe Teams message. */
-export function formatTeamsReply(response: LandOpsWorkroomResponse, packet?: WorkroomReviewPacket): TeamsReply {
+export function formatTeamsReply(response: BusinessAgentWorkroomResponse, packet?: WorkroomReviewPacket): TeamsReply {
   const path = response.steps.map((step) => step.agentName ?? "Agent").join(" → ");
   const lines = [
     `**Business Agent review ${packet ? "completed" : response.status.toLowerCase()}**`,
@@ -151,7 +151,7 @@ export function formatTeamsReply(response: LandOpsWorkroomResponse, packet?: Wor
   return { text: lines.join("\n") };
 }
 
-function recommendationFor(packet: WorkroomReviewPacket | undefined, response: LandOpsWorkroomResponse): string {
+function recommendationFor(packet: WorkroomReviewPacket | undefined, response: BusinessAgentWorkroomResponse): string {
   if (packet?.scenarioId === "land-ownership-gaps") {
     return "Have a person decide whether the Harrison South Unit / Tract 14 evidence supports requesting missing title or ownership records before relying on the recorded interest.";
   }
@@ -168,7 +168,7 @@ function reviewContextFor(packet: WorkroomReviewPacket): string | undefined {
   return undefined;
 }
 
-function humanBoundaryFor(packet: WorkroomReviewPacket | undefined, response: LandOpsWorkroomResponse): string {
+function humanBoundaryFor(packet: WorkroomReviewPacket | undefined, response: BusinessAgentWorkroomResponse): string {
   if (packet?.scenarioId === "land-ownership-gaps") {
     return "This review organizes evidence for the ownership question. It does not issue a title opinion, change payment status, or approve development.";
   }

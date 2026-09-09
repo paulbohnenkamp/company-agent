@@ -1,16 +1,18 @@
-# Deployment and service integration
+# Deployment overview
 
-The repository is deployable as a Next.js application or container, but the
-default workflow remains a local reference implementation.
+The current deployment shape is a C#/.NET API, Next.js web surface, and
+separate Microsoft Teams adapter deployed as Azure App Service containers. The
+canonical recreation instructions are in [azure-recreation.md](azure-recreation.md);
+the Teams-specific operational checklist is in
+[teams-live-activation.md](teams-live-activation.md).
 
 ## Local verification
 
 ```sh
-npm ci
 npm run typecheck
 npm test
 npm run build
-docker build -t business-agent .
+dotnet test dotnet/LandOps.sln
 ```
 
 ## Microsoft target shape
@@ -26,6 +28,7 @@ docker build -t business-agent .
 | Delivery | Teams/Copilot Studio/web app | Next.js surface and API boundary |
 | Tools | MCP server or approved internal APIs | MCP handler and tool registry |
 
-No cloud resource, credential, or external write is created by this repository.
-Production deployment still needs tenant isolation, managed identity, network
-policy, secret rotation, data retention, backup, and an operational owner.
+Local deterministic execution remains the fastest verification path. Cloud
+deployment requires credentials, managed identities, tenant configuration,
+network policy, secret rotation, data retention, backup, and an operational
+owner. Do not treat a local provider seam as live Foundry or MCP integration.

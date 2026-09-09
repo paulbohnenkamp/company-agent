@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using LandOps.Application;
+using BusinessAgent.Application;
 
-namespace LandOps.Api.Tests;
+namespace BusinessAgent.Api.Tests;
 
 public sealed class PlaybookEndToEndTests : IClassFixture<ApiFactory>
 {

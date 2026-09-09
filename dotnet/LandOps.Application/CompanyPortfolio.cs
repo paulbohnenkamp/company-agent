@@ -1,4 +1,4 @@
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>
 /// The small read-only company contract used by the first portfolio shell.

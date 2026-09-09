@@ -14,7 +14,7 @@ explicit boundaries around identity, providers, persistence, and human action.
 The design keeps business rules in the C# application while Teams and the web
 application act as presentation and transport surfaces.
 
-### Resume-ready project brief
+### Project brief
 
 Designed and built a .NET 10 and C# agent platform that routes evidence-based
 work through bounded specialist agents and presents one auditable review in
@@ -46,7 +46,7 @@ for verified work, limits, and the active specs.
 
 ## Technology used
 
-This project uses the parts of the Antero role’s stack that it demonstrates:
+This project demonstrates the following product stack:
 
 - **.NET 10 and C#** for the domain, application, infrastructure, and API layers.
 - **ASP.NET Core and Entity Framework Core** for HTTP boundaries, authorization, persistence, and migrations.
@@ -71,7 +71,7 @@ Open [the Teams example](http://localhost:3001/teams) after starting the local
 application. It illustrates Sample Energy Company departments and contributions
 from Business Agent. It is not a screenshot of an installed Teams app.
 
-Earlier screenshots in `docs/images/landops-*.png` retain historical branding
+Earlier screenshots in `docs/images/business-agent-*.png` retain historical styling
 and are not current product illustrations. Spec 048 records the naming change.
 
 ## Run the local application
@@ -82,7 +82,7 @@ Prerequisites: Node.js, the .NET SDK selected in `dotnet/global.json`, and Docke
 npm install
 docker compose up -d sqlserver
 dotnet run --project dotnet/LandOps.Api --urls http://127.0.0.1:5006
-LANDOPS_API_URL=http://127.0.0.1:5006 NEXT_PUBLIC_LANDOPS_MODE=true npm run dev -- --port 3001
+BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 NEXT_PUBLIC_BUSINESS_AGENT_MODE=true npm run dev -- --port 3001
 ```
 
 Open [http://localhost:3001](http://localhost:3001). The seeded Braxton County case is synthetic. The frozen WVDEP/WVGES evidence is included for repeatable local review and does not require live government endpoints.
@@ -112,7 +112,7 @@ contributions, not tenant user accounts.
 To run the separate Teams channel adapter locally, keep the API running and start another terminal:
 
 ```sh
-DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true LANDOPS_API_URL=http://127.0.0.1:5006 npm run teams:dev
+DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS=true BUSINESS_AGENT_API_URL=http://127.0.0.1:5006 npm run teams:dev
 ```
 
 The adapter listens on port `3978` for the Microsoft Teams/Bot Framework endpoint. Real tenant registration, Bot configuration, Entra credentials, and Teams sideloading are deployment steps; the pure adapter tests run without those credentials.
@@ -161,15 +161,15 @@ The Teams adapter owns transport concerns only. The C# application owns authoriz
 
 ## Learn the codebase
 
-Start with the [Business Agent learner path](docs/landops-learning-path.md), then read:
+Start with the [Business Agent learner path](docs/business-agent-learning-path.md), then read:
 
-1. [Architecture](docs/landops-architecture.md)
-2. [Data and evidence](docs/landops-data-and-evidence.md)
-3. [Code tour](docs/landops-code-tour.md)
-4. [Development workflow](docs/landops-development-workflow.md)
-5. [Glossary](docs/landops-glossary.md)
-6. [V1 product specification](docs/LANDOPS_WORKBENCH_V1.md)
-7. [Documentation gap report](docs/landops-documentation-gap-report.md)
+1. [Architecture](docs/business-agent-architecture.md)
+2. [Data and evidence](docs/business-agent-data-and-evidence.md)
+3. [Code tour](docs/business-agent-code-tour.md)
+4. [Development workflow](docs/business-agent-development-workflow.md)
+5. [Glossary](docs/business-agent-glossary.md)
+6. [V1 product specification](docs/BUSINESS_AGENT_WORKBENCH_V1.md)
+7. [Documentation gap report](docs/business-agent-documentation-gap-report.md)
 8. [Microsoft Foundry standards](docs/microsoft-foundry-standards.md)
 
 The original reusable TypeScript runtime is documented in the [documentation map](docs/README.md). Read it as a behavioral reference while learning the newer .NET-centered application.
@@ -200,7 +200,7 @@ The local identity catalog is [`config/identity/personas.json`](config/identity/
 - `dotnet/LandOps.Infrastructure` — EF Core, SQL Server, fixtures, and Foundry integration.
 - `dotnet/LandOps.Api` — ASP.NET Core HTTP boundary.
 - `app/` — Next.js App Router and same-origin browser routes.
-- `src/landops/` — React view components and C# response adapters.
+- `src/business-agent/` — React view components and C# response adapters.
 - `src/teams/` — Microsoft Teams SDK channel adapter.
 - `src/` and `domains/` — older TypeScript reference runtime and WV source implementation.
 - `specs/` and `results/` — checkpoint specifications and verification records.

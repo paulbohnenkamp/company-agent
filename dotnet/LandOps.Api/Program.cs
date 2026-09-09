@@ -1,16 +1,20 @@
 using System.Text.Json;
-using LandOps.Api;
-using LandOps.Application;
-using LandOps.Domain;
-using LandOps.Infrastructure;
+using BusinessAgent.Api;
+using BusinessAgent.Application;
+using BusinessAgent.Domain;
+using BusinessAgent.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 // Program.cs is the composition root. It wires HTTP, application services, and SQL together.
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("LandOps")
+string? businessAgentSetting(string key) => builder.Configuration[$"BusinessAgent:{key}"] ?? builder.Configuration[$"LandOps:{key}"];
+bool businessAgentFlag(string key) => bool.TryParse(businessAgentSetting(key), out var value) && value;
+
+var connectionString = builder.Configuration.GetConnectionString("BusinessAgent")
+    ?? builder.Configuration.GetConnectionString("LandOps")
     ?? "Server=localhost,1433;Database=LandOps;User Id=sa;Password=LandOps_dev_2026!;TrustServerCertificate=True;Encrypt=False";
-var entraMode = string.Equals(builder.Configuration["LandOps:IdentityMode"], "entra", StringComparison.OrdinalIgnoreCase);
+var entraMode = string.Equals(businessAgentSetting("IdentityMode"), "entra", StringComparison.OrdinalIgnoreCase);
 
 builder.Services.AddAuthorization();
 if (entraMode)
@@ -34,7 +38,7 @@ if (entraMode)
                 {
                     var logger = context.HttpContext.RequestServices
                         .GetRequiredService<ILoggerFactory>()
-                        .CreateLogger("LandOps.Api.Authentication");
+                        .CreateLogger("BusinessAgent.Api.Authentication");
                     logger.LogWarning(
                         "JWT authentication failed for {Path}: {ErrorType}",
                         context.HttpContext.Request.Path,
@@ -45,7 +49,7 @@ if (entraMode)
                 {
                     var logger = context.HttpContext.RequestServices
                         .GetRequiredService<ILoggerFactory>()
-                        .CreateLogger("LandOps.Api.Authentication");
+                        .CreateLogger("BusinessAgent.Api.Authentication");
                     logger.LogWarning(
                         "JWT challenge for {Path}: {Error} {ErrorDescription}",
                         context.HttpContext.Request.Path,
@@ -61,7 +65,7 @@ if (entraMode)
 // or recycling an App Service instance. Keep the SQL boundary resilient to
 // those transient connection failures without moving persistence into the
 // Teams adapter.
-builder.Services.AddDbContext<LandOpsDbContext>(options => options.UseSqlServer(
+builder.Services.AddDbContext<BusinessAgentDbContext>(options => options.UseSqlServer(
     connectionString,
     sqlOptions => sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null)));
 builder.Services.AddScoped<ILandCaseRepository, LandCaseRepository>();
@@ -84,15 +88,15 @@ builder.Services.AddScoped<IAgentProvider>(services =>
             TimeSpan.FromSeconds(configuration.GetValue("Foundry:TimeoutSeconds", 30))));
 });
 builder.Services.AddScoped<ICaseConversation>(services =>
-    string.Equals(builder.Configuration["LandOps:ConversationProvider"], "foundry", StringComparison.OrdinalIgnoreCase)
+    string.Equals(businessAgentSetting("ConversationProvider"), "foundry", StringComparison.OrdinalIgnoreCase)
         ? new FoundryCaseConversation(services.GetRequiredService<IAgentProvider>())
         : services.GetRequiredService<DeterministicCaseConversation>());
 builder.Services.AddScoped<IWorkroomRunService>(services =>
-    string.Equals(builder.Configuration["LandOps:WorkroomExecutionProvider"], "foundry", StringComparison.OrdinalIgnoreCase)
+    string.Equals(businessAgentSetting("WorkroomExecutionProvider"), "foundry", StringComparison.OrdinalIgnoreCase)
         ? new FoundryWorkroomRunService(services.GetRequiredService<IAgentProvider>())
         : new DeterministicWorkroomRunService());
 builder.Services.AddSingleton<WorkroomThreadStore>();
-if (string.Equals(builder.Configuration["LandOps:WorkroomPersistence"], "sql", StringComparison.OrdinalIgnoreCase))
+if (string.Equals(businessAgentSetting("WorkroomPersistence"), "sql", StringComparison.OrdinalIgnoreCase))
     builder.Services.AddScoped<IWorkroomThreadStore, SqlWorkroomThreadStore>();
 else
     builder.Services.AddSingleton<IWorkroomThreadStore>(services => services.GetRequiredService<WorkroomThreadStore>());
@@ -105,10 +109,10 @@ if (entraMode)
     app.UseAuthorization();
 }
 
-if (app.Configuration.GetValue<bool>("LandOps:ApplyMigrations"))
+if (businessAgentFlag("ApplyMigrations"))
 {
     await using var scope = app.Services.CreateAsyncScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<LandOpsDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<BusinessAgentDbContext>();
     await dbContext.Database.MigrateAsync();
     await SeedData.SeedBraxtonCaseAsync(dbContext);
 }
@@ -151,13 +155,13 @@ app.MapPost("/api/v1/cases/{caseId}/scenario-runs", (string caseId, FictionalRev
 
 app.MapPost("/api/v1/workroom/threads", async (HttpContext httpContext, WorkroomThreadRequest request, IWorkroomThreadStore store, ILoggerFactory loggerFactory, CancellationToken cancellationToken) =>
 {
-    var logger = loggerFactory.CreateLogger("LandOps.Api.WorkroomAuthorization");
+    var logger = loggerFactory.CreateLogger("BusinessAgent.Api.WorkroomAuthorization");
     if (string.IsNullOrWhiteSpace(request.CaseId) || string.IsNullOrWhiteSpace(request.ScenarioId) || string.IsNullOrWhiteSpace(request.Question))
         return Results.BadRequest(new { error = "caseId, scenarioId, and question are required" });
-    var identity = LandOpsIdentityResolver.Resolve(
+    var identity = BusinessAgentIdentityResolver.Resolve(
         httpContext,
         request,
-        app.Configuration["LandOps:IdentityMode"],
+        businessAgentSetting("IdentityMode"),
         app.Configuration["Entra:TrustedAdapterAppId"]);
     if (!identity.IsAuthenticated) return Results.Unauthorized();
     if (identity.Roles.Count == 0 || string.IsNullOrWhiteSpace(identity.Subject))
@@ -192,25 +196,25 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/run", async (string threadId, I
     }
     catch (WorkroomRunException error)
     {
-        loggerFactory.CreateLogger("LandOps.Api.WorkroomExecution").LogError(
+        loggerFactory.CreateLogger("BusinessAgent.Api.WorkroomExecution").LogError(
             "Workroom execution failed (thread={ThreadId}, case={CaseId}, scenario={ScenarioId}, provider={Provider}): {Error}",
             thread.ThreadId,
             thread.CaseId,
             thread.ScenarioId,
-            app.Configuration["LandOps:WorkroomExecutionProvider"] ?? "deterministic",
+            businessAgentSetting("WorkroomExecutionProvider") ?? "deterministic",
             error.Message);
         return Results.Problem(error.Message, statusCode: StatusCodes.Status502BadGateway);
     }
 });
 
-app.MapPost("/api/v1/workroom/threads/{threadId}/actions", async (string threadId, HttpContext httpContext, WorkroomActionRequest request, IWorkroomThreadStore store, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapPost("/api/v1/workroom/threads/{threadId}/actions", async (string threadId, HttpContext httpContext, WorkroomActionRequest request, IWorkroomThreadStore store, BusinessAgentDbContext dbContext, CancellationToken cancellationToken) =>
 {
     var thread = await store.GetAsync(threadId, cancellationToken);
     if (thread is null) return Results.NotFound(new { error = "agent request not found" });
     if (request.Action is not ("approve-next-step" or "request-evidence" or "reject-recommendation" or "assign-task"))
         return Results.BadRequest(new { error = "action must be approve-next-step, request-evidence, reject-recommendation, or assign-task" });
     if (string.IsNullOrWhiteSpace(request.Reason)) return Results.BadRequest(new { error = "reason is required" });
-    var identity = LandOpsIdentityResolver.Resolve(httpContext, new WorkroomThreadRequest(thread.CaseId, thread.ScenarioId, thread.Question, thread.RequestedBy, thread.RoleId, [thread.RequiredGroup], thread.Context.Messages.ToArray()), app.Configuration["LandOps:IdentityMode"], app.Configuration["Entra:TrustedAdapterAppId"]);
+    var identity = BusinessAgentIdentityResolver.Resolve(httpContext, new WorkroomThreadRequest(thread.CaseId, thread.ScenarioId, thread.Question, thread.RequestedBy, thread.RoleId, [thread.RequiredGroup], thread.Context.Messages.ToArray()), businessAgentSetting("IdentityMode"), app.Configuration["Entra:TrustedAdapterAppId"]);
     if (!identity.IsAuthenticated || string.IsNullOrWhiteSpace(identity.Subject)) return Results.Unauthorized();
     if (identity.IsTrustedAdapter) return Results.StatusCode(StatusCodes.Status403Forbidden);
     if (!identity.Roles.Any(role => string.Equals(role, thread.RoleId, StringComparison.OrdinalIgnoreCase))) return Results.StatusCode(StatusCodes.Status403Forbidden);
@@ -220,7 +224,7 @@ app.MapPost("/api/v1/workroom/threads/{threadId}/actions", async (string threadI
     return Results.Created($"/api/v1/workroom/threads/{threadId}/actions/{action.Id}", new { action.Id, action.ThreadId, action.CaseId, action.Action, action.ActorId, action.Assignee, action.Reason, action.CreatedAt });
 });
 
-app.MapGet("/api/v1/workroom/threads/{threadId}/actions", async (string threadId, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapGet("/api/v1/workroom/threads/{threadId}/actions", async (string threadId, BusinessAgentDbContext dbContext, CancellationToken cancellationToken) =>
     Results.Ok(await dbContext.WorkroomActions.AsNoTracking().Where(item => item.ThreadId == threadId).OrderBy(item => item.CreatedAt).ToListAsync(cancellationToken)));
 
 app.MapPost("/api/v1/cases/{caseId}/runs", async (string caseId, CaseQuery query, ReconciliationPersistence persistence, CancellationToken cancellationToken) =>
@@ -243,7 +247,7 @@ app.MapPost("/api/v1/cases/{caseId}/runs", async (string caseId, CaseQuery query
     });
 });
 
-app.MapGet("/api/v1/cases/{caseId}/runs/{runId}", async (string caseId, string runId, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapGet("/api/v1/cases/{caseId}/runs/{runId}", async (string caseId, string runId, BusinessAgentDbContext dbContext, CancellationToken cancellationToken) =>
 {
     var run = await dbContext.ReconciliationRuns.AsNoTracking().SingleOrDefaultAsync(item => item.Id == runId && item.CaseId == caseId, cancellationToken);
     if (run is null) return Results.NotFound();
@@ -267,7 +271,7 @@ app.MapGet("/api/v1/cases/{caseId}/runs/{runId}", async (string caseId, string r
     });
 });
 
-app.MapGet("/api/v1/cases/{caseId}/evidence", async (string caseId, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapGet("/api/v1/cases/{caseId}/evidence", async (string caseId, BusinessAgentDbContext dbContext, CancellationToken cancellationToken) =>
 {
     var evidence = await dbContext.PublicEvidence.AsNoTracking().Where(item => item.CaseId == caseId).ToListAsync(cancellationToken);
     if (evidence.Count == 0) return Results.NotFound();
@@ -290,7 +294,7 @@ app.MapGet("/api/v1/cases/{caseId}/evidence", async (string caseId, LandOpsDbCon
     });
 });
 
-app.MapPost("/api/v1/cases/{caseId}/runs/{runId}/conversation", async (string caseId, string runId, HttpRequest request, LandOpsDbContext dbContext, ICaseConversation conversation, CancellationToken cancellationToken) =>
+app.MapPost("/api/v1/cases/{caseId}/runs/{runId}/conversation", async (string caseId, string runId, HttpRequest request, BusinessAgentDbContext dbContext, ICaseConversation conversation, CancellationToken cancellationToken) =>
 {
     var run = await dbContext.ReconciliationRuns.AsNoTracking().SingleOrDefaultAsync(item => item.Id == runId && item.CaseId == caseId, cancellationToken);
     if (run is null) return Results.NotFound();
@@ -316,7 +320,7 @@ app.MapPost("/api/v1/cases/{caseId}/runs/{runId}/conversation", async (string ca
     return Results.Ok(response);
 });
 
-app.MapPost("/api/v1/cases/{caseId}/runs/{runId}/review", async (string caseId, string runId, ReviewRequest body, LandOpsDbContext dbContext, CancellationToken cancellationToken) =>
+app.MapPost("/api/v1/cases/{caseId}/runs/{runId}/review", async (string caseId, string runId, ReviewRequest body, BusinessAgentDbContext dbContext, CancellationToken cancellationToken) =>
 {
     if (await dbContext.ReconciliationRuns.AsNoTracking().SingleOrDefaultAsync(item => item.Id == runId && item.CaseId == caseId, cancellationToken) is null) return Results.NotFound();
     if (body.Decision is not ("approved" or "rejected" or "revision-requested") || string.IsNullOrWhiteSpace(body.ReviewerId) || string.IsNullOrWhiteSpace(body.Reason)) return Results.BadRequest(new { error = "decision, reviewerId, and reason are required" });

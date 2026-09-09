@@ -1,4 +1,4 @@
-import { dotnetBaseUrl, mapCase } from "../../../../src/landops/adapter";
+import { dotnetBaseUrl, mapCase } from "../../../../src/business-agent/adapter";
 
 // Keep browser traffic same-origin while the C# API runs on its own local port.
 export async function GET(): Promise<Response> {

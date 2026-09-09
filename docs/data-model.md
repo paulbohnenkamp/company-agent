@@ -1,5 +1,9 @@
 # Data model and provenance
 
+> Reference runtime documentation for the older TypeScript model. Current
+> product behavior is described in
+> [business-agent-data-and-evidence.md](business-agent-data-and-evidence.md).
+
 Business Agent is intentionally document- and configuration-first. The
 runtime does not pretend to be a land accounting system. It creates reviewable
 packets from supplied evidence.

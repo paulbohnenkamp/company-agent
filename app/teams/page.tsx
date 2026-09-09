@@ -1,6 +1,6 @@
-import { TeamsCollaborationView } from "../../src/landops/TeamsCollaborationView";
-import { TeamsIntegrationPanel } from "../../src/landops/TeamsIntegrationPanel";
-import { WorkroomReviewView } from "../../src/landops/WorkroomReviewView";
+import { TeamsCollaborationView } from "../../src/business-agent/TeamsCollaborationView";
+import { TeamsIntegrationPanel } from "../../src/business-agent/TeamsIntegrationPanel";
+import { WorkroomReviewView } from "../../src/business-agent/WorkroomReviewView";
 import "../globals.css";
 
 /** Focused local preview for the Teams channel and its LandOps adapter boundary. */

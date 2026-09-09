@@ -1,5 +1,10 @@
 # Business Agent architecture
 
+> Reference runtime documentation. The current application boundary is the
+> C#/.NET API and the current user surface is Microsoft Teams. See
+> [business-agent-architecture.md](business-agent-architecture.md) for the
+> current architecture.
+
 Business Agent keeps domain behavior in readable YAML/Markdown artifacts and keeps execution
 mechanics in TypeScript. New business domains normally add configuration, not
 runtime classes. Stateful application boundaries use small cohesive services.

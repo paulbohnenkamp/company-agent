@@ -1,6 +1,6 @@
-using LandOps.Domain;
+using BusinessAgent.Domain;
 
-namespace LandOps.Domain.Tests;
+namespace BusinessAgent.Domain.Tests;
 
 public sealed class LandCaseTests
 {

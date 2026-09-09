@@ -1,8 +1,8 @@
 using System.Text.Json;
-using LandOps.Application;
+using BusinessAgent.Application;
 using Microsoft.EntityFrameworkCore;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 /// <summary>
 /// SQL-shaped representation of a Workroom thread. JSON columns preserve the
@@ -37,7 +37,7 @@ public sealed class WorkroomThreadRow
 }
 
 /// <summary>Durable Workroom implementation used by SQL Server/Azure SQL mode.</summary>
-public sealed class SqlWorkroomThreadStore(LandOpsDbContext dbContext) : IWorkroomThreadStore
+public sealed class SqlWorkroomThreadStore(BusinessAgentDbContext dbContext) : IWorkroomThreadStore
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 

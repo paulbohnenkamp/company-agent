@@ -1,4 +1,4 @@
-import { dotnetBaseUrl, mapCompany } from "../../../../src/landops/adapter";
+import { dotnetBaseUrl, mapCompany } from "../../../../src/business-agent/adapter";
 
 // Keep the company portfolio request same-origin while the C# API runs separately.
 export async function GET(): Promise<Response> {

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { upstreamHeaders } from "../src/landops/proxy";
+import { upstreamHeaders } from "../src/business-agent/proxy";
 
 test("LandOps proxy forwards the caller bearer token and JSON content type", () => {
   const request = new Request("http://localhost/api/landops/workroom", {

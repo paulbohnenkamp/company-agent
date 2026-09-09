@@ -1,7 +1,7 @@
-using LandOps.Application;
-using LandOps.Domain;
+using BusinessAgent.Application;
+using BusinessAgent.Domain;
 
-namespace LandOps.Application.Tests;
+namespace BusinessAgent.Application.Tests;
 
 public sealed class ReconciliationTests
 {

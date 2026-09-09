@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 public sealed class SubmittedEvidence
 {

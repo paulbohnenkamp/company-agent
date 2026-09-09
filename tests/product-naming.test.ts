@@ -4,8 +4,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
-import { TeamsCollaborationView } from "../src/landops/TeamsCollaborationView";
-import { PeopleDirectory } from "../src/landops/PeopleDirectory";
+import { TeamsCollaborationView } from "../src/business-agent/TeamsCollaborationView";
+import { PeopleDirectory } from "../src/business-agent/PeopleDirectory";
 import personas from "../config/identity/personas.json";
 
 test("rendered Teams example identifies people and agent contributions without claiming activation", () => {
@@ -29,7 +29,7 @@ test("persona dry-run uses dotted aliases and never prints a configured password
 });
 
 test("legacy HTTP identifiers remain transport contracts while product copy is current", async () => {
-  const client = await readFile("src/teams/landops-client.ts", "utf8");
+  const client = await readFile("src/teams/business-agent-client.ts", "utf8");
   assert.ok(client.includes("/api/v1/workroom/threads"));
   const naming = await readFile("docs/product-naming.md", "utf8");
   assert.match(naming, /Microsoft Teams is where people collaborate/);

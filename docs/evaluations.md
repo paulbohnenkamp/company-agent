@@ -1,5 +1,8 @@
 # Evaluations
 
+> Reference runtime documentation. Current Teams review status and approved
+> work are tracked in [PROJECT_STATE.md](PROJECT_STATE.md).
+
 Evaluations are behavioral contracts for agents and flows. They are separate
 from unit tests: unit tests prove code mechanics; evaluations judge whether an
 agent response preserves the business and safety rules.

@@ -1,13 +1,13 @@
-using LandOps.Domain;
+using BusinessAgent.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 public static class SeedData
 {
     public const string BraxtonCaseId = "synthetic-wv-case-braxton-001";
 
-    public static async Task SeedBraxtonCaseAsync(LandOpsDbContext dbContext, CancellationToken cancellationToken = default)
+    public static async Task SeedBraxtonCaseAsync(BusinessAgentDbContext dbContext, CancellationToken cancellationToken = default)
     {
         if (await dbContext.LandCases.AnyAsync(item => item.Id == BraxtonCaseId, cancellationToken)) return;
 

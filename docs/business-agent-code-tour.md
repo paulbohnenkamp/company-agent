@@ -13,18 +13,18 @@ Use this page to find the code behind a product behavior. Start with the endpoin
 | `dotnet/*Tests` | .NET unit and API tests |
 | `app/page.tsx` | React case workspace |
 | `app/api/landops` | Next.js same-origin routes for C# mode |
-| `src/landops/adapter.ts` | C# response to React view-model mapping |
+| `src/business-agent/adapter.ts` | C# response to React view-model mapping |
 | `specs/013-017-*` | Approved checkpoint specifications |
 | `results/013-017-*` | Verification records for completed checkpoints |
 
 ## Load the case workspace
 
-The page chooses between the TypeScript demo and the C# transport with `NEXT_PUBLIC_LANDOPS_MODE`.
+The page chooses between the TypeScript demo and the C# transport with `NEXT_PUBLIC_BUSINESS_AGENT_MODE`; `NEXT_PUBLIC_LANDOPS_MODE` remains a compatibility alias.
 
 1. `app/page.tsx` requests `/api/landops/case` when C# mode is enabled.
 2. `app/api/landops/case/route.ts` calls the ASP.NET Core case endpoint.
 3. `CaseQuery` asks `ILandCaseRepository` for the case.
-4. `LandCaseRepository` uses `LandOpsDbContext` to read SQL Server.
+4. `LandCaseRepository` uses `BusinessAgentDbContext` to read SQL Server.
 5. The response travels back through the same route to React.
 
 ## Run reconciliation
@@ -37,7 +37,7 @@ The run path follows the same boundary:
 4. `DeterministicAgentWorkflow.Execute` creates the ordered steps.
 5. `DeterministicReconciliationService.Execute` creates findings, conflicts, and unknowns.
 6. The persistence service saves the run and its child records through EF Core.
-7. The route maps the API result with `src/landops/adapter.ts`.
+7. The route maps the API result with `src/business-agent/adapter.ts`.
 
 ## Ask a case question
 
@@ -51,7 +51,7 @@ The conversation service does not search the internet and does not invent new fa
 
 ## Follow a database change
 
-When a persisted contract changes, update the domain object, update `LandOpsDbContext`, create an EF Core migration, and run the .NET tests. The migration files under `dotnet/LandOps.Infrastructure/Migrations` are the history of the SQL schema.
+When a persisted contract changes, update the domain object, update `BusinessAgentDbContext`, create an EF Core migration, and run the .NET tests. The migration files under `dotnet/LandOps.Infrastructure/Migrations` are the history of the SQL schema.
 
 ## Where to add a new feature
 
@@ -62,6 +62,6 @@ Choose the smallest layer that owns the behavior:
 - Add storage mapping or a provider to `dotnet/LandOps.Infrastructure`.
 - Add an HTTP boundary to `dotnet/LandOps.Api`.
 - Add a browser interaction to `app/page.tsx` and a same-origin route under `app/api/landops`.
-- Add a response-shape conversion to `src/landops/adapter.ts`.
+- Add a response-shape conversion to `src/business-agent/adapter.ts`.
 
 Do not put SQL queries in React. Do not put business judgment in a Next.js route. Do not make a cloud provider a requirement for deterministic tests.

@@ -483,7 +483,7 @@ The implementation can begin with the local Teams vertical slice, but broad web 
 
 ## Source grounding
 
-This direction builds on the role and operating research in [LANDOPS_USER_WORKFLOWS_RESEARCH.md](LANDOPS_USER_WORKFLOWS_RESEARCH.md), especially:
+This direction builds on the role and operating research in [Business Agent user workflows research](BUSINESS_AGENT_USER_WORKFLOWS_RESEARCH.md), especially:
 
 - [AAPL Landman Toolkit](https://www.landman.org/resources/landman-toolkit.html)
 - [AAPL landwork definitions](https://www.landman.org/join-engage/membership-types/active-members.html)

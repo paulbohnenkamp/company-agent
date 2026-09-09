@@ -1,11 +1,11 @@
-# LandOps .NET foundation
+# Business Agent .NET foundation
 
-The LandOps Workbench is a .NET 10/C# 14 ASP.NET Core application with EF Core
+Business Agent is a .NET 10/C# 14 ASP.NET Core application with EF Core
 10 and SQL Server persistence. Checkpoints A through E now cover the case
 foundation, evidence reconciliation, ordered workflow, React transport,
 case-scoped conversation, and append-only human review.
 
-Start with the [LandOps learner path](../docs/landops-learning-path.md) for the
+Start with the [Business Agent learner path](../docs/business-agent-learning-path.md) for the
 beginner-oriented architecture and local run instructions. Use this file as a
 short .NET-specific reference.
 

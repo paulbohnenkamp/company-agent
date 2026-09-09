@@ -3,10 +3,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text.Json;
-using LandOps.Api;
-using LandOps.Application;
-using LandOps.Domain;
-using LandOps.Infrastructure;
+using BusinessAgent.Api;
+using BusinessAgent.Application;
+using BusinessAgent.Domain;
+using BusinessAgent.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 
-namespace LandOps.Api.Tests;
+namespace BusinessAgent.Api.Tests;
 
 public sealed class ApiTests : IClassFixture<ApiFactory>
 {
@@ -359,7 +359,7 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         };
         var request = new WorkroomThreadRequest("case", "scenario", "question", "spoofed-user", "spoofed-role", ["spoofed-group"], null);
 
-        var identity = LandOpsIdentityResolver.Resolve(context, request, "entra");
+        var identity = BusinessAgentIdentityResolver.Resolve(context, request, "entra");
 
         Assert.True(identity.IsAuthenticated);
         Assert.Equal("entra-user-001", identity.Subject);
@@ -375,7 +375,7 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
         var context = new DefaultHttpContext();
         var request = new WorkroomThreadRequest("case", "scenario", "question", "local-demo-user", "lease-analyst", ["lease-compliance-review"], null);
 
-        var identity = LandOpsIdentityResolver.Resolve(context, request, "entra");
+        var identity = BusinessAgentIdentityResolver.Resolve(context, request, "entra");
 
         Assert.False(identity.IsAuthenticated);
         Assert.Empty(identity.Roles);
@@ -580,7 +580,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>
     {
         // The action endpoint writes to SQL, so the test host applies the same
         // migrations that production uses before exercising the write path.
-        builder.UseSetting("LandOps:ApplyMigrations", "true");
+        builder.UseSetting("BusinessAgent:ApplyMigrations", "true");
         builder.ConfigureServices(services =>
         {
             var descriptor = services.Single(item => item.ServiceType == typeof(ILandCaseRepository));
@@ -610,11 +610,11 @@ public sealed class EntraApiFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseSetting("LandOps:IdentityMode", "entra");
+        builder.UseSetting("BusinessAgent:IdentityMode", "entra");
         builder.UseSetting("Entra:Authority", "https://login.example.test/tenant/v2.0");
         builder.UseSetting("Entra:Audience", "landops-test");
         builder.UseSetting("Entra:TrustedAdapterAppId", "trusted-adapter-app");
-        builder.UseSetting("LandOps:ApplyMigrations", "true");
+        builder.UseSetting("BusinessAgent:ApplyMigrations", "true");
         builder.ConfigureTestServices(services =>
         {
             services.AddAuthentication(options =>
@@ -629,7 +629,7 @@ public sealed class EntraApiFactory : WebApplicationFactory<Program>
 
 public sealed class TestAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-    public const string TestScheme = "LandOpsTest";
+    public const string TestScheme = "BusinessAgentTest";
 
     public TestAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder)
         : base(options, logger, encoder)

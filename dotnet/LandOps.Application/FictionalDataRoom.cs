@@ -1,4 +1,4 @@
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>
 /// A source-linked record from the fictional company's case data room.

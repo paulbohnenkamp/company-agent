@@ -1,10 +1,10 @@
 using System.Security.Claims;
 
-namespace LandOps.Api;
+namespace BusinessAgent.Api;
 
 // This adapter keeps authentication plumbing at the HTTP boundary. The
 // application layer receives resolved identity values, not ASP.NET details.
-public sealed record ResolvedLandOpsIdentity(
+public sealed record ResolvedBusinessAgentIdentity(
     string Subject,
     IReadOnlyCollection<string> Roles,
     IReadOnlyCollection<string> Groups,
@@ -15,9 +15,9 @@ public sealed record ResolvedLandOpsIdentity(
     public string PrimaryRole => Roles.FirstOrDefault() ?? string.Empty;
 }
 
-public static class LandOpsIdentityResolver
+public static class BusinessAgentIdentityResolver
 {
-    public static ResolvedLandOpsIdentity Resolve(
+    public static ResolvedBusinessAgentIdentity Resolve(
         HttpContext httpContext,
         WorkroomThreadRequest request,
         string? configuredMode,
@@ -30,7 +30,7 @@ public static class LandOpsIdentityResolver
 
         if (mode == "local")
         {
-            return new ResolvedLandOpsIdentity(
+            return new ResolvedBusinessAgentIdentity(
                 request.RequestedBy,
                 string.IsNullOrWhiteSpace(request.RoleId) ? [] : [request.RoleId],
                 request.Groups ?? [],
@@ -69,7 +69,7 @@ public static class LandOpsIdentityResolver
         {
             var transportedRoles = string.IsNullOrWhiteSpace(request.RoleId) ? [] : new[] { request.RoleId };
             var transportedGroups = request.Groups ?? [];
-            return new ResolvedLandOpsIdentity(
+            return new ResolvedBusinessAgentIdentity(
                 request.RequestedBy,
                 transportedRoles,
                 transportedGroups,
@@ -78,6 +78,6 @@ public static class LandOpsIdentityResolver
                 true);
         }
 
-        return new ResolvedLandOpsIdentity(subject, roles, groups, principal.Identity?.IsAuthenticated == true, mode);
+        return new ResolvedBusinessAgentIdentity(subject, roles, groups, principal.Identity?.IsAuthenticated == true, mode);
     }
 }

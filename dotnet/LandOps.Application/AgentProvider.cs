@@ -1,4 +1,4 @@
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 /// <summary>Typed request sent across the model-provider boundary.</summary>
 public sealed record AgentProviderRequest(string AgentId, string Instructions, string Input);

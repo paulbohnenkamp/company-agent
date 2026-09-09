@@ -1,4 +1,4 @@
-import { dotnetBaseUrl } from "../../../../src/landops/adapter";
+import { dotnetBaseUrl } from "../../../../src/business-agent/adapter";
 
 export async function GET() {
   const base = dotnetBaseUrl();

@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
-public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<LandOpsDbContext>
+public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<BusinessAgentDbContext>
 {
-    public LandOpsDbContext CreateDbContext(string[] args)
+    public BusinessAgentDbContext CreateDbContext(string[] args)
     {
-        var options = new DbContextOptionsBuilder<LandOpsDbContext>()
+        var options = new DbContextOptionsBuilder<BusinessAgentDbContext>()
             .UseSqlServer("Server=localhost,1433;Database=LandOps;User Id=sa;Password=LandOps_dev_2026!;TrustServerCertificate=True;Encrypt=False")
             .Options;
-        return new LandOpsDbContext(options);
+        return new BusinessAgentDbContext(options);
     }
 }

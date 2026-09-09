@@ -11,7 +11,7 @@ Reviewed: 2026-09-06
 - Reframed the top-level README around LandOps Workbench and the C#/.NET-centered architecture.
 - Added beginner-oriented links for architecture, data, code tour, workflow, glossary, product specification, and gaps.
 - Documented the distinction between the web Workroom and the real Microsoft Teams channel adapter.
-- Added `src/teams/landops-adapter.ts` with typed activity mapping, mention parsing, channel mapping, idempotency, and safe reply formatting.
+- Added `src/teams/teams-adapter.ts` with typed activity mapping, mention parsing, channel mapping, idempotency, and safe reply formatting.
 - Added `src/teams/server.ts` as a separate Microsoft Teams SDK entrypoint that calls the ASP.NET Core Workroom API.
 - Added a Teams collaboration view showing a human request, three explicit agent handoffs, and the human decision boundary.
 - Added pure tests for the adapter contract, including duplicate activity suppression and channel mapping.

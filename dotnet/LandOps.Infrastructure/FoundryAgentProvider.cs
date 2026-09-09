@@ -4,9 +4,9 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using LandOps.Application;
+using BusinessAgent.Application;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 /// <summary>Configuration for one Microsoft Foundry Responses API deployment.</summary>
 public sealed record FoundryOptions(

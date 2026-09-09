@@ -127,6 +127,8 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'WEBSITES_PORT', value: '3000' }
         { name: 'PORT', value: '3000' }
         { name: 'WEBSITES_CONTAINER_START_TIME_LIMIT', value: '1800' }
+        { name: 'BUSINESS_AGENT_API_URL', value: 'https://${apiName}.azurewebsites.net' }
+        { name: 'NEXT_PUBLIC_BUSINESS_AGENT_MODE', value: 'true' }
         { name: 'LANDOPS_API_URL', value: 'https://${apiName}.azurewebsites.net' }
         { name: 'APPLICATIONINSIGHTS_CONNECTION_STRING', value: insights.properties.ConnectionString }
       ]
@@ -153,6 +155,11 @@ resource api 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'ASPNETCORE_HTTP_PORTS', value: '8080' }
         { name: 'PORT', value: '8080' }
         { name: 'WEBSITES_CONTAINER_START_TIME_LIMIT', value: '1800' }
+        { name: 'BusinessAgent__IdentityMode', value: 'entra' }
+        { name: 'BusinessAgent__WorkroomPersistence', value: 'sql' }
+        { name: 'BusinessAgent__WorkroomExecutionProvider', value: 'foundry' }
+        { name: 'BusinessAgent__ConversationProvider', value: 'foundry' }
+        { name: 'BusinessAgent__ApplyMigrations', value: 'false' }
         { name: 'LandOps__IdentityMode', value: 'entra' }
         { name: 'LandOps__WorkroomPersistence', value: 'sql' }
         { name: 'LandOps__WorkroomExecutionProvider', value: 'foundry' }
@@ -204,9 +211,19 @@ resource teams 'Microsoft.Web/sites@2023-12-01' = {
         { name: 'CLIENT_ID', value: teamsBotAppId }
         { name: 'TENANT_ID', value: teamsBotTenantId }
         { name: 'CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
+        { name: 'BUSINESS_AGENT_API_URL', value: 'https://${apiName}.azurewebsites.net' }
         { name: 'LANDOPS_API_URL', value: 'https://${apiName}.azurewebsites.net' }
         // The API workload token is issued to the trusted adapter app, which
         // is separate from the Bot Framework app used for Teams delivery.
+        { name: 'BUSINESS_AGENT_API_CLIENT_ID', value: trustedAdapterAppId }
+        { name: 'BUSINESS_AGENT_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
+        { name: 'BUSINESS_AGENT_API_TENANT_ID', value: subscription().tenantId }
+        { name: 'BUSINESS_AGENT_API_SCOPE', value: landOpsApiScope }
+        { name: 'BUSINESS_AGENT_TEAMS_CASE_ID', value: 'synthetic-blue-ridge-lease-001' }
+        { name: 'BUSINESS_AGENT_TEAMS_SCENARIO_ID', value: 'land-ownership-gaps' }
+        { name: 'BUSINESS_AGENT_TEAMS_ROLE_ID', value: 'land-analyst' }
+        { name: 'BUSINESS_AGENT_TEAMS_GROUP', value: 'case-management' }
+        { name: 'BUSINESS_AGENT_WEB_URL', value: 'https://${webName}.azurewebsites.net' }
         { name: 'LANDOPS_API_CLIENT_ID', value: trustedAdapterAppId }
         { name: 'LANDOPS_API_CLIENT_SECRET', value: '@Microsoft.KeyVault(SecretUri=https://${keyVault.name}.vault.azure.net/secrets/${teamsBotClientSecretName})' }
         { name: 'LANDOPS_API_TENANT_ID', value: subscription().tenantId }

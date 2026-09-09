@@ -1,5 +1,5 @@
-import { dotnetBaseUrl } from "../../../../src/landops/adapter";
-import { upstreamHeaders } from "../../../../src/landops/proxy";
+import { dotnetBaseUrl } from "../../../../src/business-agent/adapter";
+import { upstreamHeaders } from "../../../../src/business-agent/proxy";
 
 // Conversation stays behind the same-origin boundary and is scoped to one saved run.
 export async function POST(request: Request): Promise<Response> {

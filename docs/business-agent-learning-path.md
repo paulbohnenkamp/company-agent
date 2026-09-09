@@ -18,11 +18,11 @@ The application does not make a title determination or take a consequential busi
 
 ## Read these pages in order
 
-1. Read [Business Agent architecture](landops-architecture.md) to see how the browser, API, application services, domain model, and database fit together.
-2. Read [Business Agent data and evidence](landops-data-and-evidence.md) to understand why the application stores source identity, snapshots, evidence, findings, conflicts, and unknowns separately.
-3. Follow [Business Agent development workflow](landops-development-workflow.md) to start the application and run its checks.
-4. Use [Business Agent code tour](landops-code-tour.md) when you want to connect a screen or API request to the code that handles it.
-5. Keep [Business Agent glossary](landops-glossary.md) open when a product term is new.
+1. Read [Business Agent architecture](business-agent-architecture.md) to see how the browser, API, application services, domain model, and database fit together.
+2. Read [Business Agent data and evidence](business-agent-data-and-evidence.md) to understand why the application stores source identity, snapshots, evidence, findings, conflicts, and unknowns separately.
+3. Follow [Business Agent development workflow](business-agent-development-workflow.md) to start the application and run its checks.
+4. Use [Business Agent code tour](business-agent-code-tour.md) when you want to connect a screen or API request to the code that handles it.
+5. Keep [Business Agent glossary](business-agent-glossary.md) open when a product term is new.
 
 ## Prerequisites
 
@@ -78,8 +78,8 @@ Open a second terminal and run:
 
 ```sh
 npm install
-LANDOPS_API_URL=http://localhost:5006 \
-NEXT_PUBLIC_LANDOPS_MODE=true \
+BUSINESS_AGENT_API_URL=http://localhost:5006 \
+NEXT_PUBLIC_BUSINESS_AGENT_MODE=true \
 npm run dev
 ```
 
@@ -126,7 +126,7 @@ Keep the key out of source files and shell history when you use a real account. 
 
 ## Run in Azure with managed identity
 
-In Azure, set `Foundry__UseManagedIdentity=true` and omit `Foundry__ApiKey`. The API uses its managed identity to request a token for `https://ai.azure.com/.default`. Grant that identity the required Foundry model permission, then set `LANDOPS_API_URL` on the Next.js app to the deployed ASP.NET Core API URL.
+In Azure, set `Foundry__UseManagedIdentity=true` and omit `Foundry__ApiKey`. The API uses its managed identity to request a token for `https://ai.azure.com/.default`. Grant that identity the required Foundry model permission, then set `BUSINESS_AGENT_API_URL` on the Next.js app to the deployed ASP.NET Core API URL. `LANDOPS_API_URL` remains a compatibility alias for existing deployments.
 
 The browser still uses the same Next.js routes in both modes:
 
@@ -156,4 +156,4 @@ for Entra accounts or place SQL secrets in `.env` files.
 
 ## What to learn next
 
-Read the [Business Agent development workflow](landops-development-workflow.md) before changing code. It explains which project owns each kind of change and which checks prove the change works.
+Read the [Business Agent development workflow](business-agent-development-workflow.md) before changing code. It explains which project owns each kind of change and which checks prove the change works.

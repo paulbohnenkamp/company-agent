@@ -6,8 +6,8 @@
  */
 import { App, ExpressAdapter } from "@microsoft/teams.apps";
 import type { Request, Response } from "express";
-import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, TeamsIdempotencyStore, toWorkroomRequest, type TeamsActivity } from "./landops-adapter.js";
-import { createLandOpsClient } from "./landops-client.js";
+import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, TeamsIdempotencyStore, toWorkroomRequest, type TeamsActivity } from "./teams-adapter.js";
+import { createBusinessAgentClient } from "./business-agent-client.js";
 
 const isLocalUnauthenticatedMode = process.env.DANGEROUSLY_ALLOW_UNAUTHENTICATED_REQUESTS === "true";
 if (!isLocalUnauthenticatedMode && (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET)) {
@@ -26,7 +26,7 @@ const app = new App({
   dangerouslyAllowUnauthenticatedRequests: isLocalUnauthenticatedMode,
 });
 const idempotency = new TeamsIdempotencyStore();
-const landOpsClient = createLandOpsClient(process.env.LANDOPS_API_URL ?? "http://127.0.0.1:5006");
+const businessAgentClient = createBusinessAgentClient(process.env.BUSINESS_AGENT_API_URL ?? process.env.LANDOPS_API_URL ?? "http://127.0.0.1:5006");
 
 app.on("message", async ({ send, activity }) => {
   const normalized = activity as unknown as TeamsActivity;
@@ -34,10 +34,10 @@ app.on("message", async ({ send, activity }) => {
     // Keep the Teams demo aligned with the API's canonical Business Agent
     // review seed. The well number belongs in evidence records, not as a
     // second case ID.
-    caseId: process.env.LANDOPS_TEAMS_CASE_ID ?? "synthetic-blue-ridge-lease-001",
-    scenarioId: process.env.LANDOPS_TEAMS_SCENARIO_ID ?? "land-ownership-gaps",
-    roleId: process.env.LANDOPS_TEAMS_ROLE_ID ?? "land-analyst",
-    requiredGroup: process.env.LANDOPS_TEAMS_GROUP ?? "case-management",
+    caseId: process.env.BUSINESS_AGENT_TEAMS_CASE_ID ?? process.env.LANDOPS_TEAMS_CASE_ID ?? "synthetic-blue-ridge-lease-001",
+    scenarioId: process.env.BUSINESS_AGENT_TEAMS_SCENARIO_ID ?? process.env.LANDOPS_TEAMS_SCENARIO_ID ?? "land-ownership-gaps",
+    roleId: process.env.BUSINESS_AGENT_TEAMS_ROLE_ID ?? process.env.LANDOPS_TEAMS_ROLE_ID ?? "land-analyst",
+    requiredGroup: process.env.BUSINESS_AGENT_TEAMS_GROUP ?? process.env.LANDOPS_TEAMS_GROUP ?? "case-management",
   });
   console.info(`[teams] received message activity ${mapped.activityId} (${mapped.channel})`);
   if (idempotency.has(mapped.activityId)) return;
@@ -46,13 +46,13 @@ app.on("message", async ({ send, activity }) => {
     await send({ type: "typing" });
     const action = parseWorkroomAction(mapped.request.question);
     if (action) {
-      const result = await landOpsClient.recordAction(action, { tenantId: mapped.tenantId, userId: mapped.userId });
+      const result = await businessAgentClient.recordAction(action, { tenantId: mapped.tenantId, userId: mapped.userId });
       await send(formatWorkroomActionReply(result).text);
       return;
     }
     await send("_Business Agent is reviewing the evidence and coordinating the agent path…_");
-    const response = await landOpsClient.createWorkroom(mapped.request, { tenantId: mapped.tenantId, userId: mapped.userId });
-    const packet = await landOpsClient.runWorkroom(response.threadId, { tenantId: mapped.tenantId, userId: mapped.userId });
+    const response = await businessAgentClient.createWorkroom(mapped.request, { tenantId: mapped.tenantId, userId: mapped.userId });
+    const packet = await businessAgentClient.runWorkroom(response.threadId, { tenantId: mapped.tenantId, userId: mapped.userId });
     await send(formatTeamsReply(response, packet).text);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown adapter failure";
@@ -63,6 +63,6 @@ app.on("message", async ({ send, activity }) => {
 
 const port = Number(process.env.TEAMS_PORT ?? 3978);
 app.start(port).catch((error: unknown) => {
-  console.error("Failed to start the LandOps Teams adapter", error);
+  console.error("Failed to start the Business Agent Teams adapter", error);
   process.exitCode = 1;
 });

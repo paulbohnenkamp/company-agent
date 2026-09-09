@@ -1,10 +1,10 @@
-using LandOps.Domain;
+using BusinessAgent.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace LandOps.Infrastructure;
+namespace BusinessAgent.Infrastructure;
 
 /// <summary>EF Core gateway that maps the domain model to the SQL Server schema.</summary>
-public sealed class LandOpsDbContext(DbContextOptions<LandOpsDbContext> options) : DbContext(options)
+public class BusinessAgentDbContext(DbContextOptions<BusinessAgentDbContext> options) : DbContext(options)
 {
     public DbSet<LandCase> LandCases => Set<LandCase>();
     public DbSet<Well> Wells => Set<Well>();

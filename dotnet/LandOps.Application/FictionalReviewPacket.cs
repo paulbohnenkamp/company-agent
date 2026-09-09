@@ -1,4 +1,4 @@
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 public sealed record FictionalReviewFinding(
     string FindingId,

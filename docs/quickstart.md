@@ -1,4 +1,8 @@
-# Business Agent quickstart
+# TypeScript reference quickstart
+
+> Reference material. The current product path starts with the
+> [Business Agent learner path](business-agent-learning-path.md) and uses the
+> C#/.NET API with Microsoft Teams.
 
 Install dependencies and inspect the land domain.
 
@@ -19,10 +23,9 @@ npm run cli -- run \
   --context examples/inputs/parcel-transfer.md
 ```
 
-The active catalog resolves only the Phase 5 flagship definitions. The
-existing CLI runner remains the legacy Markdown runner; typed WV execution
-requires a provider-neutral agent executor and is exercised offline through
-test infrastructure. Microsoft Foundry integration is deferred to Phase 9.
+The CLI runner is the legacy Markdown runner. Typed WV execution and the
+Microsoft Foundry provider boundary are documented elsewhere; this command is
+retained for reference-runtime comparisons and offline evaluations.
 
 Run the local evaluation harness:
 

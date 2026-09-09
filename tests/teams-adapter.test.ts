@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, stripAgentMention, toWorkroomRequest, TeamsIdempotencyStore } from "../src/teams/landops-adapter";
+import { formatTeamsReply, formatWorkroomActionReply, parseWorkroomAction, stripAgentMention, toWorkroomRequest, TeamsIdempotencyStore } from "../src/teams/teams-adapter";
 
 test("strips only the Business Agent bot mention", () => {
   assert.equal(stripAgentMention("<at>Business Agent</at> review this", [{ type: "mention", text: "<at>Business Agent</at>", mentioned: { id: "bot-1" } }], "bot-1"), "review this");

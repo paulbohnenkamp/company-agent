@@ -1,5 +1,5 @@
-import { dotnetBaseUrl } from "../../../../../src/landops/adapter";
-import { upstreamHeaders } from "../../../../../src/landops/proxy";
+import { dotnetBaseUrl } from "../../../../../src/business-agent/adapter";
+import { upstreamHeaders } from "../../../../../src/business-agent/proxy";
 
 export async function GET(request: Request, { params }: { params: Promise<{ threadId: string }> }) {
   const base = dotnetBaseUrl();

@@ -1,7 +1,7 @@
 using System.Text.Json;
-using LandOps.Domain;
+using BusinessAgent.Domain;
 
-namespace LandOps.Application;
+namespace BusinessAgent.Application;
 
 public sealed record WorkflowOutput(
     ReconciliationOutput Reconciliation,

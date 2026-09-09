@@ -1,5 +1,5 @@
 import { ClientSecretCredential } from "@azure/identity";
-import type { LandOpsClient, LandOpsWorkroomRequest, WorkroomActionRequest, WorkroomReviewPacket, LandOpsWorkroomResponse } from "./landops-adapter.js";
+import type { BusinessAgentClient, BusinessAgentWorkroomRequest, WorkroomActionRequest, WorkroomReviewPacket, BusinessAgentWorkroomResponse } from "./teams-adapter.js";
 
 type WorkroomIdentity = { tenantId: string; userId: string };
 
@@ -13,7 +13,7 @@ type TokenProvider = () => Promise<string>;
  * the API. Teams identity headers remain request context only; the API owns
  * authorization.
  */
-export function createLandOpsClient(baseUrl: string, tokenProvider = createOptionalApiTokenProvider()): LandOpsClient {
+export function createBusinessAgentClient(baseUrl: string, tokenProvider = createOptionalApiTokenProvider()): BusinessAgentClient {
   const endpoint = baseUrl.replace(/\/$/, "");
   const headers = async (identity: WorkroomIdentity, contentType = true): Promise<Record<string, string>> => ({
     ...(contentType ? { "content-type": "application/json" } : {}),
@@ -24,14 +24,14 @@ export function createLandOpsClient(baseUrl: string, tokenProvider = createOptio
   });
 
   return {
-    async createWorkroom(request: LandOpsWorkroomRequest, identity: WorkroomIdentity): Promise<LandOpsWorkroomResponse> {
+    async createWorkroom(request: BusinessAgentWorkroomRequest, identity: WorkroomIdentity): Promise<BusinessAgentWorkroomResponse> {
       const response = await fetch(`${endpoint}/api/v1/workroom/threads`, {
         method: "POST",
         headers: await headers(identity),
         body: JSON.stringify(request),
       });
       if (!response.ok) throw new Error(`Business Agent review returned HTTP ${response.status}`);
-      return await response.json() as LandOpsWorkroomResponse;
+      return await response.json() as BusinessAgentWorkroomResponse;
     },
     async runWorkroom(threadId: string, identity: WorkroomIdentity): Promise<WorkroomReviewPacket> {
       const response = await fetch(`${endpoint}/api/v1/workroom/threads/${encodeURIComponent(threadId)}/run`, {
@@ -54,10 +54,10 @@ export function createLandOpsClient(baseUrl: string, tokenProvider = createOptio
 }
 
 function createOptionalApiTokenProvider(): TokenProvider | undefined {
-  const clientId = process.env.LANDOPS_API_CLIENT_ID;
-  const clientSecret = process.env.LANDOPS_API_CLIENT_SECRET;
-  const tenantId = process.env.LANDOPS_API_TENANT_ID;
-  const scope = process.env.LANDOPS_API_SCOPE;
+  const clientId = process.env.BUSINESS_AGENT_API_CLIENT_ID ?? process.env.LANDOPS_API_CLIENT_ID;
+  const clientSecret = process.env.BUSINESS_AGENT_API_CLIENT_SECRET ?? process.env.LANDOPS_API_CLIENT_SECRET;
+  const tenantId = process.env.BUSINESS_AGENT_API_TENANT_ID ?? process.env.LANDOPS_API_TENANT_ID;
+  const scope = process.env.BUSINESS_AGENT_API_SCOPE ?? process.env.LANDOPS_API_SCOPE;
   const values = [clientId, clientSecret, tenantId, scope];
   if (values.every((value) => !value)) return undefined;
   if (values.some((value) => !value)) {

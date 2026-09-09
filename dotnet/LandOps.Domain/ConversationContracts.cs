@@ -1,4 +1,4 @@
-namespace LandOps.Domain;
+namespace BusinessAgent.Domain;
 
 /// <summary>One case-scoped question and evidence-grounded answer.</summary>
 public sealed class ConversationTurn
