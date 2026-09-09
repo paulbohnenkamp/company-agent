@@ -110,6 +110,11 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
   allowed to settle before retrying.
 - Copilot Studio schema/configuration, Preview/activity-map, Teams publication,
   routing evaluation, and live rollback checks — blocked by unavailable tenant.
+- On 2026-09-09, the Copilot Studio create screen returned HTTP 400 with
+  `cdsBotId: The value 'new' is not valid.` and trace ID
+  `0HNE08B3RK099N:00001249` when **Agent — Standard** was selected. The error
+  occurred before agent creation and is recorded as a Copilot Studio authoring
+  or tenant-service blocker, not an API or Azure application failure.
 
 ## Deviations from the spec
 

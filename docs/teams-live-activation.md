@@ -46,6 +46,27 @@ Repository-side API and backend verification are available. Live Copilot Studio
 authoring, tenant capability validation, publication, and an `@Mountaineer`
 smoke test are blocked until the target tenant and credentials are available.
 
+## Copilot Studio creation error
+
+On 2026-09-09, selecting **Agent — Standard** from the Copilot Studio create
+screen left the page spinning and returned HTTP 400 before an agent was created:
+
+```text
+cdsBotId: The value 'new' is not valid.
+traceId: 0HNE08B3RK099N:00001249
+```
+
+This is an authoring-route or tenant-service failure inside Copilot Studio. It
+is not an API-tool, Azure App Service, Entra, routing, or Teams-publication
+failure. **Agent — Standard** remains the correct creation choice; do not
+switch to Agent flows for the conversational Business Agent.
+
+For recovery, open Copilot Studio from Home → Agents and start creation there,
+then try a hard refresh or private browser session. If the same response
+recurs, check Power Platform service health and give the administrator or
+Microsoft support the UTC timestamp, the response, and the trace ID. Do not
+claim tenant activation until the agent can be created and opened.
+
 ## ChatGPT Desktop handoff
 
 Use the following prompt in an authenticated Microsoft 365/Copilot Studio
@@ -56,7 +77,9 @@ Continue the Mountaineer Copilot Studio/Teams activation for the Business Agent
 project.
 
 Deployed API:
-https://landops-7pxfuiyt-api.azurewebsites.net
+The replacement Mountaineer API deployment is not yet complete. Obtain the
+current App Service hostname from `rg-mountaineer-dev` before configuring tools;
+do not use the retired `landops-7pxfuiyt-api` hostname.
 
 Target outcome:
 - One primary Copilot Studio agent named Mountaineer.
