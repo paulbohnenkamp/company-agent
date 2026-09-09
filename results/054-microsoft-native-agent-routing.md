@@ -92,10 +92,17 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
 - `npm run validate:naming` — passed.
 - `az bicep build --file infra/main.bicep --stdout` — passed.
 - `git diff --check` — passed.
-- Full `dotnet test` — blocked by unavailable local SQL Server; domain and
-  application tests build successfully, while API tests require SQL.
-- Active API deployment validation — blocked by the same unavailable local SQL
-  Server. No `azd provision` or `azd deploy` mutation was run in this pass.
+- Full `dotnet test` — passed, 39/39 tests across Domain, Application, and API
+  projects after restarting the existing local `landops-sqlserver` container.
+- Active API deployment validation — passed locally; Azure provisioning and
+  deployment completed for the isolated `mountaineer-dev` environment.
+- `azd provision --no-prompt` — passed; created the API-only stack in
+  `rg-mountaineer-dev`.
+- `azd deploy --no-prompt` — passed; remote ACR build and API deployment
+  completed at `https://landops-7pxfuiyt-api.azurewebsites.net`.
+- Fresh Azure SQL schema — passed; six EF migrations applied and 18 base
+  tables verified. Runtime migration flags were restored to `false`.
+- Live API health — passed: `{"status":"ok"}`.
 - Copilot Studio schema/configuration, Preview/activity-map, Teams publication,
   routing evaluation, and live rollback checks — blocked by unavailable tenant.
 
@@ -117,6 +124,8 @@ external phase.
   evidence justifies separate child/connected agents.
 - Existing Azure Bot resources were left in place to avoid changing live cloud
   state during this repository migration.
+- The new API deployment uses a separate `mountaineer-dev` resource group;
+  Microsoft 365 users, Teams, and channels were not recreated or changed.
 
 ## Provider and tenant verification status
 

@@ -187,6 +187,7 @@ module foundryUser 'modules/foundry-role.bicep' = {
 }
 
 output apiUrl string = 'https://${api.properties.defaultHostName}'
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.properties.loginServer
 output foundryEndpoint string = foundry.properties.endpoint
 output sqlServerName string = sqlServer.name
 output keyVaultName string = keyVault.name

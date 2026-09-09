@@ -24,9 +24,10 @@ boundary. Do not put credentials in source, Bicep, or agent instructions.
 
 ```sh
 azd auth login
-azd env select landops-dev
+azd env new mountaineer-dev --no-prompt
+azd env select mountaineer-dev
 azd env set AZURE_SUBSCRIPTION_ID <subscription-id>
-azd env set AZURE_RESOURCE_GROUP <resource-group>
+azd env set AZURE_RESOURCE_GROUP rg-mountaineer-dev
 azd env set AZURE_LOCATION westus2
 azd env set SQL_ADMIN_OBJECT_ID <entra-sql-admin-object-id>
 azd env set ENTRA_AUDIENCE <api-app-client-id>
@@ -41,18 +42,21 @@ alone may use deterministic fakes.
 
 ## Current deployment status
 
-On 2026-09-09, the API-only Bicep and AZD preview passed. The preview showed
-the API update and skipped the retired Teams and web services; no Azure
-mutation was applied in that pass. The existing API health endpoint responded
-with `{"status":"ok"}`.
+On 2026-09-09, the API-only Bicep and AZD preview passed for the isolated
+`mountaineer-dev` environment. It will create only the API stack in
+`rg-mountaineer-dev`; it does not create Teams, web, or Bot resources. The
+existing `landops-dev` API health endpoint responded with `{"status":"ok"}`.
 
-The active deployment plan is local at `.azure/deployment-plan.md`. Full
-deployment remains gated by the SQL-backed API test suite: domain and
-application tests pass, but API tests require SQL Server at `localhost:1433`.
-Start the approved local SQL dependency or use the approved integration-test
-environment, rerun `azure-validate`, then run `azd provision --no-prompt` and
-`azd deploy --no-prompt`. Do not bypass this gate or treat the AZD preview as a
-deployment.
+The isolated stack was provisioned and deployed successfully to
+`https://landops-7pxfuiyt-api.azurewebsites.net`. The fresh database was
+initialized with all six EF migrations (18 application tables), and the API
+health endpoint returned `{"status":"ok"}`. Runtime migrations remain
+disabled.
+
+The active deployment plan is local at `.azure/deployment-plan.md`. The local
+SQL-backed API suite now passes with the existing `landops-sqlserver`
+container. Provisioning and deployment of `mountaineer-dev` are complete; the
+AZD deployment used a remote ACR build.
 
 ## Verification and rollback
 
