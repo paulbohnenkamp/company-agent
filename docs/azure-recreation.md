@@ -17,6 +17,25 @@ Teams container in this deployment.
 | Microsoft Foundry | Optional provider-backed API execution |
 | Entra ID | Human and workload identity |
 
+The isolated `mountaineer-dev` resource group uses generated names with the
+`mountaineer` prefix. The current resource layout is:
+
+| Resource | Mountaineer deployment purpose |
+| --- | --- |
+| `mountaineer-<suffix>-api` | Authenticated ASP.NET Core API used by Copilot Studio tools |
+| `mountaineer-<suffix>-api-id` | User-assigned API workload identity for ACR, SQL, Storage, Key Vault, and Foundry |
+| `mountaineer-<suffix>-plan` | Linux App Service plan hosting the API |
+| `mountaineer<suffix>cr` | Private ACR repository for immutable API images |
+| `mountaineer-<suffix>-sql` / `Mountaineer` | Entra-only Azure SQL server and application database |
+| `mountaineer<suffix>stg` | Private Blob-capable storage for evidence and source snapshots |
+| `mountaineer-<suffix>-kv` | Key Vault for runtime secrets and references |
+| `mountaineer-<suffix>-insights` | Application Insights request and dependency telemetry |
+| `mountaineer-<suffix>-logs` | Log Analytics workspace for centralized diagnostics |
+
+The `master` entry displayed beneath the SQL server is Azure SQL's system
+database, not a second application database. The application database is
+`Mountaineer`.
+
 The C# API remains the authorization, evidence, persistence, and human-action
 boundary. Do not put credentials in source, Bicep, or agent instructions.
 
@@ -47,11 +66,12 @@ On 2026-09-09, the API-only Bicep and AZD preview passed for the isolated
 `rg-mountaineer-dev`; it does not create Teams, web, or Bot resources. The
 existing `landops-dev` API health endpoint responded with `{"status":"ok"}`.
 
-The isolated stack was provisioned and deployed successfully to
-`https://landops-7pxfuiyt-api.azurewebsites.net`. The fresh database was
-initialized with all six EF migrations (18 application tables), and the API
-health endpoint returned `{"status":"ok"}`. Runtime migrations remain
-disabled.
+The isolated stack was provisioned and deployed once successfully during the
+initial naming pass, then intentionally removed because its generated names
+used the legacy `landops` prefix and database name. The corrected stack uses
+the Mountaineer names above. Its fresh database will be initialized with the
+same six EF migrations before final health verification. Runtime migrations
+remain disabled.
 
 The active deployment plan is local at `.azure/deployment-plan.md`. The local
 SQL-backed API suite now passes with the existing `landops-sqlserver`

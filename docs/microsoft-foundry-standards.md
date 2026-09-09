@@ -10,7 +10,7 @@ business authority; Teams and Foundry are integration surfaces.
 | SQL Server / Azure SQL | Durable request threads, runs, and review state |
 | Azure Blob Storage | Evidence and source snapshots |
 | Microsoft Entra ID | Human claims and workload identity |
-| Azure Key Vault | Bot and service secrets through App Service references |
+| Azure Key Vault | Service secrets and runtime references through App Service |
 | Azure App Service | Hosts the Business Agent API |
 | Azure Container Registry | Stores immutable API images |
 | Application Insights / Log Analytics | Runtime telemetry and diagnostics |

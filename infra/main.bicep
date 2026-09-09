@@ -1,8 +1,8 @@
 targetScope = 'resourceGroup'
 
-// Business Agent retains the deployed LandOps resource, SQL, and configuration
-// identifiers below. A display-name change must not replace resources or data.
-// Current product terminology and tenant naming targets are in docs/product-naming.md.
+// Mountaineer is isolated in its own resource group. Resource names use the
+// Mountaineer deployment prefix; LandOps remains a compatibility identifier in
+// the application and historical records.
 
 @description('The deployment location.')
 param location string = resourceGroup().location
@@ -25,16 +25,16 @@ param serviceApiImageName string = ''
 
 var suffix = uniqueString(subscription().id, resourceGroup().id)
 var shortSuffix = toLower(substring(suffix, 0, 8))
-var prefix = 'landops-${shortSuffix}'
+var prefix = 'mountaineer-${shortSuffix}'
 var apiName = '${prefix}-api'
 var planName = '${prefix}-plan'
 var registryName = replace('${prefix}cr', '-', '')
 var sqlServerName = '${prefix}-sql'
-var databaseName = 'LandOps'
-var storageName = replace('${prefix}storage', '-', '')
+var databaseName = 'Mountaineer'
+var storageName = replace('${prefix}stg', '-', '')
 var keyVaultName = '${prefix}-kv'
 var insightsName = '${prefix}-insights'
-var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/landops-api:latest'
+var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/mountaineer-api:latest'
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${prefix}-logs'

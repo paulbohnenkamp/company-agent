@@ -18,6 +18,9 @@ are no longer the active orchestration path.
 - `agent.yaml` and `SKILL.md` remain the canonical repository artifacts.
 - `infra/` and `azure.yaml` deploy the C# API and its supporting Azure
   resources.
+- The isolated `mountaineer-dev` deployment uses Mountaineer-prefixed Azure
+  resources and a `Mountaineer` SQL database. The prior `landops-dev`
+  environment is retained as historical/legacy infrastructure.
 
 The production conversation path must not use fixed Teams scenario defaults or
 canned seeded responses. Deterministic parsing, normalization, hashing,

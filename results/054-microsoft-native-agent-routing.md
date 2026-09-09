@@ -98,11 +98,16 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
   deployment completed for the isolated `mountaineer-dev` environment.
 - `azd provision --no-prompt` — passed; created the API-only stack in
   `rg-mountaineer-dev`.
-- `azd deploy --no-prompt` — passed; remote ACR build and API deployment
-  completed at `https://landops-7pxfuiyt-api.azurewebsites.net`.
-- Fresh Azure SQL schema — passed; six EF migrations applied and 18 base
-  tables verified. Runtime migration flags were restored to `false`.
-- Live API health — passed: `{"status":"ok"}`.
+- The initial API-only deployment at `https://landops-7pxfuiyt-api.azurewebsites.net`
+  was intentionally removed because its generated names retained the legacy
+  `landops` prefix.
+- Corrected Mountaineer naming is now in `azure.yaml` and `infra/main.bicep`.
+  The clean redeployment is in progress; completed resources use the
+  `mountaineer` prefix and the application database is `Mountaineer`.
+- The clean redeployment encountered Azure lifecycle delays: Key Vault
+  soft-delete name reuse and an in-progress SQL logical-server operation. The
+  stale deployment was cancelled and the remaining Azure operation is being
+  allowed to settle before retrying.
 - Copilot Studio schema/configuration, Preview/activity-map, Teams publication,
   routing evaluation, and live rollback checks — blocked by unavailable tenant.
 
