@@ -13,6 +13,8 @@ there is no web or administration surface in this branch.
 4. [Teams development](teams-development.md) — local API run and checks.
 5. [Azure recreation](azure-recreation.md) — current API deployment.
 6. [Product naming](product-naming.md) — current names and compatibility terms.
+7. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
+   Teams, Copilot Studio, subagent, MCP, and Enertia boundaries.
 
 ## Current guides
 
