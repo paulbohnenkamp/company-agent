@@ -17,6 +17,8 @@ there is no web or administration surface in this branch.
 7. [Product naming](product-naming.md) — current names and compatibility terms.
 8. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
    Teams, Copilot Studio, subagent, MCP, and Enertia boundaries.
+9. [Repository guide](repository-guide.md) — local development, verification,
+   repository structure, and implementation boundaries.
 
 ## Current guides
 
