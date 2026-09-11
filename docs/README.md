@@ -6,16 +6,17 @@ there is no web or administration surface in this branch.
 
 ## Start here
 
-1. [Project state](PROJECT_STATE.md) — verified status and next approved work.
-2. [Copilot Studio integration](copilot-studio-integration.md) — native agent,
+1. [Session handoff](HANDOFF.md) — current cleanup state and next step.
+2. [Project state](PROJECT_STATE.md) — verified status and next approved work.
+3. [Copilot Studio integration](copilot-studio-integration.md) — native agent,
    topic, tool, and Teams boundary.
-3. [Copilot Studio runbook](copilot-studio/README.md) — Mountaineer, Land Agent,
+4. [Copilot Studio runbook](copilot-studio/README.md) — Mountaineer, Land Agent,
    REST tool setup, and Preview tests.
-4. [Teams architecture](teams-architecture.md) — API and conversation boundaries.
-5. [Teams development](teams-development.md) — local API run and checks.
-6. [Azure recreation](azure-recreation.md) — current API deployment.
-7. [Product naming](product-naming.md) — current names and compatibility terms.
-8. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
+5. [Teams architecture](teams-architecture.md) — API and conversation boundaries.
+6. [Teams development](teams-development.md) — local API run and checks.
+7. [Azure recreation](azure-recreation.md) — current API deployment.
+8. [Product naming](product-naming.md) — current names and compatibility terms.
+9. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
    Teams, Copilot Studio, subagent, MCP, and Enertia boundaries.
 9. [Repository guide](repository-guide.md) — local development, verification,
    repository structure, and implementation boundaries.
