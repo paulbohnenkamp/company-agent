@@ -1,59 +1,40 @@
 {
-  "openapi": "3.0.3",
+  "swagger": "2.0",
   "info": {
-    "title": "Business Agent API",
+    "title": "Business Agent Land Read API",
     "version": "1.0.0",
-    "description": "Read-only evidence and land-operations context for the Mountaineer Copilot Studio agent. Public records are evidence, not proof of title."
+    "description": "Read-only land-operation context and evidence for the Mountaineer Copilot Studio agent. Use these operations to inspect fictional company context, supported land workflows, synthetic cases, data-room records, and evidence provenance. Public records are evidence, not proof of title. This contract is for controlled preview testing until Entra authentication is configured."
   },
-  "servers": [
-    {
-      "url": "https://mountaineer-7pxfuiyt-api.azurewebsites.net"
-    }
-  ],
+  "host": "mountaineer-7pxfuiyt-api.azurewebsites.net",
+  "basePath": "/",
+  "schemes": ["https"],
+  "produces": ["application/json"],
   "paths": {
     "/api/v1/company": {
       "get": {
         "operationId": "getCompanyPortfolio",
         "summary": "Get the Sample Energy Company portfolio context",
-        "responses": {
-          "200": {
-            "description": "Portfolio context",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          }
-        }
+        "description": "Returns fictional departments, roles, groups, bounded agents, workflows, and available cases. This explains Business Agent context; it does not grant authorization or establish ownership.",
+        "responses": { "200": { "description": "The fictional company portfolio context.", "schema": { "$ref": "#/definitions/CompanyPortfolio" } } }
       }
     },
     "/api/v1/scenarios": {
       "get": {
         "operationId": "listRoleScenarios",
         "summary": "List supported land-operation scenarios",
-        "responses": {
-          "200": {
-            "description": "Supported scenarios",
-            "content": {
-              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
-            }
-          }
-        }
+        "description": "Returns bounded land-operation scenarios that Business Agent can explain or prepare for review. Scenarios are guidance and do not authorize an action.",
+        "responses": { "200": { "description": "The supported land-operation scenarios.", "schema": { "type": "array", "items": { "$ref": "#/definitions/RoleScenario" } } } }
       }
     },
     "/api/v1/scenarios/{scenarioId}/plan": {
       "get": {
         "operationId": "getScenarioPlan",
-        "summary": "Get the plan for a supported scenario",
-        "parameters": [
-          { "name": "scenarioId", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
+        "summary": "Get the plan for a supported land-operation scenario",
+        "description": "Returns ordered specialist steps, required review group, surface, and human boundary for one scenario. This describes a plan; it does not execute a workflow or consequential action.",
+        "parameters": [ { "name": "scenarioId", "in": "path", "required": true, "description": "Stable scenario identifier, for example land-ownership-gaps or operations-well-identity.", "type": "string", "x-ms-summary": "Scenario identifier" } ],
         "responses": {
-          "200": {
-            "description": "Scenario plan",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
-          "404": { "description": "Scenario not found" }
+          "200": { "description": "The ordered plan and human boundary.", "schema": { "$ref": "#/definitions/CollaborationPlan" } },
+          "404": { "description": "The scenario identifier is not supported." }
         }
       }
     },
@@ -61,17 +42,11 @@
       "get": {
         "operationId": "getLandCase",
         "summary": "Get a case research summary",
-        "parameters": [
-          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
+        "description": "Returns a scoped case summary, synthetic-data notice, well identifiers, and submitted evidence references. Do not present this response as a title opinion or proof of ownership.",
+        "parameters": [ { "name": "caseId", "in": "path", "required": true, "description": "Stable case identifier, for example synthetic-blue-ridge-lease-001.", "type": "string", "x-ms-summary": "Case identifier" } ],
         "responses": {
-          "200": {
-            "description": "Case summary",
-            "content": {
-              "application/json": { "schema": { "type": "object" } }
-            }
-          },
-          "404": { "description": "Case not found" }
+          "200": { "description": "The case research summary and submitted evidence references.", "schema": { "$ref": "#/definitions/LandCaseResponse" } },
+          "404": { "description": "The case identifier was not found." }
         }
       }
     },
@@ -79,37 +54,59 @@
       "get": {
         "operationId": "getCaseDataRoom",
         "summary": "Get read-only data-room context for a case",
-        "parameters": [
-          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
+        "description": "Returns synthetic internal records such as lease, title, ownership, division-order, and OCR observations. Use provenance and warnings; synthetic records require human confirmation before reliance.",
+        "parameters": [ { "name": "caseId", "in": "path", "required": true, "description": "Stable case identifier, for example synthetic-blue-ridge-lease-001.", "type": "string", "x-ms-summary": "Case identifier" } ],
         "responses": {
-          "200": {
-            "description": "Case data-room records",
-            "content": {
-              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
-            }
-          },
-          "404": { "description": "Case not found" }
+          "200": { "description": "Data-room records with extracted facts, provenance, warnings, and relevant agents.", "schema": { "type": "array", "items": { "$ref": "#/definitions/FictionalCaseRecord" } } },
+          "404": { "description": "The case identifier was not found." }
         }
       }
     },
     "/api/v1/cases/{caseId}/evidence": {
       "get": {
         "operationId": "getCaseEvidence",
-        "summary": "Get evidence records for a case",
-        "parameters": [
-          { "name": "caseId", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
+        "summary": "Get evidence records and provenance for a case",
+        "description": "Returns public evidence linked to a case, including source identity, snapshot, source record, URL, content hash, and normalized facts. Preserve source independence; public evidence is not proof of title.",
+        "parameters": [ { "name": "caseId", "in": "path", "required": true, "description": "Stable case identifier, for example synthetic-blue-ridge-lease-001.", "type": "string", "x-ms-summary": "Case identifier" } ],
         "responses": {
-          "200": {
-            "description": "Evidence records",
-            "content": {
-              "application/json": { "schema": { "type": "array", "items": { "type": "object" } } }
-            }
-          },
-          "404": { "description": "Case not found" }
+          "200": { "description": "Evidence records with source provenance and normalized facts.", "schema": { "type": "array", "items": { "$ref": "#/definitions/PublicEvidence" } } },
+          "404": { "description": "The case identifier was not found or has no available evidence records." }
         }
       }
     }
+  },
+  "definitions": {
+    "CompanyPortfolio": {
+      "type": "object",
+      "description": "Fictional company context used to explain available Business Agent capabilities.",
+      "properties": {
+        "companyId": { "type": "string", "description": "Stable fictional company identifier." },
+        "companyName": { "type": "string", "description": "Fictional company display name." },
+        "description": { "type": "string", "description": "Company context description." },
+        "isSynthetic": { "type": "boolean", "description": "Whether this context is synthetic." },
+        "dataNotice": { "type": "string", "description": "Synthetic-data and public-evidence boundary notice." },
+        "departments": { "type": "array", "items": { "$ref": "#/definitions/PortfolioDepartment" } },
+        "roles": { "type": "array", "items": { "$ref": "#/definitions/PortfolioRole" } },
+        "groups": { "type": "array", "items": { "$ref": "#/definitions/PortfolioGroup" } },
+        "agents": { "type": "array", "items": { "$ref": "#/definitions/PortfolioAgent" } },
+        "workflows": { "type": "array", "items": { "$ref": "#/definitions/PortfolioWorkflow" } },
+        "cases": { "type": "array", "items": { "$ref": "#/definitions/PortfolioCase" } }
+      },
+      "required": ["companyId", "companyName", "description", "isSynthetic", "dataNotice", "departments", "roles", "groups", "agents", "workflows", "cases"]
+    },
+    "PortfolioDepartment": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable department identifier." }, "name": { "type": "string", "description": "Department display name." }, "shortName": { "type": "string", "description": "Short department label." } }, "required": ["id", "name", "shortName"] },
+    "PortfolioRole": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable role identifier." }, "name": { "type": "string", "description": "Role display name." }, "departmentId": { "type": "string", "description": "Owning department identifier." }, "description": { "type": "string", "description": "Role purpose." } }, "required": ["id", "name", "departmentId", "description"] },
+    "PortfolioGroup": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable group identifier." }, "name": { "type": "string", "description": "Group display name." }, "description": { "type": "string", "description": "Group purpose." }, "departmentIds": { "type": "array", "items": { "type": "string" }, "description": "Departments represented in the group." } }, "required": ["id", "name", "description", "departmentIds"] },
+    "PortfolioAgent": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable agent identifier." }, "name": { "type": "string", "description": "Agent display name." }, "departmentId": { "type": "string", "description": "Owning department identifier." }, "purpose": { "type": "string", "description": "Bounded agent purpose." } }, "required": ["id", "name", "departmentId", "purpose"] },
+    "PortfolioWorkflow": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable workflow identifier." }, "name": { "type": "string", "description": "Workflow display name." }, "description": { "type": "string", "description": "Workflow purpose." }, "status": { "type": "string", "description": "Workflow availability status." } }, "required": ["id", "name", "description", "status"] },
+    "PortfolioCase": { "type": "object", "properties": { "caseId": { "type": "string", "description": "Stable case identifier." }, "title": { "type": "string", "description": "Case title." }, "jurisdiction": { "type": "string", "description": "Case jurisdiction." }, "status": { "type": "string", "description": "Current case status." }, "primaryWorkflow": { "type": "string", "description": "Primary workflow identifier." }, "isSynthetic": { "type": "boolean", "description": "Whether the case is synthetic." } }, "required": ["caseId", "title", "jurisdiction", "status", "primaryWorkflow", "isSynthetic"] },
+    "RoleScenario": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable scenario identifier." }, "roleId": { "type": "string", "description": "Role that uses the scenario." }, "roleName": { "type": "string", "description": "Role display name." }, "question": { "type": "string", "description": "Representative user question." }, "description": { "type": "string", "description": "Scenario purpose and scope." }, "agentIds": { "type": "array", "items": { "type": "string" }, "description": "Ordered bounded agent identifiers." }, "evidenceTypes": { "type": "array", "items": { "type": "string" }, "description": "Evidence categories used by the scenario." }, "escalatesToWorkroom": { "type": "boolean", "description": "Whether human-controlled review is required." }, "humanOutcome": { "type": "string", "description": "Human review outcome or handoff boundary." } }, "required": ["id", "roleId", "roleName", "question", "description", "agentIds", "evidenceTypes", "escalatesToWorkroom", "humanOutcome"] },
+    "CollaborationPlan": { "type": "object", "properties": { "scenarioId": { "type": "string", "description": "Scenario identifier." }, "surface": { "type": "string", "description": "Review surface, such as copilot or workroom." }, "requiredGroup": { "type": "string", "description": "Required review group identifier." }, "steps": { "type": "array", "items": { "$ref": "#/definitions/CollaborationStep" }, "description": "Ordered specialist steps." }, "humanBoundary": { "type": "string", "description": "Human decision or approval boundary." } }, "required": ["scenarioId", "surface", "requiredGroup", "steps", "humanBoundary"] },
+    "CollaborationStep": { "type": "object", "properties": { "agentId": { "type": "string", "description": "Specialist agent identifier." }, "kind": { "type": "string", "description": "Step kind, such as requested or delegated." }, "order": { "type": "integer", "format": "int32", "description": "One-based execution order." }, "delegatedFrom": { "type": "string", "x-nullable": true, "description": "Delegating agent identifier, when applicable." }, "agentName": { "type": "string", "description": "Specialist display name." }, "delegatedFromName": { "type": "string", "x-nullable": true, "description": "Delegating agent display name, when applicable." } }, "required": ["agentId", "kind", "order", "agentName"] },
+    "LandCaseResponse": { "type": "object", "properties": { "caseId": { "type": "string", "description": "Stable case identifier." }, "title": { "type": "string", "description": "Case title." }, "jurisdiction": { "type": "string", "description": "Case jurisdiction." }, "isSynthetic": { "type": "boolean", "description": "Whether the case is synthetic." }, "authorityBoundary": { "type": "string", "description": "What the case records can and cannot establish." }, "wells": { "type": "array", "items": { "$ref": "#/definitions/WellResponse" } }, "submittedEvidence": { "type": "array", "items": { "$ref": "#/definitions/SubmittedEvidenceResponse" } } }, "required": ["caseId", "title", "jurisdiction", "isSynthetic", "authorityBoundary", "wells", "submittedEvidence"] },
+    "WellResponse": { "type": "object", "properties": { "wellId": { "type": "string", "description": "Internal well identifier." }, "apiNumber": { "type": "string", "description": "Well API number." }, "county": { "type": "string", "description": "County associated with the well." }, "wellNumber": { "type": "string", "description": "Well number or label." }, "operatorName": { "type": "string", "x-nullable": true, "description": "Reported operator, when available." }, "status": { "type": "string", "x-nullable": true, "description": "Reported well status, when available." }, "sourceRecordType": { "type": "string", "x-nullable": true, "description": "Source record type, when available." } }, "required": ["wellId", "apiNumber", "county", "wellNumber"] },
+    "SubmittedEvidenceResponse": { "type": "object", "properties": { "evidenceId": { "type": "string", "description": "Stable evidence identifier." }, "kind": { "type": "string", "description": "Evidence category." }, "description": { "type": "string", "description": "Evidence description." }, "isSynthetic": { "type": "boolean", "description": "Whether the evidence is synthetic." } }, "required": ["evidenceId", "kind", "description", "isSynthetic"] },
+    "FictionalCaseRecord": { "type": "object", "properties": { "recordId": { "type": "string", "description": "Stable data-room record identifier." }, "caseId": { "type": "string", "description": "Owning case identifier." }, "recordType": { "type": "string", "description": "Record category, such as lease, title, ownership, division-order, or ocr." }, "title": { "type": "string", "description": "Record title." }, "status": { "type": "string", "description": "Record review status." }, "isSynthetic": { "type": "boolean", "description": "Whether the record is synthetic." }, "provenance": { "type": "string", "description": "Source or construction provenance." }, "extractedFacts": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Named extracted observations requiring source and human review." }, "relevantAgentIds": { "type": "array", "items": { "type": "string" }, "description": "Bounded agents relevant to the record." }, "warnings": { "type": "array", "items": { "type": "string" }, "description": "Warnings and human-review limitations." } }, "required": ["recordId", "caseId", "recordType", "title", "status", "isSynthetic", "provenance", "extractedFacts", "relevantAgentIds", "warnings"] },
+    "PublicEvidence": { "type": "object", "properties": { "id": { "type": "string", "description": "Stable evidence identifier." }, "caseId": { "type": "string", "description": "Owning case identifier." }, "sourceIdentityId": { "type": "string", "description": "Independent publisher and dataset identity." }, "snapshotId": { "type": "string", "description": "Immutable source snapshot identifier." }, "sourceRecordId": { "type": "string", "description": "Publisher record identifier." }, "sourceUrl": { "type": "string", "format": "uri", "description": "Source or record URL." }, "contentHash": { "type": "string", "description": "Hash of the exact source content." }, "normalizedFactsJson": { "type": "string", "description": "Serialized normalized facts linked to this evidence." } }, "required": ["id", "caseId", "sourceIdentityId", "snapshotId", "sourceRecordId", "sourceUrl", "contentHash", "normalizedFactsJson"] }
   }
 }

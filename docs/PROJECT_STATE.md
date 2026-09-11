@@ -1,6 +1,6 @@
 # Business Agent project state
 
-**Last reconciled:** 2026-09-09
+**Last reconciled:** 2026-09-10
 
 This branch adopts Mountaineer as the user-facing Copilot Studio agent. Users
 mention `@Mountaineer` in Teams. Business Agent is the C# application/API
@@ -41,6 +41,19 @@ The active implementation is [spec 054](../specs/054-microsoft-native-agent-rout
 Compatibility identifiers such as `LandOps` and `Workroom` may remain in
 storage, routes, permissions, or deployment settings; they are not product or
 collaboration-space names.
+
+## Current tenant progress
+
+The target DecisionForge tenant is now available for Copilot Studio authoring.
+Mountaineer is published to Teams, Land Agent is connected as a child agent,
+and the `Land Read API Preview v5` REST contract is deployed. Copilot Studio
+Preview and a private Teams channel have both completed read-only smoke tests.
+
+The current tenant workaround requires connecting all six Copilot Studio
+connection rows that represent the six v5 operations. The API remains
+read-only and uses synthetic data for the live test. Consolidating those rows
+into one reusable connection is still follow-up work; do not describe that
+cleanup as complete.
 
 ## Verification boundary
 

@@ -393,7 +393,8 @@ protected HTTP servers to validate token audience and expiration.^6 ^7 ^8
   deterministic workflow.
 - A mock land-system adapter and production routing endpoint do not yet exist.
 - The Copilot Studio tool is not yet a production-authenticated integration.
-- The agent is not yet published to Teams.
+- Mountaineer is published to Teams and has passed a read-only smoke test in a
+  controlled channel.
 
 ### Target state
 

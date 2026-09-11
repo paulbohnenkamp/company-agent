@@ -9,30 +9,39 @@ public static class SeedData
 
     public static async Task SeedBraxtonCaseAsync(BusinessAgentDbContext dbContext, CancellationToken cancellationToken = default)
     {
-        if (await dbContext.LandCases.AnyAsync(item => item.Id == BraxtonCaseId, cancellationToken)) return;
+        if (!await dbContext.LandCases.AnyAsync(item => item.Id == BraxtonCaseId, cancellationToken))
+        {
+            var landCase = new LandCase(
+                BraxtonCaseId,
+                "Synthetic Braxton County well reconciliation",
+                "West Virginia",
+                isSynthetic: true,
+                "WVDEP and WVGES public regulatory/geological records support identity comparison only; they are not proof of mineral title.");
+            landCase.Wells.Add(new Well(
+                "well-synthetic-wv-4700701733",
+                "4700701733",
+                "Braxton",
+                "3-S-245",
+                "Ross & Wharton Gas Co., Inc.",
+                "Completed",
+                "WVGES historical well record"));
+            landCase.SubmittedEvidence.Add(new SubmittedEvidence(
+                "submitted-package-synthetic-wv-braxton-001",
+                BraxtonCaseId,
+                "synthetic-land-package",
+                "Synthetic submitted package with API 4700701733, Braxton County, and well 3-S-245 clues.",
+                isSynthetic: true));
+            dbContext.LandCases.Add(landCase);
+        }
 
-        var landCase = new LandCase(
-            BraxtonCaseId,
-            "Synthetic Braxton County well reconciliation",
-            "West Virginia",
-            isSynthetic: true,
-            "WVDEP and WVGES public regulatory/geological records support identity comparison only; they are not proof of mineral title.");
-        landCase.Wells.Add(new Well(
-            "well-synthetic-wv-4700701733",
-            "4700701733",
-            "Braxton",
-            "3-S-245",
-            "Ross & Wharton Gas Co., Inc.",
-            "Completed",
-            "WVGES historical well record"));
-        landCase.SubmittedEvidence.Add(new SubmittedEvidence(
-            "submitted-package-synthetic-wv-braxton-001",
-            BraxtonCaseId,
-            "synthetic-land-package",
-            "Synthetic submitted package with API 4700701733, Braxton County, and well 3-S-245 clues.",
-            isSynthetic: true));
-
-        dbContext.LandCases.Add(landCase);
+        var fixture = BraxtonFixture.Load(BraxtonCaseId, "seed");
+        if (!await dbContext.SourceIdentities.AnyAsync(item => item.Id == "wvdep-oog-rbdms-wells", cancellationToken))
+        {
+            dbContext.SourceIdentities.AddRange(fixture.SourceIdentities);
+            dbContext.SourceSnapshots.AddRange(fixture.Snapshots);
+            dbContext.PublicEvidence.AddRange(fixture.Evidence);
+            dbContext.ProductionResults.Add(fixture.Reconciliation.Production);
+        }
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

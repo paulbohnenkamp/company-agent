@@ -3,7 +3,7 @@ id: 054-microsoft-native-agent-routing
 title: Adopt Microsoft-native Business Agent routing
 status: in-progress
 created: 2026-09-09
-updated: 2026-09-09
+updated: 2026-09-10
 result: results/054-microsoft-native-agent-routing.md
 supersedes: specs/050-evidence-grounded-teams-review.md
 ---
@@ -224,6 +224,10 @@ evaluations, Azure inspection, and a documented rollback/version check.
 - 2026-09-09: Completed repository-side implementation and verification. Live
   Copilot Studio capability, publication, and routing checks remain blocked by
   unavailable tenant access.
+- 2026-09-10: Verified Copilot Studio Preview and a controlled Teams channel.
+  The published Mountaineer agent delegates to Land Agent and completes the
+  read-only smoke test after all six tenant-side v5 connection rows are
+  connected. One reusable connection and Entra authentication remain open.
 
 ## Decision log
 

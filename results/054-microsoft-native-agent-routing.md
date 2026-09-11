@@ -59,7 +59,7 @@ Documentation and records:
 
 The existing Azure Bot and App Service resources were not changed directly.
 They are no longer declared as active services in the repository deployment
-manifest. The unrelated untracked `.DS_Store` was not touched.
+manifest.
 
 ## Requirements checklist
 
@@ -77,8 +77,9 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
 - [x] Document Teams publication, tenant sharing, local development, smoke
       testing, rollback, and provider limitations.
 - [x] Preserve spec 050 as superseded historical evidence.
-- [ ] Live tenant capability check, Copilot Studio authoring, publication, and
-      `@Mountaineer` smoke test: blocked by unavailable tenant access.
+- [x] Live tenant capability check, Copilot Studio authoring, publication, and
+      `@Mountaineer` smoke test: passed in a controlled Teams channel after
+      connecting all six tenant-side v5 connection rows.
 
 ## Checks run and results
 
@@ -96,6 +97,19 @@ manifest. The unrelated untracked `.DS_Store` was not touched.
   projects after restarting the existing local `landops-sqlserver` container.
 - Active API deployment validation — passed; Azure provisioning and deployment
   completed for the isolated `mountaineer-dev` environment.
+- 2026-09-10 API rebuild and deployment — passed. The API seed now includes the
+  synthetic Braxton data-room record and idempotent WVDEP/WVGES evidence seed.
+  Image `api-mountaineer-dev:azd-deploy-1789074697` is live at
+  `https://mountaineer-7pxfuiyt-api.azurewebsites.net/`.
+- 2026-09-10 live case validation — passed: `/health`, the Braxton case,
+  Braxton data-room, and Braxton evidence returned HTTP 200. The evidence
+  response preserved separate WVDEP and WVGES publishers. Runtime migrations
+  are disabled after the explicit SQL migration/seed step.
+- 2026-09-10 Copilot Studio and Teams validation — passed. Mountaineer is
+  published and installed in a controlled Teams channel. Preview and Teams
+  read-only smoke tests completed after all six tenant-side v5 connection rows
+  were connected. The six-row connection behavior remains a tenant cleanup
+  item; it is not represented as one reusable connection.
 - `azd provision --no-prompt` — passed; created the API-only stack in
   `rg-mountaineer-dev`.
 - The initial API-only deployment at `https://landops-7pxfuiyt-api.azurewebsites.net`

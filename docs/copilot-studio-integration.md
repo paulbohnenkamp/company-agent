@@ -3,6 +3,9 @@
 Mountaineer is the user-facing Copilot Studio agent published to Microsoft
 Teams. Business Agent is the C# application/API boundary behind it.
 
+The tenant-side instructions, REST tool notes, and Preview checklist live in
+the [Copilot Studio runbook](copilot-studio/README.md).
+
 ## Responsibilities
 
 Copilot Studio owns the employee conversation, generative orchestration,

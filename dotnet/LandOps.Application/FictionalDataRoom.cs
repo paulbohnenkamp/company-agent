@@ -114,6 +114,31 @@ public static class FictionalDataRoomSeed
             ["OCR is an extracted observation and must retain page-level provenance."])
     ];
 
+    public static IReadOnlyList<FictionalCaseRecord> Braxton { get; } =
+    [
+        new(
+            "wv-braxton-package-001",
+            "synthetic-wv-case-braxton-001",
+            "submitted-land-package",
+            "Synthetic Braxton County Well Reconciliation Package",
+            "ready",
+            true,
+            "Synthetic submitted package for controlled reconciliation testing.",
+            new Dictionary<string, string>
+            {
+                ["apiNumber"] = "4700701733",
+                ["county"] = "Braxton",
+                ["wellNumber"] = "3-S-245",
+                ["requestedReview"] = "Compare submitted clues with independent WVDEP and WVGES evidence."
+            },
+            ["land-case-intake", "land-well-reconciler", "case-synthesizer"],
+            ["Synthetic package facts are not proof of title or ownership."])
+    ];
+
     public static IReadOnlyList<FictionalCaseRecord>? ForCase(string caseId) =>
-        string.Equals(caseId, CaseId, StringComparison.OrdinalIgnoreCase) ? Current : null;
+        string.Equals(caseId, CaseId, StringComparison.OrdinalIgnoreCase)
+            ? Current
+            : string.Equals(caseId, "synthetic-wv-case-braxton-001", StringComparison.OrdinalIgnoreCase)
+                ? Braxton
+                : null;
 }
