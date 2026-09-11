@@ -1,4 +1,4 @@
-# Business Agent
+# Company Agent
 
 Oil and gas company employees use Microsoft Teams as a central hub to
 communicate, collaborate, share information, and get work done.
