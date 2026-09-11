@@ -30,7 +30,7 @@ there is no web or administration surface in this branch.
 | [Execution records](execution-records.md) | Specs, results, approvals, and verification |
 | [Safety](safety.md) | Evidence, identity, authorization, and human control |
 | [Glossary](company-agent-glossary.md) | Product and evidence terminology |
-| [WV land architecture](WV_LAND_ARCHITECTURE.md) | Flagship evidence and source boundaries |
+| [WV land architecture](WV_LAND_ARCHITECTURE.md) | Historical flagship evidence and source boundaries |
 
 ## History
 

@@ -4,22 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "cli": "tsx src/cli/index.ts",
     "validate:records": "tsx scripts/validate-records.ts",
     "validate:agent-artifacts": "tsx scripts/validate-agent-artifacts.ts",
     "validate:identity-personas": "tsx scripts/validate-identity-personas.ts",
     "validate:naming": "tsx scripts/validate-naming.ts",
     "provision:entra-personas": "tsx scripts/provision-entra-personas.ts",
-    "test": "node --import tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit",
-    "eval": "tsx scripts/run-evals.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@azure/identity": "4.13.2",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@types/express": "5.0.6",
     "@types/node": "26.3.0",
     "tsx": "4.23.12",
     "typescript": "5.9.3"

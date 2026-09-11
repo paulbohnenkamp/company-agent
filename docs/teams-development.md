@@ -15,7 +15,6 @@ production configuration requires the Foundry/provider path.
 ```sh
 node --version
 npm run typecheck
-npm test
 dotnet test dotnet/LandOps.sln --no-restore --disable-build-servers -m:1 --verbosity quiet /p:UseSharedCompilation=false
 npm run validate:records
 npm run validate:agent-artifacts

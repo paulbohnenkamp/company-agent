@@ -19,10 +19,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*.ts",
-    "scripts/**/*.ts",
-    "tests/**/*.ts",
-    "teams-app/**/*.ts"
+    "scripts/**/*.ts"
   ],
   "exclude": [
     "node_modules"

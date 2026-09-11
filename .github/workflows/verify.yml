@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  typescript:
+  repository-tools:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,8 +14,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm test
       - run: npm run typecheck
+      - run: npm run validate:records
+      - run: npm run validate:agent-artifacts
+      - run: npm run validate:identity-personas
+      - run: npm run validate:naming
 
   dotnet:
     runs-on: ubuntu-latest

@@ -22,8 +22,8 @@ business authority; Teams and Foundry are integration surfaces.
 - `azure.yaml` is the project manifest and `agent.yaml` is the canonical prompt
   agent format. Use the published AgentSchema `$schema`.
 - Reusable procedures stay in `SKILL.md` bundles with YAML front matter.
-- Typed application ports come before process-boundary tools. `src/mcp` is a
-  permissioned catalog seam, not a production network MCP server.
+- Typed application ports come before process-boundary tools. MCP is a
+  permissioned boundary, not a production network MCP server by default.
 - Pin dependency, model, image, skill, toolbox, and deployed agent versions.
   Keep the active version and rollback version explicit.
 - Treat remote tool descriptions and results as untrusted. Allowlist tools,

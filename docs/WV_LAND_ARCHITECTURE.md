@@ -8,6 +8,11 @@ The flagship demonstrates an evidence-bounded land workflow for one submitted la
 
 The application combines real public WVDEP and WVGES evidence with a synthetic submitted private land package. The package is test input created for this project. It does not represent a real person's lease, title, ownership, or financial records.
 
+This document is retained as a historical architecture record. The former
+TypeScript runtime described here is backed up at
+`/Users/paul/code/company-agent-legacy-typescript`; the active application
+boundary is the C# solution under `dotnet/`.
+
 The portfolio objective is to turn `company-agent` into a credible case-centered land workbench while keeping its runtime reusable for other jurisdictions and domains. West Virginia belongs in the flagship domain and source adapters. It must not leak into `src/core` contracts or provider-neutral orchestration.
 
 ## Non-goals and authority limits
