@@ -1,6 +1,6 @@
 # Company Agent
 
-Oil and gas company employees use Microsoft Teams as a central hub to
+Company employees use Microsoft Teams as a central hub to
 communicate, collaborate, share information, and get work done.
 
 They need quick, evidence-based access to company data based on the
@@ -10,10 +10,10 @@ A **Company Agent** provides a single entry point to that information.
 Employees can @mention the Company Agent in Teams, and it routes each request
 to the specialized capability best suited to handle it.
 
-For example, questions about leases, wells, ownership, or land records can be
-routed to a **Land Agent**. The Land Agent uses authorized business systems,
-documents, and data sources to answer land-related questions and return the
-supporting evidence.
+For example, in an oil and gas company, questions about leases, wells,
+ownership, or land records can be routed to a **Land Agent**. The Land Agent
+uses authorized business systems, documents, and data sources to answer
+land-related questions and return the supporting evidence.
 
 Employees get the answer in the Teams conversation without needing to know
 which agent, system, or data source to use.
