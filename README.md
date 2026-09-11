@@ -27,5 +27,13 @@ The Company Agent routes the question to the Land Agent. The Land Agent checks
 the appropriate land data and documents, then returns the answer and
 supporting evidence directly to the Teams conversation.
 
+The same front door can expand to other specialized agents. For example:
+
+> @CompanyAgent What is our vacation policy, and how do I request time off?
+
+The Company Agent routes the question to the **HR Agent**. The HR Agent checks
+authorized HR policies and explains the request process without exposing
+private employee information or making an employment decision.
+
 **Business outcome:** Employees spend less time searching across systems and
 more time making informed decisions and getting work done.
