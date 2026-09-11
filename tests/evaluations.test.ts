@@ -40,7 +40,7 @@ test("full-flow evaluator grades the final handoff and review state", async () =
   const agents = await loadAgents("domains/land-administration");
   const flow = (await loadFlows("domains/land-administration")).get("lease-lifecycle-review");
   assert.ok(flow);
-  const root = await mkdtemp(join(tmpdir(), "business-agent-eval-flow-"));
+  const root = await mkdtemp(join(tmpdir(), "company-agent-eval-flow-"));
   try {
     const results = await evaluateFlow(new MockExecutor(), flow, agents, root, [{ id: "flow", input: "seed", mustContain: ["Status: complete"], expectedReviewStatus: "pending-human-review" }]);
     assert.equal(results[0]?.passed, true);

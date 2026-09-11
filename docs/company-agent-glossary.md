@@ -1,4 +1,4 @@
-# Business Agent glossary
+# Company Agent glossary
 
 Use these definitions consistently in code, UI text, and documentation.
 
@@ -26,7 +26,7 @@ Use these definitions consistently in code, UI text, and documentation.
 
 ## Product and legacy terminology
 
-Business Agent is the platform; Sample Energy Company is the fictional company.
+Company Agent is the platform; Sample Energy Company is the fictional company.
 Teams hosts collaboration across departments. Land is one department.
 
 `Workroom` is a legacy code and wire identifier for stored request context. It

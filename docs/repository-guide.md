@@ -1,13 +1,13 @@
 # Repository guide
 
-In this repository, Microsoft Copilot Studio and Teams provide the user
-experience. Business Agent is the application and API boundary behind it.
+In this repository, Microsoft Copilot Studio and Microsoft Teams provide the user
+experience. Company Agent is the application and API boundary behind it.
 
 ## Conversation flow
 
 ```text
 Teams → Copilot Studio Mountaineer → native topics/tools/agents
-      → authenticated Business Agent API → structured response → Teams
+      → authenticated Company Agent API → structured response → Teams
 ```
 
 Topics gather information and guide bounded conversations. API tools perform

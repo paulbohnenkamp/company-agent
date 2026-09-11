@@ -1,6 +1,6 @@
-# Business Agent naming
+# Company Agent naming
 
-Business Agent is the application boundary. **Mountaineer** is the user-facing
+Company Agent is the application boundary. **Mountaineer** is the user-facing
 Copilot Studio agent published in Microsoft Teams, so users address it as
 `@Mountaineer`. Microsoft Teams is where people collaborate. Sample Energy
 Company is fictional context. Land, Legal,
@@ -9,7 +9,7 @@ separate collaboration spaces.
 
 | Item | Current name |
 | --- | --- |
-| Application/API boundary | Business Agent |
+| Application/API boundary | Company Agent |
 | Teams agent display name | Mountaineer |
 | Fictional organization | Sample Energy Company |
 | Collaboration surface | Microsoft Teams |

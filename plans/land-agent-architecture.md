@@ -1,7 +1,7 @@
 ## Goal
 
 Produce a durable, evidence-backed architecture document for the Teams,
-Copilot Studio, Business Agent API, Land subagent, workflow, Enertia adapter,
+Copilot Studio, Company Agent API, Land subagent, workflow, Enertia adapter,
 MCP, identity, evidence, title-opinion, and human-review boundaries.
 
 ## Related roadmap item
@@ -27,7 +27,7 @@ MCP, identity, evidence, title-opinion, and human-review boundaries.
 ### In scope
 
 - Overall architecture and ownership boundaries.
-- Teams mention flow through Copilot Studio and the Business Agent API.
+- Teams mention flow through Copilot Studio and the Company Agent API.
 - Land subagent routing and workflow orchestration.
 - `LandSystemPort`, mock adapter, Enertia adapter, and MCP placement.
 - Land records, evidence, title opinions, curative requirements, and human
@@ -59,7 +59,7 @@ MCP, identity, evidence, title-opinion, and human-review boundaries.
 - The document explains every named component and its owner.
 - The document includes an overall architecture diagram.
 - The document includes a Teams `@Mountaineer` mention sequence diagram.
-- The document explains why MCP is behind the Business Agent boundary.
+- The document explains why MCP is behind the Company Agent boundary.
 - The document explains how all existing Land subagents participate.
 - The document places title opinions and human approval correctly.
 - The document identifies Enertia schema/API uncertainty and the mock-first
@@ -88,7 +88,7 @@ done
 ## Outcome summary
 
 - The architecture now has one durable explanation for Teams, Copilot Studio,
-  Land routing, subagents, the Business Agent API, Enertia, MCP, evidence, and
+  Land routing, subagents, the Company Agent API, Enertia, MCP, evidence, and
   human review.
 
 ## Tooling / verification notes

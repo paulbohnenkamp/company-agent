@@ -16,7 +16,7 @@ function requiredOption(args: string[], name: string): string {
   return value;
 }
 
-function domainsRoot(): string { return resolve(process.env.BUSINESS_AGENT_DOMAINS_ROOT ?? "domains"); }
+function domainsRoot(): string { return resolve(process.env.COMPANY_AGENT_DOMAINS_ROOT ?? "domains"); }
 
 async function main(): Promise<void> {
   const [, , command, ...args] = process.argv;

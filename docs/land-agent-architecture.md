@@ -1,8 +1,8 @@
-# Business Agent Land architecture
+# Company Agent Land architecture
 
 ## Executive summary
 
-Business Agent is the application boundary for evidence-bounded land work. The
+Company Agent is the application boundary for evidence-bounded land work. The
 current Microsoft Copilot Studio agent, `Mountaineer`, is the Teams-facing
 conversation surface. A future Land specialist can own Land-specific
 conversation and tools, but it should not become a second business system.
@@ -13,7 +13,7 @@ The recommended production path is:
 Teams @Mountaineer
   → Copilot Studio orchestration
   → Land specialist agent or Land topic
-  → authenticated Business Agent API
+  → authenticated Company Agent API
   → typed Land workflow
   → bounded Land subagents
   → LandSystemPort
@@ -60,16 +60,16 @@ smoke-test, not the finished Land routing API.
 
 | Term | Meaning | System of authority |
 | --- | --- | --- |
-| Business Agent | The application and C# API boundary | Business Agent |
+| Company Agent | The application and C# API boundary | Company Agent |
 | `Mountaineer` | Current user-facing Copilot Studio agent | Copilot Studio |
-| Land specialist | A bounded Land conversation capability, if created | Copilot Studio plus Business Agent |
+| Land specialist | A bounded Land conversation capability, if created | Copilot Studio plus Company Agent |
 | Tract or parcel | The physical or legal land unit being researched | Land system of record |
 | Lease or contract | Rights, terms, provisions, and obligations tied to land | Enertia or another approved land system |
-| Research request | A user’s question and requested review | Business Agent |
-| Evidence | A source-attributed fact or document reference | Business Agent evidence store |
+| Research request | A user’s question and requested review | Company Agent |
+| Evidence | A source-attributed fact or document reference | Company Agent evidence store |
 | Title opinion | A human/legal work product about title status | Legal document system or Enertia-linked record |
-| Finding | A structured, evidence-referenced business observation | Business Agent |
-| Human route | A proposed next step requiring a responsible person | Business Agent and Teams/workroom |
+| Finding | A structured, evidence-referenced business observation | Company Agent |
+| Human route | A proposed next step requiring a responsible person | Company Agent and Teams/workroom |
 
 “Land Packet” is not required as a core entity. If users want that phrase, it
 can describe a generated collection of research outputs. The durable model
@@ -84,13 +84,13 @@ flowchart TB
     T[Microsoft Teams<br/>channel, group chat, or personal chat]
     M[Mountaineer<br/>Copilot Studio front door]
     L[Land specialist capability<br/>child agent, topic, or delegated route]
-    B[Business Agent API<br/>authorization and application boundary]
+    B[Company Agent API<br/>authorization and application boundary]
     O[Land workflow orchestrator<br/>typed request and step sequencing]
     S[Bounded Land subagents<br/>intake, title, ownership, lease, compliance, well, synthesis]
     P[LandSystemPort<br/>provider-neutral interface]
     X[Mock land-system adapter<br/>deterministic fixtures]
     E[Enertia adapter<br/>future supported API or export integration]
-    D[(Business Agent persistence<br/>SQL, evidence snapshots, audit state)]
+    D[(Company Agent persistence<br/>SQL, evidence snapshots, audit state)]
     H[Human review<br/>Land, Legal, Compliance, Accounting, or Operations]
     R[Structured response<br/>findings, evidence, conflicts, unknowns, route]
 
@@ -138,7 +138,7 @@ approved API tool, and present the result. It must not be treated as the
 authority for role membership, title status, payment status, or a write to a
 system of record.
 
-#### Business Agent API
+#### Company Agent API
 
 The ASP.NET Core API is the application boundary. It should own:
 
@@ -248,11 +248,11 @@ notes that direct API tools are faster for rapid prototyping, while MCP adds
 shared discovery and lifecycle value.^5
 
 For this architecture, MCP is an optional process boundary around the
-`LandSystemPort` or adapter. It is not a replacement for the Business Agent
+`LandSystemPort` or adapter. It is not a replacement for the Company Agent
 API:
 
 ```text
-Business Agent workflow
+Company Agent workflow
   → LandSystemPort
   → in-process mock adapter, or
   → authenticated MCP client
@@ -283,7 +283,7 @@ sequenceDiagram
     participant Teams
     participant M as Mountaineer
     participant L as Land specialist
-    participant API as Business Agent API
+    participant API as Company Agent API
     participant W as Land workflow
     participant A as Land subagents
     participant LS as LandSystemPort
@@ -444,7 +444,7 @@ protected HTTP servers to validate token audience and expiration.^6 ^7 ^8
 ### Decisions
 
 - `Mountaineer` is the current user-facing Teams agent.
-- Business Agent remains the application and authorization boundary.
+- Company Agent remains the application and authorization boundary.
 - Land subagents own bounded judgments; they do not own source access.
 - Enertia is an external system of record behind an adapter.
 - Title opinions require human/legal authorship or approval.

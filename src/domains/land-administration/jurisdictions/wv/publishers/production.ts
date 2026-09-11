@@ -19,7 +19,7 @@ export interface WorkbookReader {
 /** Reads the fixed XML layout used by the captured WVDEP annual workbook. */
 export class WvdepAnnualWorkbookReader implements WorkbookReader {
   async read(bytes: Uint8Array): Promise<readonly WorkbookRow[]> {
-    const directory = await mkdtemp(`${tmpdir()}/business-agent-xlsx-`);
+    const directory = await mkdtemp(`${tmpdir()}/company-agent-xlsx-`);
     const path = `${directory}/source.xlsx`;
     try {
       await writeFile(path, bytes);

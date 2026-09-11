@@ -81,7 +81,7 @@ describe("domain-oriented agent architecture", () => {
     const agents = await loadAgents(domainRoot);
     const flow = (await loadFlows(domainRoot)).get("parcel-transfer-review");
     assert.ok(flow);
-    const root = await mkdtemp(join(tmpdir(), "business-agent-run-"));
+    const root = await mkdtemp(join(tmpdir(), "company-agent-run-"));
     try {
       const store = new FileRunStore();
       const record = await runFlow({ root, domain: "land-administration", flow, agents, context: "# Case\n\n- Case ID: demo-1\n- Parcel ID: P-1\n" }, store);
@@ -110,7 +110,7 @@ describe("domain-oriented agent architecture", () => {
     const domainRoot = join(process.cwd(), "domains", "land-administration");
     const agents = await loadAgents(domainRoot);
     const flows = await loadFlows(domainRoot);
-    const root = await mkdtemp(join(tmpdir(), "business-agent-research-flows-"));
+    const root = await mkdtemp(join(tmpdir(), "company-agent-research-flows-"));
     try {
       const store = new FileRunStore();
       for (const flowId of ["lease-lifecycle-review", "division-order-preparation", "assignment-transfer-review"]) {
@@ -132,7 +132,7 @@ describe("domain-oriented agent architecture", () => {
     const flow = (await loadFlows(domainRoot)).get("lease-lifecycle-review");
     assert.ok(flow);
     let attempts = 0;
-    const root = await mkdtemp(join(tmpdir(), "business-agent-retry-"));
+    const root = await mkdtemp(join(tmpdir(), "company-agent-retry-"));
     try {
       const record = await runFlow({ root, domain: "land-administration", flow, agents, maxAttempts: 2, context: "retry", executor: { async execute(agent) { attempts += 1; return attempts === 1 ? { agentId: agent.id, status: "failed", output: "", error: "transient" } : { agentId: agent.id, status: "complete", output: "ok" }; } } }, new FileRunStore());
       assert.equal(record.status, "complete");

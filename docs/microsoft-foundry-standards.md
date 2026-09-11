@@ -1,6 +1,6 @@
 # Microsoft technology map
 
-Business Agent uses Microsoft services for clear boundaries. The C# API is the
+Company Agent uses Microsoft services for clear boundaries. The C# API is the
 business authority; Teams and Foundry are integration surfaces.
 
 | Technology | Use in this repository |
@@ -11,7 +11,7 @@ business authority; Teams and Foundry are integration surfaces.
 | Azure Blob Storage | Evidence and source snapshots |
 | Microsoft Entra ID | Human claims and workload identity |
 | Azure Key Vault | Service secrets and runtime references through App Service |
-| Azure App Service | Hosts the Business Agent API |
+| Azure App Service | Hosts the Company Agent API |
 | Azure Container Registry | Stores immutable API images |
 | Application Insights / Log Analytics | Runtime telemetry and diagnostics |
 | Microsoft Foundry | Optional provider-backed agent execution and evaluations |

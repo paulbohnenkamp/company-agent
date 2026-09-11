@@ -19,7 +19,7 @@ test("loads the WV suite with one execution-kind vocabulary", async () => {
 });
 
 test("rejects malformed, duplicate, and invalidly discriminated cases", async () => {
-  const root = await mkdtemp(join(tmpdir(), "business-agent-wv-eval-schema-"));
+  const root = await mkdtemp(join(tmpdir(), "company-agent-wv-eval-schema-"));
   try {
     const malformed = join(root, "malformed.jsonl");
     await writeFile(malformed, JSON.stringify({ id: "bad", version: "1", executionKind: "agent-behavior", fixture: {}, expected: {}, executorRequirement: "genuine-external" }) + "\n", "utf8");

@@ -1,6 +1,6 @@
 # West Virginia land architecture
 
-This document is the architecture specification for the West Virginia oil-and-gas flagship built on the reusable `business-agent` runtime. It records the WV workflow, source boundaries, and flagship-specific contracts. The former multi-jurisdiction architecture is preserved in the checkpoint commit; this document does not promote WV concepts into the reusable runtime or shared land layer.
+This document is the architecture specification for the West Virginia oil-and-gas flagship built on the reusable `company-agent` runtime. It records the WV workflow, source boundaries, and flagship-specific contracts. The former multi-jurisdiction architecture is preserved in the checkpoint commit; this document does not promote WV concepts into the reusable runtime or shared land layer.
 
 ## Purpose and scope
 
@@ -8,7 +8,7 @@ The flagship demonstrates an evidence-bounded land workflow for one submitted la
 
 The application combines real public WVDEP and WVGES evidence with a synthetic submitted private land package. The package is test input created for this project. It does not represent a real person's lease, title, ownership, or financial records.
 
-The portfolio objective is to turn `business-agent` into a credible case-centered land workbench while keeping its runtime reusable for other jurisdictions and domains. West Virginia belongs in the flagship domain and source adapters. It must not leak into `src/core` contracts or provider-neutral orchestration.
+The portfolio objective is to turn `company-agent` into a credible case-centered land workbench while keeping its runtime reusable for other jurisdictions and domains. West Virginia belongs in the flagship domain and source adapters. It must not leak into `src/core` contracts or provider-neutral orchestration.
 
 ## Non-goals and authority limits
 
@@ -427,7 +427,7 @@ exact run and evidence snapshot reviewed.
 ## Target directory structure
 
 ```text
-business-agent/
+company-agent/
   docs/
     WV_LAND_ARCHITECTURE.md
     WV_LAND_IMPLEMENTATION_PLAN.md
@@ -469,7 +469,7 @@ The exact directory names may follow existing repository conventions, but the ow
 
 ## Architectural decisions
 
-- `business-agent` remains the reusable runtime and West Virginia is its flagship application domain.
+- `company-agent` remains the reusable runtime and West Virginia is its flagship application domain.
 - The first workflow is `wv-land-well-reconciliation`.
 - The first topology has three agents: intake, reconciliation, and synthesis.
 - WVDEP and WVGES remain independent sources. Ingestion never silently resolves disagreement.

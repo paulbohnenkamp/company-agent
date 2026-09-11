@@ -1,6 +1,6 @@
 # Execution records
 
-Business Agent tracks planned and completed work as paired repository records.
+Company Agent tracks planned and completed work as paired repository records.
 
 ## Directories and lifecycle
 

@@ -7,9 +7,9 @@ import { getDemoReview, loadDemoCase, runDemo } from "../src/domains/wv-land/dem
 
 describe("local WV demo boundary", () => {
   it("loads the synthetic case and runs all three typed agents into human review", async () => {
-    const root = await mkdtemp(join(tmpdir(), "business-agent-demo-test-"));
-    const previous = process.env.BUSINESS_AGENT_WORKSPACE;
-    process.env.BUSINESS_AGENT_WORKSPACE = root;
+    const root = await mkdtemp(join(tmpdir(), "company-agent-demo-test-"));
+    const previous = process.env.COMPANY_AGENT_WORKSPACE;
+    process.env.COMPANY_AGENT_WORKSPACE = root;
     try {
       const caseData = await loadDemoCase();
       assert.equal(caseData.submittedPackage.synthetic, true);
@@ -23,8 +23,8 @@ describe("local WV demo boundary", () => {
       assert.equal(aggregate.result.synthesis?.proposedRoute, "human-review");
       assert.equal((await getDemoReview(aggregate.runId)).state, "pending-human-review");
     } finally {
-      if (previous === undefined) delete process.env.BUSINESS_AGENT_WORKSPACE;
-      else process.env.BUSINESS_AGENT_WORKSPACE = previous;
+      if (previous === undefined) delete process.env.COMPANY_AGENT_WORKSPACE;
+      else process.env.COMPANY_AGENT_WORKSPACE = previous;
       await rm(root, { recursive: true, force: true });
     }
   });

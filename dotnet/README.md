@@ -1,6 +1,6 @@
-# Business Agent .NET foundation
+# Company Agent .NET foundation
 
-Business Agent is a .NET 10/C# 14 ASP.NET Core application with EF Core
+Company Agent is a .NET 10/C# 14 ASP.NET Core application with EF Core
 10 and SQL Server persistence. Checkpoints A through E now cover the case
 foundation, evidence reconciliation, ordered workflow, API tools, case-scoped
 conversation, and append-only human review.

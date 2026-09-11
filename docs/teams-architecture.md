@@ -10,7 +10,7 @@ Microsoft Teams
 Copilot Studio Mountaineer agent
   generative orchestration · topics · supported child/connected agents
         ↓ authenticated API tools
-Business Agent ASP.NET Core API
+Company Agent ASP.NET Core API
   authorization · evidence · persistence · deterministic domain mechanics
         ↓
 human-review result or approved action

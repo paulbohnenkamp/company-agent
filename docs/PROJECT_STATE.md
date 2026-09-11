@@ -1,9 +1,9 @@
-# Business Agent project state
+# Company Agent project state
 
 **Last reconciled:** 2026-09-10
 
 This branch adopts Mountaineer as the user-facing Copilot Studio agent. Users
-mention `@Mountaineer` in Teams. Business Agent is the C# application/API
+mention `@Mountaineer` in Teams. Company Agent is the C# application/API
 boundary behind the agent. The custom Bot Framework adapter and Teams package
 are no longer the active orchestration path.
 

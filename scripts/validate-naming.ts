@@ -29,7 +29,7 @@ for (const person of catalog.personas) {
   assert.match(person.displayName, /^[A-Za-z]+ [A-Za-z]+ \([A-Za-z ]+\)$/);
   assert.doesNotMatch(person.displayName, / Agent\b/);
 }
-for (const obsoletePath of ["src/landops", "src/business-agent", "src/teams", "teams-app", "teams.Dockerfile", "src/teams/landops-adapter.ts", "src/teams/landops-client.ts"]) {
+for (const obsoletePath of ["src/landops", "src/company-agent", "src/teams", "teams-app", "teams.Dockerfile", "src/teams/landops-adapter.ts", "src/teams/landops-client.ts"]) {
   await access(obsoletePath).then(() => { throw new Error(`Obsolete active path remains: ${obsoletePath}`); }).catch((error: unknown) => {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   });

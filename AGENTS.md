@@ -1,4 +1,4 @@
-# Business Agent instructions
+# Company Agent instructions
 
 - Use `/plan` for multi-step work; explore and discuss before modifying code.
 - Write or update a spec in `specs/` only after agreement.
@@ -13,7 +13,7 @@ specification and result-record workflow.
 ## Product naming
 
 Read [docs/product-naming.md](docs/product-naming.md) before changing product
-labels or information architecture. Business Agent is the application, Sample
+labels or information architecture. Company Agent is the application, Sample
 Energy Company is fictional context, and Teams hosts collaboration. Land is a
 department. LandOps and Workroom remain documented compatibility identifiers;
 do not introduce them as product names or another collaboration space.

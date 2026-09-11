@@ -1,7 +1,7 @@
-# Business Agent Teams documentation
+# Company Agent Teams documentation
 
 This is the current documentation surface for the Mountaineer Copilot Studio
-agent and its Business Agent C#/.NET API. Teams is the conversation channel;
+agent and its Company Agent C#/.NET API. Teams is the conversation channel;
 there is no web or administration surface in this branch.
 
 ## Start here
@@ -29,7 +29,7 @@ there is no web or administration surface in this branch.
 | [Teams live activation](teams-live-activation.md) | Mountaineer publication and tenant checks |
 | [Execution records](execution-records.md) | Specs, results, approvals, and verification |
 | [Safety](safety.md) | Evidence, identity, authorization, and human control |
-| [Glossary](business-agent-glossary.md) | Product and evidence terminology |
+| [Glossary](company-agent-glossary.md) | Product and evidence terminology |
 | [WV land architecture](WV_LAND_ARCHITECTURE.md) | Flagship evidence and source boundaries |
 
 ## History

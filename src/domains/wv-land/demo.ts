@@ -25,7 +25,7 @@ export interface DemoCase {
 }
 
 export function demoWorkspace(environment: Readonly<Record<string, string | undefined>> = process.env): string {
-  return resolve(environment.BUSINESS_AGENT_WORKSPACE?.trim() || join("/tmp", "business-agent-demo"));
+  return resolve(environment.COMPANY_AGENT_WORKSPACE?.trim() || join("/tmp", "company-agent-demo"));
 }
 
 export async function loadDemoCase(): Promise<DemoCase> {

@@ -1,6 +1,6 @@
 # Safety and control model
 
-Business Agent is designed for consequential enterprise workflows, so the
+Company Agent is designed for consequential enterprise workflows, so the
 agent is not the authority.
 
 ## Human gates

@@ -50,7 +50,7 @@ public static class CompanyPortfolioSeed
     public static CompanyPortfolio Current { get; } = new(
         "blue-ridge-energy-resources",
         "Sample Energy Company",
-        "Fictional company where departments collaborate through Business Agent.",
+        "Fictional company where departments collaborate through Company Agent.",
         true,
         "All company people, leases, title documents, ownership records, and workflow history are fictional. Public WV evidence is reference material, not proof of mineral title.",
         [

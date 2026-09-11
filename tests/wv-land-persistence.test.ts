@@ -29,7 +29,7 @@ function result(runId = "run-phase-6-a", status: WvFlowResult["status"] = "compl
 
 const options = { flowVersion: "1.0", startedAt: "2026-09-03T00:00:00Z", completedAt: "2026-09-03T00:01:00Z" };
 
-async function tempRoot(): Promise<string> { return mkdtemp(join(tmpdir(), "business-agent-phase-6-")); }
+async function tempRoot(): Promise<string> { return mkdtemp(join(tmpdir(), "company-agent-phase-6-")); }
 
 describe("WV land Phase 6 persistence", () => {
   it("persists and reloads the complete structured aggregate", async () => {

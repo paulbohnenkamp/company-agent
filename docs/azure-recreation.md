@@ -1,6 +1,6 @@
 # Azure deployment
 
-Azure hosts the Business Agent API and its data/provider dependencies.
+Azure hosts the Company Agent API and its data/provider dependencies.
 Mountaineer is published from Copilot Studio to Teams; it is not a custom
 Teams container in this deployment.
 

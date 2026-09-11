@@ -41,7 +41,7 @@ for (const persona of catalog.personas) {
   } else run(["ad", "user", "create", "--display-name", persona.displayName, "--user-principal-name", upn, "--password", "<LANDOPS_TEMP_PASSWORD>", "--force-change-password-next-sign-in", "true", "--mail-nickname", persona.id]);
   const userId = lookup(["ad", "user", "show", "--id", upn, "--query", "id", "-o", "tsv"]);
   for (const groupId of persona.groupIds) {
-    const groupName = `Business Agent ${groupId}`;
+    const groupName = `Company Agent ${groupId}`;
     if (apply) {
       try { lookup(["ad", "group", "show", "--group", groupName, "--query", "id", "-o", "tsv"]); }
       catch { run(["ad", "group", "create", "--display-name", groupName, "--mail-nickname", groupId]); }

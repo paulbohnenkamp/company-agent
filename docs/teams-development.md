@@ -1,6 +1,6 @@
 # Mountaineer development
 
-The repository-side development target is the Business Agent C# API and its
+The repository-side development target is the Company Agent C# API and its
 authenticated tool boundary. Copilot Studio authoring and Teams publication
 require a connected tenant and are not part of the local test loop.
 

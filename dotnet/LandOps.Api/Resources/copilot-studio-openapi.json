@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Business Agent Land Read API",
+    "title": "Company Agent Land Read API",
     "version": "1.0.0",
     "description": "Read-only land-operation context and evidence for the Mountaineer Copilot Studio agent. Use these operations to inspect fictional company context, supported land workflows, synthetic cases, data-room records, and evidence provenance. Public records are evidence, not proof of title. This contract is for controlled preview testing until Entra authentication is configured."
   },
@@ -14,7 +14,7 @@
       "get": {
         "operationId": "getCompanyPortfolio",
         "summary": "Get the Sample Energy Company portfolio context",
-        "description": "Returns fictional departments, roles, groups, bounded agents, workflows, and available cases. This explains Business Agent context; it does not grant authorization or establish ownership.",
+        "description": "Returns fictional departments, roles, groups, bounded agents, workflows, and available cases. This explains Company Agent context; it does not grant authorization or establish ownership.",
         "responses": { "200": { "description": "The fictional company portfolio context.", "schema": { "$ref": "#/definitions/CompanyPortfolio" } } }
       }
     },
@@ -22,7 +22,7 @@
       "get": {
         "operationId": "listRoleScenarios",
         "summary": "List supported land-operation scenarios",
-        "description": "Returns bounded land-operation scenarios that Business Agent can explain or prepare for review. Scenarios are guidance and do not authorize an action.",
+        "description": "Returns bounded land-operation scenarios that Company Agent can explain or prepare for review. Scenarios are guidance and do not authorize an action.",
         "responses": { "200": { "description": "The supported land-operation scenarios.", "schema": { "type": "array", "items": { "$ref": "#/definitions/RoleScenario" } } } }
       }
     },
@@ -78,7 +78,7 @@
   "definitions": {
     "CompanyPortfolio": {
       "type": "object",
-      "description": "Fictional company context used to explain available Business Agent capabilities.",
+      "description": "Fictional company context used to explain available Company Agent capabilities.",
       "properties": {
         "companyId": { "type": "string", "description": "Stable fictional company identifier." },
         "companyName": { "type": "string", "description": "Fictional company display name." },
