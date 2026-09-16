@@ -63,7 +63,7 @@ association rather than deleting the shared connector blindly.
 
 ## Procedure
 
-1. Open the browser to <https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade>
+1. Open the browser to [Entra app registrations](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade)
    for **Entra app registrations**. Confirm the active directory is the
    DecisionForge tenant
    `ec4b8411-d158-44e0-a8cf-6f71e2d8b96b` and the signed-in user is
@@ -74,18 +74,18 @@ association rather than deleting the shared connector blindly.
    `http://localhost` under **Authentication → Mobile and desktop
    applications**. Record its Application (client) ID as
    `COPILOT_E2E_CLIENT_ID`. Record the directory ID as `COPILOT_TENANT_ID`.
-3. Open the browser to <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections>
+3. Open the browser to [Power Automate connections](https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections)
    for **Power Automate connections**. In the DecisionForge environment,
    authorize exactly one connection for the provider in the source connector
    metadata:
    `shared_new-5Fland-20read-20api-20preview-20v5`.
-4. Open the browser to <https://copilotstudio.microsoft.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/bots>
+4. Open the browser to [Copilot Studio agents](https://copilotstudio.microsoft.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/bots)
    for **Copilot Studio agents**. Inspect Mountaineer, Company Agent, Land
    Agent, and HR Agent. Remove stale tool attachments that point to the old
    Mountaineer/Land connector, duplicate `Land Read API Preview` tools, or
    obsolete Company/Land/HR connection references. Do not remove the Company
    Agent child agents. This cleanup must happen before the Company Agent push.
-5. Open the browser to <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections/custom>
+5. Open the browser to [Power Automate custom connectors](https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections/custom)
    for **Power Automate custom connectors**. Remove duplicate obsolete custom
    connectors only when their descriptions, operations, or installed-on
    associations identify them as old Mountaineer/Land artifacts. Keep the
