@@ -1,0 +1,21 @@
+﻿{
+  "connectorid": "6f9cfa63-1bb1-f111-aaac-7ced8d05c994",
+  "name": "company_agent_api_v1_land_hr",
+  "displayname": "Company Agent API v1 - Land + HR",
+  "description": "Versioned read-only Company Agent API connector for Land Agent and HR Agent. Includes six Land operations and the synthetic vacation-policy operation. Records are evidence only, not proof of title or ownership. Do not use for legal conclusions or consequential actions.",
+  "connectorinternalid": "shared_new-5Fland-20read-20api-20preview-20v5",
+  "openapidefinition": "connectors/new_land-20read-20api-20preview-20v5-6f9cfa63-1bb1-f111-aaac-7ced8d05c994/openapidefinition.json",
+  "connectionparameters": "connectors/new_land-20read-20api-20preview-20v5-6f9cfa63-1bb1-f111-aaac-7ced8d05c994/connectionparameters.json",
+  "connectionparametersets": null,
+  "policytemplateinstances": "connectors/new_land-20read-20api-20preview-20v5-6f9cfa63-1bb1-f111-aaac-7ced8d05c994/policytemplateinstances.json",
+  "iconbrandcolor": null,
+  "iconblob": "connectors/new_land-20read-20api-20preview-20v5-6f9cfa63-1bb1-f111-aaac-7ced8d05c994/iconblob.png",
+  "connectortype": 1,
+  "statecode": 0,
+  "statuscode": 1,
+  "ismanaged": false,
+  "componentstate": 0,
+  "createdon": "2026-09-10T19:49:59Z",
+  "modifiedon": "2026-09-10T19:50:00Z",
+  "versionnumber": 2172213
+}

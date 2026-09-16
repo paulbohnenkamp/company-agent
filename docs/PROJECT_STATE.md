@@ -13,7 +13,7 @@ are no longer the active orchestration path.
   supported child/connected agents.
 - `dotnet/LandOps.*` owns authorization, case scope, evidence, persistence,
   agent workflows, API tools, and human actions.
-- `domains/`, `fixtures/`, and `evaluations/` define bounded behavior and
+- `departments/`, `fixtures/`, and `evaluations/` define bounded behavior and
   deterministic backend verification.
 - `agent.yaml` and `SKILL.md` remain the canonical repository artifacts.
 - `infra/` and `azure.yaml` deploy the C# API and its supporting Azure
@@ -36,7 +36,7 @@ Read [AGENTS.md](../AGENTS.md), this page, and the relevant current guide before
 making changes. Every multi-step change needs an approved spec in `specs/` and
 a matching result in `results/`; [execution-records.md](execution-records.md)
 defines the format. Spec 050 is preserved as a superseded historical record.
-The active implementation is [spec 054](../specs/054-microsoft-native-agent-routing.md).
+The active implementation is [spec 059](../specs/059-source-controlled-company-agent-deployment.md).
 
 Compatibility identifiers such as `LandOps` and `Workroom` may remain in
 storage, routes, permissions, or deployment settings; they are not product or

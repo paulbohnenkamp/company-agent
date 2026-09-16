@@ -1,0 +1,29 @@
+mcs.metadata:
+  componentName: Land Agent · Get Land Case
+kind: TaskDialog
+modelDescription: Returns a scoped case summary, synthetic-data notice, well identifiers, and submitted evidence references. Do not present this response as a title opinion or proof of ownership.
+outputs:
+  - propertyName: authorityBoundary
+
+  - propertyName: caseId
+
+  - propertyName: isSynthetic
+
+  - propertyName: jurisdiction
+
+  - propertyName: submittedEvidence
+
+  - propertyName: title
+
+  - propertyName: wells
+
+action:
+  kind: InvokeConnectorTaskAction
+  connectionReference: ca_CompanyAgent.shared_cr42d-5fland-20read-20api-20preview-20v5-5f10d5d3eec5c5bdb0.8ba20b4e433f4a349adc84d9e52d5bb3
+  connectionProperties:
+    mode: Invoker
+
+  operationId: getLandCase
+  aIPluginOperationExportKey: aiplugin.name=msdynaip_a28db162-d00c-447a-9534-996e8e830355,operationid=msdynaip_getLandCase
+
+outputMode: All

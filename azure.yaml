@@ -1,6 +1,6 @@
-name: mountaineer-workbench
+name: company-agent
 metadata:
-  template: landops-workbench@1.0.0
+  template: company-agent@1.0.0
 
 services:
   api:

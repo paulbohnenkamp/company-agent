@@ -6,12 +6,23 @@
   "scripts": {
     "validate:records": "tsx scripts/validate-records.ts",
     "validate:agent-artifacts": "tsx scripts/validate-agent-artifacts.ts",
+    "validate:copilot-workspace": "tsx scripts/validate-copilot-workspace.ts",
+    "normalize:copilot-workspace": "tsx scripts/normalize-copilot-workspace.ts",
+    "prepare:copilot-connector": "tsx scripts/create-company-agent-connector.ts",
+    "rebind:copilot-connection-references": "tsx scripts/rebind-copilot-connection-references.ts",
+    "prepare:copilot-workspace": "tsx scripts/prepare-copilot-workspace.ts",
+    "validate:department-artifacts": "tsx scripts/validate-department-artifacts.ts",
     "validate:identity-personas": "tsx scripts/validate-identity-personas.ts",
     "validate:naming": "tsx scripts/validate-naming.ts",
     "provision:entra-personas": "tsx scripts/provision-entra-personas.ts",
+    "deploy:copilot-studio": "tsx scripts/deploy-copilot-studio.ts",
+    "verify:copilot-deployment": "tsx scripts/verify-copilot-deployment.ts",
+    "test:copilot-e2e": "tsx scripts/test-copilot-deployment.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@azure/identity": "4.13.3",
+    "@microsoft/agents-copilotstudio-client": "1.8.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {

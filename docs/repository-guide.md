@@ -49,6 +49,7 @@ git diff --check
 ## Documentation
 
 Start with [project state](PROJECT_STATE.md), then read the
+[Company Agent deployment guide](company-agent-deployment.md),
 [Copilot Studio integration](copilot-studio-integration.md),
 [Teams architecture](teams-architecture.md),
 [Azure recreation](azure-recreation.md), and
@@ -60,6 +61,6 @@ specs and results are the durable execution record.
 ## Repository map
 
 - `dotnet/LandOps.*` — API, domain, application, infrastructure, and tests.
-- `domains/`, `fixtures/`, and `evaluations/` — bounded behavior and evidence.
+- `departments/`, `fixtures/`, and `evaluations/` — bounded behavior and evidence.
 - `infra/` and `azure.yaml` — API deployment infrastructure.
 - `specs/` and `results/` — approved work and verification history.

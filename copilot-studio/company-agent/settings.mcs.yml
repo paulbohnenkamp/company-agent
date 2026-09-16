@@ -1,0 +1,33 @@
+displayName: Company Agent
+schemaName: ca_CompanyAgent
+accessControlPolicy: GroupMembership
+authenticationMode: Integrated
+authenticationTrigger: Always
+configuration:
+  channels:
+    - channelId: MsTeams
+
+  settings:
+    GenerativeActionsEnabled: true
+
+  isAgentConnectable: true
+  publishOnImport: true
+  gPTSettings:
+    defaultSchemaName: ca_CompanyAgent.gpt.default
+
+  isLightweightBot: false
+  aISettings:
+    useModelKnowledge: true
+    isFileAnalysisEnabled: true
+    isSemanticSearchEnabled: true
+    contentModeration: Low
+    optInUseLatestModels: false
+
+  recognizer:
+    kind: GenerativeAIRecognizer
+
+  deferredProvisioning: false
+
+publishedOn: 2026-09-10T23:03:32.0000000Z
+template: default-2.1.0
+language: 1033

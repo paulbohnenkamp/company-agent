@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Company Agent Land Read API",
+    "title": "Company Agent Read API",
     "version": "1.0.0",
-    "description": "Read-only land-operation context and evidence for the Mountaineer Copilot Studio agent. Use these operations to inspect fictional company context, supported land workflows, synthetic cases, data-room records, and evidence provenance. Public records are evidence, not proof of title. This contract is for controlled preview testing until Entra authentication is configured."
+    "description": "Read-only Company Agent context for Land and HR departments. Use these operations to inspect fictional company context, supported land workflows, synthetic cases, data-room records, evidence provenance, and public-safe HR policy guidance. Public records are evidence, not proof of title. This contract is for controlled preview testing until Entra authentication is configured."
   },
-  "host": "mountaineer-7pxfuiyt-api.azurewebsites.net",
+  "host": "${COMPANY_AGENT_API_HOST}",
   "basePath": "/",
   "schemes": ["https"],
   "produces": ["application/json"],
@@ -16,6 +16,29 @@
         "summary": "Get the Sample Energy Company portfolio context",
         "description": "Returns fictional departments, roles, groups, bounded agents, workflows, and available cases. This explains Company Agent context; it does not grant authorization or establish ownership.",
         "responses": { "200": { "description": "The fictional company portfolio context.", "schema": { "$ref": "#/definitions/CompanyPortfolio" } } }
+      }
+    },
+    "/api/v1/hr/policies/vacation": {
+      "get": {
+        "operationId": "getVacationPolicy",
+        "summary": "Get the synthetic vacation policy",
+        "description": "Returns public-safe synthetic vacation policy guidance and request steps. This operation never returns employee records, balances, schedules, approvals, or employment decisions.",
+        "responses": {
+          "200": {
+            "description": "The synthetic vacation policy and request steps.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "policyId": { "type": "string", "description": "Stable policy identifier." },
+                "name": { "type": "string", "description": "Policy display name." },
+                "summary": { "type": "string", "description": "Public-safe policy summary." },
+                "requestSteps": { "type": "array", "items": { "type": "string" }, "description": "General request steps." },
+                "isSynthetic": { "type": "boolean", "description": "Whether the policy is synthetic." }
+              },
+              "required": ["policyId", "name", "summary", "requestSteps", "isSynthetic"]
+            }
+          }
+        }
       }
     },
     "/api/v1/scenarios": {

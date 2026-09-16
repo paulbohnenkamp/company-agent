@@ -1,0 +1,37 @@
+mcs.metadata:
+  componentName: Land Agent · Get Company Portfolio
+kind: TaskDialog
+modelDescription: Returns fictional departments, roles, groups, bounded agents, workflows, and available cases through the Company Agent API. This explains Business Agent context; it does not grant authorization or establish ownership.
+outputs:
+  - propertyName: agents
+
+  - propertyName: cases
+
+  - propertyName: companyId
+
+  - propertyName: companyName
+
+  - propertyName: dataNotice
+
+  - propertyName: departments
+
+  - propertyName: description
+
+  - propertyName: groups
+
+  - propertyName: isSynthetic
+
+  - propertyName: roles
+
+  - propertyName: workflows
+
+action:
+  kind: InvokeConnectorTaskAction
+  connectionReference: ca_CompanyAgent.shared_cr42d-5fland-20read-20api-20preview-20v5-5f10d5d3eec5c5bdb0.20fdff0999e94e70a7f4691289199ae5
+  connectionProperties:
+    mode: Invoker
+
+  operationId: getCompanyPortfolio
+  aIPluginOperationExportKey: aiplugin.name=msdynaip_a28db162-d00c-447a-9534-996e8e830355,operationid=msdynaip_getCompanyPortfolio
+
+outputMode: All

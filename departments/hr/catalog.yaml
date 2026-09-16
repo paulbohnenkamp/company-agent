@@ -1,0 +1,9 @@
+id: hr
+version: 1.0.0
+description: "Public-safe HR policy guidance without private employee records."
+
+skills:
+  - id: vacation-policy
+    file: skills/vacation-policy/SKILL.md
+
+flows: []

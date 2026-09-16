@@ -1,7 +1,11 @@
 # Copilot Studio runbook
 
-This directory contains the tenant-side configuration used by the Mountaineer
-Copilot Studio agent and its Land Agent child agent.
+For the current source-controlled Company Agent deployment flow, start with
+the [Company Agent deployment guide](../company-agent-deployment.md). This
+runbook contains the older tenant-capture and preview notes.
+
+This directory contains tenant-capture notes and preview guidance for the
+Copilot Studio agents and their Land Agent child agent.
 
 ## Files
 

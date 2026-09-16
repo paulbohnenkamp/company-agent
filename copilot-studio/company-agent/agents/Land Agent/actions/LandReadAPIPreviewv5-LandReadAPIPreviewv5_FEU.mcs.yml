@@ -1,0 +1,17 @@
+mcs.metadata:
+  componentName: Land Agent · Get Case Data Room
+kind: TaskDialog
+modelDescription: Returns synthetic internal records such as lease, title, ownership, division-order, and OCR observations. Use provenance and warnings; synthetic records require human confirmation before reliance.
+outputs:
+  - propertyName: Response
+
+action:
+  kind: InvokeConnectorTaskAction
+  connectionReference: ca_CompanyAgent.shared_cr42d-5fland-20read-20api-20preview-20v5-5f10d5d3eec5c5bdb0.e3644bfbaa3241ac8a93e36ef0af0eee
+  connectionProperties:
+    mode: Invoker
+
+  operationId: getCaseDataRoom
+  aIPluginOperationExportKey: aiplugin.name=msdynaip_a28db162-d00c-447a-9534-996e8e830355,operationid=msdynaip_getCaseDataRoom
+
+outputMode: All

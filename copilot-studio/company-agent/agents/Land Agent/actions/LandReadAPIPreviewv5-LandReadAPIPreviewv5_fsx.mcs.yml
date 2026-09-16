@@ -1,0 +1,17 @@
+mcs.metadata:
+  componentName: Land Agent · Get Case Evidence
+kind: TaskDialog
+modelDescription: Returns public evidence linked to a case, including source identity, snapshot, source record, URL, content hash, and normalized facts. Preserve source independence; public evidence is not proof of title.
+outputs:
+  - propertyName: Response
+
+action:
+  kind: InvokeConnectorTaskAction
+  connectionReference: ca_CompanyAgent.shared_cr42d-5fland-20read-20api-20preview-20v5-5f10d5d3eec5c5bdb0.17f87ead803c409cb809dac846e62a26
+  connectionProperties:
+    mode: Invoker
+
+  operationId: getCaseEvidence
+  aIPluginOperationExportKey: aiplugin.name=msdynaip_a28db162-d00c-447a-9534-996e8e830355,operationid=msdynaip_getCaseEvidence
+
+outputMode: All

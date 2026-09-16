@@ -1,8 +1,8 @@
 targetScope = 'resourceGroup'
 
-// Mountaineer is isolated in its own resource group. Resource names use the
-// Mountaineer deployment prefix; LandOps remains a compatibility identifier in
-// the application and historical records.
+// Company Agent deployments use a parallel resource group and generic resource
+// names. Mountaineer and LandOps remain compatibility identifiers only in the
+// existing application and historical deployment records.
 
 @description('The deployment location.')
 param location string = resourceGroup().location
@@ -25,16 +25,16 @@ param serviceApiImageName string = ''
 
 var suffix = uniqueString(subscription().id, resourceGroup().id)
 var shortSuffix = toLower(substring(suffix, 0, 8))
-var prefix = 'mountaineer-${shortSuffix}'
+var prefix = 'companyagent-${shortSuffix}'
 var apiName = '${prefix}-api'
 var planName = '${prefix}-plan'
 var registryName = replace('${prefix}cr', '-', '')
 var sqlServerName = '${prefix}-sql'
-var databaseName = 'Mountaineer'
+var databaseName = 'CompanyAgent'
 var storageName = replace('${prefix}stg', '-', '')
 var keyVaultName = '${prefix}-kv'
 var insightsName = '${prefix}-insights'
-var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/mountaineer-api:latest'
+var apiImage = !empty(serviceApiImageName) ? serviceApiImageName : '${registryName}.azurecr.io/companyagent-api:0.1.0'
 
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: '${prefix}-logs'
@@ -187,6 +187,7 @@ module foundryUser 'modules/foundry-role.bicep' = {
 }
 
 output apiUrl string = 'https://${api.properties.defaultHostName}'
+output applicationInsightsName string = insights.name
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.properties.loginServer
 output foundryEndpoint string = foundry.properties.endpoint
 output sqlServerName string = sqlServer.name

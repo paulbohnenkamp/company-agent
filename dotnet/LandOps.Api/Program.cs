@@ -146,6 +146,11 @@ app.MapGet("/openapi.json", (IWebHostEnvironment environment) =>
 // use the explicit local or Entra boundary configured below.
 app.MapGet("/api/v1/company", () => Results.Ok(CompanyPortfolioSeed.Current));
 
+// Public-safe, read-only policy guidance. Authorization is enforced whenever
+// the API runs in Entra mode; local development remains deterministic.
+var hrPolicyEndpoint = app.MapGet("/api/v1/hr/policies/vacation", () => Results.Ok(HrPolicySeed.Vacation));
+if (entraMode) hrPolicyEndpoint.RequireAuthorization();
+
 // Fictional internal records are case-scoped and read-only. They demonstrate
 // the shape that a future SQL Server document/evidence query will return.
 app.MapGet("/api/v1/cases/{caseId}/data-room", (string caseId) =>

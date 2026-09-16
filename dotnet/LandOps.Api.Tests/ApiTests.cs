@@ -66,6 +66,22 @@ public sealed class ApiTests : IClassFixture<ApiFactory>
     }
 
     [Fact]
+    public async Task Returns_synthetic_vacation_policy_without_employee_records()
+    {
+        var response = await client.GetAsync("/api/v1/hr/policies/vacation");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<HrPolicyResponse>();
+        Assert.NotNull(body);
+        Assert.True(body!.IsSynthetic);
+        Assert.Equal("vacation-policy", body.PolicyId);
+        Assert.NotEmpty(body.RequestSteps);
+        var payload = await response.Content.ReadAsStringAsync();
+        Assert.DoesNotContain("employeeId", payload, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("employeeRecords", payload, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
     public async Task Returns_case_scoped_fictional_data_room_with_provenance()
     {
         var response = await client.GetAsync("/api/v1/cases/synthetic-blue-ridge-lease-001/data-room");
