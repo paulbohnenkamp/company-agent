@@ -13,6 +13,7 @@ const value = (name: string): string => {
 const agentName = value("--agent-name");
 const environmentName = value("--environment") || process.env.AZURE_ENV_NAME || "companyagent-dev";
 const apply = args.includes("--apply");
+const confirmEachStep = !args.includes("--non-interactive");
 const azd = await readAzdEnvironment(environmentName);
 const environmentId = process.env.COPILOT_ENVIRONMENT_ID || azd.COPILOT_ENVIRONMENT_ID || "";
 const apiUrl = process.env.COMPANY_AGENT_API_URL || azd.COMPANY_AGENT_API_URL || azd.apiUrl || "";
@@ -56,8 +57,9 @@ async function run(command: string, commandArgs: string[]): Promise<string> {
   });
 }
 async function checkpoint(message: string): Promise<void> {
+  if (!confirmEachStep) return;
   const prompt = createInterface({ input: process.stdin, output: process.stdout });
-  await prompt.question(`\nCHECKPOINT\n${message}\nWhen complete, press Enter.\n`);
+  await prompt.question(`\nVERIFY\n${message}\nWhen verified in the UI, press Enter.\n`);
   prompt.close();
 }
 

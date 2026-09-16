@@ -14,6 +14,10 @@ that require Copilot Studio or Power Automate UI interaction.
 npm run deploy:copilot-studio -- --mode bootstrap --agent-name "Company Agent A" --apply
 ```
 
+Add `--non-interactive` after the bootstrap is proven to skip verification
+pauses. The script must still stop for authentication, consent, or failed
+post-step verification.
+
 ## Scope
 
 - Create an HR-only connector from a clean generated OpenAPI definition.
