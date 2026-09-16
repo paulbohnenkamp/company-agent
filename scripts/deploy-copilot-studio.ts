@@ -7,6 +7,13 @@ import { createInterface } from "node:readline/promises";
 import { readAzdEnvironment } from "./read-azd-environment.js";
 
 const positionalArguments = process.argv.slice(2).filter((argument) => !argument.startsWith("--"));
+const modeArgumentIndex = process.argv.findIndex((argument) => argument === "--mode");
+const mode = modeArgumentIndex >= 0 ? process.argv[modeArgumentIndex + 1] : "update";
+if (mode === "bootstrap") {
+  await import("./bootstrap-copilot-studio.js");
+  process.exit(0);
+}
+if (mode !== "update") throw new Error(`Unsupported deployment mode: ${mode}. Use --mode update or --mode bootstrap.`);
 const projectDir = positionalArguments[0] ?? "copilot-studio/company-agent";
 const sourceProjectDir = process.env.COPILOT_SOURCE_PROJECT_DIR ?? "copilot-studio/company-agent";
 const apply = process.argv.includes("--apply");
@@ -91,7 +98,7 @@ if (!apply) {
   const metadata = JSON.parse((await readFile(join(connectorPath, "metadata.yml"), "utf8")).replace(/^\uFEFF/, "")) as { connectorid?: unknown; connectorinternalid?: unknown; displayname?: unknown };
   if (typeof metadata.connectorid !== "string" || metadata.connectorid.length === 0) throw new Error(`${connectorPath}/metadata.yml: connectorid is required for an idempotent update.`);
   if (typeof metadata.connectorinternalid !== "string" || metadata.connectorinternalid.length === 0) throw new Error(`${connectorPath}/metadata.yml: connectorinternalid is required for connection verification.`);
-  if (metadata.displayname !== "Company Agent API v1 - Land + HR") throw new Error(`${connectorPath}/metadata.yml: unexpected connector display name.`);
+  if (metadata.displayname !== "Company Agent API v1 Land HR") throw new Error(`${connectorPath}/metadata.yml: unexpected connector display name.`);
   await runCommand("npm", ["run", "prepare:copilot-connector"], "Connector bootstrap preparation");
   await runPac(["connector", "update", "--environment", environmentId, "--connector-id", metadata.connectorid, "--api-definition-file", join(connectorPath, "openapidefinition.json"), "--api-properties-file", join(".azure", environmentName, "connector-create", "apiProperties.json"), "--icon-file", join(".azure", environmentName, "connector-create", "connector-icon.png"), "--solution-unique-name", "ca_CompanyAgent"], "PAC connector update");
   const liveConnectorDir = await mkdtemp(join(tmpdir(), "company-agent-connector-"));
@@ -125,7 +132,10 @@ if (!apply) {
     throw new Error(`No active connection exists for ${providerName}. Re-run with --wait-for-connection after creating the connection, or create it once in Power Platform. PAC push cannot create user-consented connector connections.`);
   }
   await appendFile(logPath, `${new Date().toISOString()}\n${plan}\nmode=apply\n`);
-  await runPac(["copilot", "push", "--project-dir", projectDir], "PAC push");
+  const pushOutput = await capturePac(["copilot", "push", "--project-dir", projectDir], "PAC push");
+  if (/Failed to push|No local changes detected/i.test(pushOutput)) {
+    throw new Error("PAC reported that the workspace push did not apply; refusing to report deployment success.");
+  }
   if (publish) {
     if (!companyAgentId) throw new Error("--publish requires COMPANY_AGENT_ID in the AZD environment or shell.");
     await runPac(["copilot", "publish", "--environment", environmentId, "--bot", companyAgentId], "PAC publish");

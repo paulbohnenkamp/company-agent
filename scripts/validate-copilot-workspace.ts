@@ -84,7 +84,7 @@ if (!openApi.paths || Object.keys(openApi.paths).length !== actionFiles.length +
 }
 
 const metadata = parse(await readFile(join(projectDir, "connectors", connectorDir.name, "metadata.yml"), "utf8")) as { displayname?: unknown; description?: unknown };
-if (metadata.displayname !== "Company Agent API v1 - Land + HR") throw new Error("Connector display name changed unexpectedly; review before push.");
+if (metadata.displayname !== "Company Agent API v1 Land HR") throw new Error("Connector display name changed unexpectedly; review before push.");
 if (typeof metadata.description !== "string" || /Mountaineer/.test(metadata.description)) throw new Error("Connector metadata must use Company Agent vocabulary.");
 
 console.log(`Validated Copilot workspace ${relative(process.cwd(), projectDir)}: ${actionFiles.length} uniquely named actions and ${Object.keys(openApi.paths).length} OpenAPI paths.`);

@@ -19,7 +19,7 @@ outputs:
 
 action:
   kind: InvokeConnectorTaskAction
-  connectionReference: ca_CompanyAgent.shared_cr42d-5fland-20read-20api-20preview-20v5-5f10d5d3eec5c5bdb0.8ba20b4e433f4a349adc84d9e52d5bb3
+  connectionReference: ca_CompanyAgent.shared_new-5fcompany-20agent-20api-20v1-20land-20hr-5f10d5d3eec5c5bdb0.8ba20b4e433f4a349adc84d9e52d5bb3
   connectionProperties:
     mode: Invoker
 

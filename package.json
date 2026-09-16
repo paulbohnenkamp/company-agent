@@ -16,6 +16,7 @@
     "validate:naming": "tsx scripts/validate-naming.ts",
     "provision:entra-personas": "tsx scripts/provision-entra-personas.ts",
     "deploy:copilot-studio": "tsx scripts/deploy-copilot-studio.ts",
+    "bootstrap:copilot-studio": "tsx scripts/bootstrap-copilot-studio.ts",
     "verify:copilot-deployment": "tsx scripts/verify-copilot-deployment.ts",
     "test:copilot-e2e": "tsx scripts/test-copilot-deployment.ts",
     "typecheck": "tsc --noEmit"

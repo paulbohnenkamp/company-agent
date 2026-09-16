@@ -97,4 +97,20 @@ const host = new URL(apiUrl).hostname;
 const openApi = (await readFile(openApiPath, "utf8")).replace(/^\uFEFF/, "");
 await writeFile(openApiPath, openApi.replaceAll("${COMPANY_AGENT_API_HOST}", host));
 
+const connectorMetadata = JSON.parse(
+  (await readFile(join(connectorRoot, connectorDirectory.name, "metadata.yml"), "utf8")).replace(/^\uFEFF/, ""),
+) as { connectorinternalid?: unknown };
+if (typeof connectorMetadata.connectorinternalid !== "string" || connectorMetadata.connectorinternalid.length === 0) {
+  throw new Error(`${connectorDirectory.name}/metadata.yml: connectorinternalid is required to synchronize PAC metadata.`);
+}
+const botDefinitionPath = join(targetDir, ".mcs", "botdefinition.json");
+const botDefinition = JSON.parse(await readFile(botDefinitionPath, "utf8")) as {
+  connectorDefinitions?: Array<{ $kind?: string; connectorId?: string }>;
+};
+botDefinition.connectorDefinitions = [{
+  $kind: "ConnectorDefinition",
+  connectorId: `/providers/Microsoft.PowerApps/apis/${connectorMetadata.connectorinternalid}`,
+}];
+await writeFile(botDefinitionPath, `${JSON.stringify(botDefinition)}\n`);
+
 console.log(`Merged ${sourceDir} into PAC sync workspace ${targetDir}; preserved target .mcs metadata.`);
