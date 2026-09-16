@@ -53,6 +53,14 @@ Do not delete, rename, deactivate, or mutate:
 That bot is a Teams integration identity, not the Company Agent E2E client.
 Do not use its client ID for the E2E test.
 
+The old Land tools and connector attachments installed on Mountaineer are
+stale and must be removed before the Company Agent deployment. Preserve the
+Mountaineer host/API and Teams identity, but remove only the obsolete
+Copilot/Power Platform tool attachments and duplicate connector records after
+checking their **Installed on** associations. If a connector is still needed
+by the Teams bot, remove the bot's old attachment first or stop and report the
+association rather than deleting the shared connector blindly.
+
 ## Procedure
 
 1. Confirm the active directory is the DecisionForge tenant
@@ -67,10 +75,11 @@ Do not use its client ID for the E2E test.
 3. In Power Automate for the DecisionForge environment, authorize exactly one
    connection for the provider in the source connector metadata:
    `shared_new-5Fland-20read-20api-20preview-20v5`.
-4. In Copilot Studio, inspect Company Agent, Land Agent, and HR Agent. Remove
-   stale tool attachments that point to the old Mountaineer/Land connector,
-   duplicate `Land Read API Preview` tools, or obsolete Company/Land/HR
-   connection references. Do not remove the Company Agent child agents.
+4. In Copilot Studio, inspect Mountaineer, Company Agent, Land Agent, and HR
+   Agent. Remove stale tool attachments that point to the old Mountaineer/Land
+   connector, duplicate `Land Read API Preview` tools, or obsolete
+   Company/Land/HR connection references. Do not remove the Company Agent
+   child agents. This cleanup must happen before the Company Agent push.
 5. In Power Automate/Copilot Studio, remove duplicate obsolete custom
    connectors only when their descriptions, operations, or installed-on
    associations identify them as old Mountaineer/Land artifacts. Keep the
@@ -120,7 +129,8 @@ Stop and report the exact screen or command output if:
 
 - the directory or signed-in account is wrong;
 - a deletion target is ambiguous;
-- a connector is installed on Mountaineer and cannot be identified as stale;
+- a connector is installed on Mountaineer and cannot be identified as stale or
+  safely detached from the Teams bot;
 - PAC reports success but the downloaded live connector lacks the expected
   title or `getVacationPolicy`;
 - the new connection provider is absent; or

@@ -80,10 +80,13 @@ Company Agent
 ### Reset and versioning decision
 
 The tenant reset will preserve the existing **Business Agent Teams Bot** Entra
-application and Teams integration until their current usage is explicitly
-verified. It will remove stale Company Agent, Land Agent, and HR Agent tool
-attachments, duplicate Company/Land connectors, and their obsolete connection
-references, without deleting the Mountaineer Azure resource group or API.
+application and Teams integration identity, the Mountaineer Azure resource
+group, and the Mountaineer API. It will remove stale Mountaineer, Company
+Agent, Land Agent, and HR Agent Copilot/Power Platform tool attachments,
+duplicate Company/Land connectors, and their obsolete connection references.
+If an old shared connector is still required by the Teams bot, detach that
+old tool from the bot before deleting the connector; never delete a shared
+connector based on its display name alone.
 
 The replacement connector and tools use versioned, role-qualified names so a
 stale artifact cannot be mistaken for the active deployment:
