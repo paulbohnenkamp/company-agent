@@ -14,6 +14,26 @@ Read these files first:
 - `copilot-studio/company-agent/`
 - `.env.example`
 
+## Browser map
+
+Open each URL in the signed-in Microsoft browser. These URLs are landing pages;
+use the exact names and IDs below to select the intended records.
+
+| Purpose | URL | Control plane |
+| --- | --- | --- |
+| Azure resource groups | <https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Resources%2FresourceGroups> | Azure subscription |
+| App registrations, including Business Agent Teams Bot and Company Agent Client | <https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade> | Entra tenant |
+| Enterprise applications/service principals | <https://portal.azure.com/#view/Microsoft_AAD_IAM/ManagedAppMenuBlade/~/AllApps> | Entra tenant |
+| Copilot Studio agents | <https://copilotstudio.microsoft.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/bots> | Power Platform / DecisionForge |
+| Power Automate custom connectors | <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections/custom> | Power Platform / DecisionForge |
+| Power Automate connections | <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections> | Power Platform / DecisionForge |
+
+The Azure resource-group page cannot display Entra or Power Platform objects.
+The Business Agent Teams Bot app is found only under **App registrations**;
+its service principal is found under **Enterprise applications**. Copilot
+Studio tools and Power Automate connectors are found only in the DecisionForge
+Power Platform environment.
+
 ## Target state
 
 There is one active Company Agent deployment:
