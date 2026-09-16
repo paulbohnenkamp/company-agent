@@ -14,26 +14,6 @@ Read these files first:
 - `copilot-studio/company-agent/`
 - `.env.example`
 
-## Browser map
-
-Open each URL in the signed-in Microsoft browser. These URLs are landing pages;
-use the exact names and IDs below to select the intended records.
-
-| Purpose | URL | Control plane |
-| --- | --- | --- |
-| Azure resource groups | <https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Resources%2FresourceGroups> | Azure subscription |
-| App registrations, including Business Agent Teams Bot and Company Agent Client | <https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade> | Entra tenant |
-| Enterprise applications/service principals | <https://portal.azure.com/#view/Microsoft_AAD_IAM/ManagedAppMenuBlade/~/AllApps> | Entra tenant |
-| Copilot Studio agents | <https://copilotstudio.microsoft.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/bots> | Power Platform / DecisionForge |
-| Power Automate custom connectors | <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections/custom> | Power Platform / DecisionForge |
-| Power Automate connections | <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections> | Power Platform / DecisionForge |
-
-The Azure resource-group page cannot display Entra or Power Platform objects.
-The Business Agent Teams Bot app is found only under **App registrations**;
-its service principal is found under **Enterprise applications**. Copilot
-Studio tools and Power Automate connectors are found only in the DecisionForge
-Power Platform environment.
-
 ## Target state
 
 There is one active Company Agent deployment:
@@ -83,24 +63,30 @@ association rather than deleting the shared connector blindly.
 
 ## Procedure
 
-1. Confirm the active directory is the DecisionForge tenant
+1. Open the browser to <https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade>
+   for **Entra app registrations**. Confirm the active directory is the
+   DecisionForge tenant
    `ec4b8411-d158-44e0-a8cf-6f71e2d8b96b` and the signed-in user is
-   `PaulBohnenkamp@landopsdemo.onmicrosoft.com`.
-2. In Entra ID, create or verify a separate app registration named
+   `PaulBohnenkamp@landopsdemo.onmicrosoft.com`. Create or verify a separate
+   app registration named
    **Company Agent Client**. Add the delegated Power Platform permission
    `CopilotStudio.Copilots.Invoke`, grant admin consent, and add
    `http://localhost` under **Authentication → Mobile and desktop
    applications**. Record its Application (client) ID as
    `COPILOT_E2E_CLIENT_ID`. Record the directory ID as `COPILOT_TENANT_ID`.
-3. In Power Automate for the DecisionForge environment, authorize exactly one
-   connection for the provider in the source connector metadata:
+3. Open the browser to <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections>
+   for **Power Automate connections**. In the DecisionForge environment,
+   authorize exactly one connection for the provider in the source connector
+   metadata:
    `shared_new-5Fland-20read-20api-20preview-20v5`.
-4. In Copilot Studio, inspect Mountaineer, Company Agent, Land Agent, and HR
-   Agent. Remove stale tool attachments that point to the old Mountaineer/Land
-   connector, duplicate `Land Read API Preview` tools, or obsolete
-   Company/Land/HR connection references. Do not remove the Company Agent
-   child agents. This cleanup must happen before the Company Agent push.
-5. In Power Automate/Copilot Studio, remove duplicate obsolete custom
+4. Open the browser to <https://copilotstudio.microsoft.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/bots>
+   for **Copilot Studio agents**. Inspect Mountaineer, Company Agent, Land
+   Agent, and HR Agent. Remove stale tool attachments that point to the old
+   Mountaineer/Land connector, duplicate `Land Read API Preview` tools, or
+   obsolete Company/Land/HR connection references. Do not remove the Company
+   Agent child agents. This cleanup must happen before the Company Agent push.
+5. Open the browser to <https://make.powerautomate.com/environments/Default-ec4b8411-d158-44e0-a8cf-6f71e2d8b96b/connections/custom>
+   for **Power Automate custom connectors**. Remove duplicate obsolete custom
    connectors only when their descriptions, operations, or installed-on
    associations identify them as old Mountaineer/Land artifacts. Keep the
    connector whose source ID is
