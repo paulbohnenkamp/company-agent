@@ -31,11 +31,9 @@ The same front door can expand to other specialized agents. For example:
 
 > @CompanyAgent What is our vacation policy, and how do I request time off?
 
-The Company Agent routes the question to the **HR Agent**. The HR AgenHR Agentt checks
+The Company Agent routes the question to the **HR Agent**. The HR Agent checks
 authorized HR policies and explains the request process without exposing
 private employee information or making an employment decision.
 
 **Business outcome:** Employees spend less time searching across systems and
 more time making informed decisions and getting work done.
-
-For implementation and deployment, start with the [repository guide](docs/repository-guide.md) and [Company Agent deployment guide](docs/company-agent-deployment.md).
