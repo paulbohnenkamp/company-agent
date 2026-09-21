@@ -7,10 +7,10 @@ inputs:
   - lease record and supporting instruments
 outputs:
   - obligation register and human-review route
-agents:
-  - intake-reviewer
-  - lease-lifecycle-reviewer
-  - case-synthesizer
+skills:
+  - case-intake
+  - lease-lifecycle-review
+  - case-synthesis
 ---
 
 # Lease Lifecycle Review Flow
@@ -21,9 +21,9 @@ payment, deadline, or conflicting-record decisions to a human.
 
 ## Stage contract
 
-1. `intake-reviewer` records the case ID, lease ID, source snapshot, and missing inputs.
-2. `lease-lifecycle-reviewer` returns one evidence-backed row per obligation or event.
-3. `case-synthesizer` keeps the specialist output intact, labels conflicts, and selects `continue`, `request-records`, or `human-review`.
+1. `case-intake` records the case ID, lease ID, source snapshot, and missing inputs.
+2. `lease-lifecycle-review` returns one evidence-backed row per obligation or event.
+3. `case-synthesis` keeps the specialist output intact, labels conflicts, and selects `continue`, `request-records`, or `human-review`.
 
 The flow may create reminders only after a human accepts the proposed event and
 the configured jurisdictional calendar is available.

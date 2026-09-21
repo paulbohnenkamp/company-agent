@@ -13,7 +13,11 @@ if (mode === "bootstrap") {
   await import("./bootstrap-copilot-studio.js");
   process.exit(0);
 }
-if (mode !== "update") throw new Error(`Unsupported deployment mode: ${mode}. Use --mode update or --mode bootstrap.`);
+if (mode === "init") {
+  await import("./init-copilot-studio.js");
+  process.exit(0);
+}
+if (mode !== "update") throw new Error(`Unsupported deployment mode: ${mode}. Use --mode init, --mode bootstrap, or --mode update.`);
 const projectDir = positionalArguments[0] ?? "copilot-studio/company-agent";
 const sourceProjectDir = process.env.COPILOT_SOURCE_PROJECT_DIR ?? "copilot-studio/company-agent";
 const apply = process.argv.includes("--apply");
@@ -26,6 +30,8 @@ const azdEnvironment = await readAzdEnvironment(environmentName);
 const environmentId = process.env.COPILOT_ENVIRONMENT_ID ?? azdEnvironment.COPILOT_ENVIRONMENT_ID ?? "";
 const apiUrl = process.env.COMPANY_AGENT_API_URL ?? azdEnvironment.COMPANY_AGENT_API_URL ?? azdEnvironment.apiUrl ?? "";
 const companyAgentId = process.env.COMPANY_AGENT_ID ?? azdEnvironment.COMPANY_AGENT_ID ?? "";
+const solutionUniqueName = process.env.COMPANY_AGENT_SOLUTION_NAME ?? azdEnvironment.COMPANY_AGENT_SOLUTION_NAME ?? "ca_CompanyAgent";
+const connectorId = process.env.COMPANY_AGENT_CONNECTOR_ID ?? azdEnvironment.COMPANY_AGENT_CONNECTOR_ID ?? "";
 const connectorRoot = join(projectDir, "connectors");
 let hasSyncMetadata = true;
 try {
@@ -34,9 +40,35 @@ try {
   hasSyncMetadata = false;
 }
 
+type ConnectorMetadata = {
+  connectorid: string;
+  connectorinternalid: string;
+  displayname: string;
+};
+
+function isConnectorMetadata(value: unknown): value is ConnectorMetadata {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const record = Object.fromEntries(Object.entries(value));
+  return typeof record.connectorid === "string" && record.connectorid.length > 0
+    && typeof record.connectorinternalid === "string" && record.connectorinternalid.length > 0
+    && typeof record.displayname === "string" && record.displayname.length > 0;
+}
+
+async function readConnectorMetadata(): Promise<{ path: string; metadata: ConnectorMetadata }> {
+  const connectorDirectory = (await readdir(connectorRoot, { withFileTypes: true })).find((entry) => entry.isDirectory());
+  if (!connectorDirectory) throw new Error(`${projectDir}: no connector directory found.`);
+  const path = join(connectorRoot, connectorDirectory.name);
+  const value: unknown = JSON.parse((await readFile(join(path, "metadata.yml"), "utf8")).replace(/^\uFEFF/, ""));
+  if (!isConnectorMetadata(value)) throw new Error(`${path}/metadata.yml: connectorid, connectorinternalid, and displayname are required.`);
+  if (value.displayname !== "Company Agent API v1 Land HR") throw new Error(`${path}/metadata.yml: unexpected connector display name.`);
+  return { path, metadata: value };
+}
+
 if (!environmentId) throw new Error(`Missing COPILOT_ENVIRONMENT_ID for ${environmentName}.`);
 if (!apiUrl) throw new Error(`Missing COMPANY_AGENT_API_URL for ${environmentName}.`);
+if (!solutionUniqueName) throw new Error(`Missing COMPANY_AGENT_SOLUTION_NAME for ${environmentName}.`);
 if (/mountaineer/i.test(apiUrl) || /mountaineer/i.test(environmentId)) throw new Error("Refusing a Mountaineer deployment target.");
+const connector = await readConnectorMetadata();
 
 async function runCommand(command: string, args: string[], label: string): Promise<void> {
   await new Promise<void>((resolve, reject) => {
@@ -79,6 +111,11 @@ const plan = [
   `environmentId=${environmentId}`,
   `apiUrl=${apiUrl}`,
   `projectDir=${projectDir}`,
+  `connectorPath=${connector.path}`,
+  `connectorId=${connectorId || connector.metadata.connectorid}`,
+  `connectorProvider=${connector.metadata.connectorinternalid}`,
+  `connectorDisplayName=${connector.metadata.displayname}`,
+  `solutionUniqueName=${solutionUniqueName}`,
   `workspaceSyncMetadata=${hasSyncMetadata ? "present" : "missing"}`,
   `publish=${publish ? "requested" : "not-requested"}`,
   `testE2e=${testE2e ? "requested" : "not-requested"}`,
@@ -92,18 +129,12 @@ if (!apply) {
   if (process.env.COPILOT_PUSH_APPROVED !== "true") throw new Error("Set COPILOT_PUSH_APPROVED=true for the explicit tenant mutation.");
   if (testE2e && !publish) throw new Error("--test-e2e requires --publish so the conversation test runs after this deployment publishes.");
   if (!hasSyncMetadata) throw new Error("Workspace has no .mcs/conn.json. Initialize or clone a new Company Agent workspace before pushing.");
-  const connectorDirectory = (await readdir(connectorRoot, { withFileTypes: true })).find((entry) => entry.isDirectory());
-  if (!connectorDirectory) throw new Error(`${projectDir}: no connector directory found.`);
-  const connectorPath = join(connectorRoot, connectorDirectory.name);
-  const metadata = JSON.parse((await readFile(join(connectorPath, "metadata.yml"), "utf8")).replace(/^\uFEFF/, "")) as { connectorid?: unknown; connectorinternalid?: unknown; displayname?: unknown };
-  if (typeof metadata.connectorid !== "string" || metadata.connectorid.length === 0) throw new Error(`${connectorPath}/metadata.yml: connectorid is required for an idempotent update.`);
-  if (typeof metadata.connectorinternalid !== "string" || metadata.connectorinternalid.length === 0) throw new Error(`${connectorPath}/metadata.yml: connectorinternalid is required for connection verification.`);
-  if (metadata.displayname !== "Company Agent API v1 Land HR") throw new Error(`${connectorPath}/metadata.yml: unexpected connector display name.`);
   await runCommand("npm", ["run", "prepare:copilot-connector"], "Connector bootstrap preparation");
-  await runPac(["connector", "update", "--environment", environmentId, "--connector-id", metadata.connectorid, "--api-definition-file", join(connectorPath, "openapidefinition.json"), "--api-properties-file", join(".azure", environmentName, "connector-create", "apiProperties.json"), "--icon-file", join(".azure", environmentName, "connector-create", "connector-icon.png"), "--solution-unique-name", "ca_CompanyAgent"], "PAC connector update");
+  const targetConnectorId = connectorId || connector.metadata.connectorid;
+  await runPac(["connector", "update", "--environment", environmentId, "--connector-id", targetConnectorId, "--api-definition-file", join(connector.path, "openapidefinition.json"), "--api-properties-file", join(".azure", environmentName, "connector-create", "apiProperties.json"), "--icon-file", join(".azure", environmentName, "connector-create", "connector-icon.png"), "--solution-unique-name", solutionUniqueName], "PAC connector update");
   const liveConnectorDir = await mkdtemp(join(tmpdir(), "company-agent-connector-"));
   try {
-    await runPac(["connector", "download", "--environment", environmentId, "--connector-id", metadata.connectorid, "--outputDirectory", liveConnectorDir], "PAC live connector download");
+    await runPac(["connector", "download", "--environment", environmentId, "--connector-id", targetConnectorId, "--outputDirectory", liveConnectorDir], "PAC live connector download");
     const liveFiles: string[] = [];
     async function collect(directory: string): Promise<void> {
       for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -120,7 +151,7 @@ if (!apply) {
   } finally {
     await rm(liveConnectorDir, { recursive: true, force: true });
   }
-  const providerName = metadata.connectorinternalid;
+  const providerName = connector.metadata.connectorinternalid;
   let connectionOutput = await capturePac(["connection", "list"], "PAC connection list");
   if (!connectionOutput.includes(providerName) && waitForConnection) {
     const prompt = createInterface({ input: process.stdin, output: process.stdout });
@@ -133,13 +164,18 @@ if (!apply) {
   }
   await appendFile(logPath, `${new Date().toISOString()}\n${plan}\nmode=apply\n`);
   const pushOutput = await capturePac(["copilot", "push", "--project-dir", projectDir], "PAC push");
-  if (/Failed to push|No local changes detected/i.test(pushOutput)) {
-    throw new Error("PAC reported that the workspace push did not apply; refusing to report deployment success.");
+  if (/Failed to push/i.test(pushOutput)) {
+    throw new Error("PAC reported that the workspace push failed; refusing to report deployment success.");
   }
+  const pushConverged = /No local changes detected/i.test(pushOutput);
+  if (pushConverged) console.log("PAC workspace is already converged; continuing with requested publish and smoke-test checks.");
   if (publish) {
     if (!companyAgentId) throw new Error("--publish requires COMPANY_AGENT_ID in the AZD environment or shell.");
     await runPac(["copilot", "publish", "--environment", environmentId, "--bot", companyAgentId], "PAC publish");
-    await runPac(["copilot", "status", "--environment", environmentId, "--bot-id", companyAgentId], "PAC publish status");
+    const copilotList = await capturePac(["copilot", "list", "--environment", environmentId], "PAC published-agent verification");
+    if (!copilotList.includes(companyAgentId) || !/Published/i.test(copilotList)) {
+      throw new Error(`PAC published-agent verification did not find published bot ${companyAgentId}.`);
+    }
   }
   if (testE2e) {
     await runCommand("npm", ["run", "test:copilot-e2e"], "Copilot Studio conversation E2E");

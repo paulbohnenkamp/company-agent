@@ -7,10 +7,10 @@ inputs:
   - typed WV land flow input
 outputs:
   - transient typed WV land flow result
-agents:
-  - land-case-intake
-  - land-well-reconciler
-  - case-synthesizer
+skills:
+  - case-intake
+  - well-reconciliation
+  - case-synthesis
 ---
 
 # WV Land Well Reconciliation Flow

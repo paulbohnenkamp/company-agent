@@ -10,11 +10,11 @@ inputs:
 outputs:
   - synthesized parcel-transfer review packet
   - proposed administrative route requiring human confirmation
-agents:
-  - intake-reviewer
-  - ownership-reviewer
-  - compliance-reviewer
-  - case-synthesizer
+skills:
+  - case-intake
+  - ownership-verification
+  - compliance-review
+  - case-synthesis
 ---
 
 # Parcel Transfer Review Flow
@@ -34,10 +34,10 @@ intake-reviewer
 
 ## Steps
 
-1. **Intake**: Run `agents/intake-reviewer.agent.yaml` against the case bundle. If the target case or parcel cannot be identified, stop with `failed-intake` and request clarification. If required records are missing, preserve the incomplete status and continue only when downstream review can still produce useful bounded findings.
-2. **Specialist review**: After intake, run `agents/ownership-reviewer.agent.yaml` and `agents/compliance-reviewer.agent.yaml`. These steps may run in parallel. Each receives the intake assessment and must report its own failure, unknowns, provenance, and human-review triggers.
+1. **Intake**: Run the `case-intake` skill against the case bundle. If the target case or parcel cannot be identified, stop with `failed-intake` and request clarification. If required records are missing, preserve the incomplete status and continue only when downstream review can still produce useful bounded findings.
+2. **Specialist review**: After intake, run the `ownership-verification` and `compliance-review` skills. These steps may run in parallel. Each receives the intake assessment and must report its own failure, unknowns, provenance, and human-review triggers.
 3. **Conflict preservation**: Do not discard or overwrite disagreement between source records or specialist assessments. Attach the conflicting claims and their sources to the synthesis input. A conflict that cannot be resolved from authoritative configuration routes to human review.
-4. **Synthesis**: Run `agents/case-synthesizer.agent.yaml` only after intake and both specialist outputs are available. If an agent fails, the synthesizer must identify the missing output and cannot label the review complete.
+4. **Synthesis**: Run the `case-synthesis` skill only after intake and both specialist outputs are available. If a skill fails, synthesis must identify the missing output and cannot label the review complete.
 5. **Routing**: The synthesizer proposes exactly one next administrative route. A human reviewer confirms, changes, or rejects that route before any filing, registry update, approval, denial, or communication.
 
 ## Branching and failure rules

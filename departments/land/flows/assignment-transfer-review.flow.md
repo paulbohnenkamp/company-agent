@@ -7,11 +7,11 @@ inputs:
   - assignment instrument and underlying agreement
 outputs:
   - evidence comparison, requirements, and human-review route
-agents:
-  - intake-reviewer
-  - title-chain-reviewer
-  - assignment-transfer-reviewer
-  - case-synthesizer
+skills:
+  - case-intake
+  - title-chain-review
+  - assignment-transfer-review
+  - case-synthesis
 ---
 
 # Assignment Transfer Review Flow

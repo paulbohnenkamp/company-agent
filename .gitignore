@@ -7,6 +7,8 @@ coverage/
 .env
 workspace/private/
 .copilot-azure/
+.azure/
+copilot-studio/**/.mcs/
 dotnet/**/bin/
 dotnet/**/obj/
 test-results/

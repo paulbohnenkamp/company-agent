@@ -10,6 +10,18 @@
 See [docs/execution-records.md](docs/execution-records.md) for the full
 specification and result-record workflow.
 
+## User-facing verification workflow
+
+- When giving UI instructions, always include the direct URL for the target
+  page when it is known. If the URL contains tenant, environment, agent, or
+  resource identifiers, include the resolved URL and identify the values used.
+  Do not give only navigation labels when a direct link can be provided.
+- For Company Agent conversation acceptance, always use Copilot Studio Preview
+  or a controlled Teams channel with observable activity/API evidence. Skip
+  terminal Direct Line or other terminal conversation E2E runs by default;
+  treat terminal E2E as deferred automation work unless the user explicitly
+  requests it.
+
 ## Product naming
 
 Read [docs/product-naming.md](docs/product-naming.md) before changing product
@@ -87,9 +99,10 @@ Follow these rules for every new agent, skill, tool, MCP server, or deployment:
   `instructions`. Store repository-specific version, role, permitted-tool,
   and referenced-skill metadata under `metadata`; do not invent top-level
   fields that the schema does not define.
-- `catalog.yaml` must point at canonical `agent.yaml` files. The TypeScript
-  loader may project those YAML files into its runtime contract, but the
-  runtime must not require `.agent.md` as the source format.
+- Department `catalog.yaml` files must point at canonical `SKILL.md` and flow
+  artifacts. Copilot Studio agent workspaces are the source for deployed
+  `agent.yaml` files; the runtime must not require `.agent.md` as a source
+  format.
 - Keep the C# LandOps API as the application boundary. A hosted Foundry agent
   or prompt agent is a provider/deployment projection over that boundary, not
   a second implementation of authorization, evidence rules, persistence, or

@@ -37,7 +37,11 @@ ignored AZD environment file or provide them as shell overrides.
 | --- | --- | --- | --- |
 | `AZURE_ENV_NAME` | All deployment helpers | Shell, then `companyagent-dev` | You or `azd` selection |
 | `COPILOT_ENVIRONMENT_ID` | Connector update, PAC push, deployment verification | Shell, then `.azure/<env>/.env` | Copilot Studio/PAC inventory |
+| `COMPANY_AGENT_CONNECTOR_ID` | Existing connector update and verification | Shell, then `.azure/<env>/.env` | Connector inventory for the selected environment; omit only when source metadata is current |
+| `COMPANY_AGENT_SOLUTION_NAME` | Connector solution binding | Shell, then `.azure/<env>/.env` | Existing unmanaged solution unique name in the selected environment |
 | `COMPANY_AGENT_API_URL` | Workspace preparation, connector host, deployment verification | Shell, then `.azure/<env>/.env` | Azure deployment output |
+
+Before any mutating CLI command, authenticate the operator session with `az login` and select a tenant account that has Dataverse access. The CLI reuses that Azure CLI token when it provisions connection references; it does not silently open a browser login.
 | `COMPANY_AGENT_APP_INSIGHTS_NAME` | E2E API-correlation query | Shell, then `.azure/<env>/.env` or `applicationInsightsName` | Azure deployment output |
 | `COMPANY_AGENT_ID` | Deployment verification and publish | Shell, then `.azure/<env>/.env` | Copilot Studio/PAC inventory |
 | `COPILOT_DIRECT_LINE_TOKEN_ENDPOINT` | E2E conversation token | Shell, then `.azure/<env>/.env` | Published agent's Direct Line token endpoint; current Web app/Native app panels show only the Agents SDK URL |
@@ -214,10 +218,11 @@ idempotent update instead of creating a duplicate. The active source uses
 role-qualified action names such as `Land Agent · Get Case Data Room` and
 `HR Agent · Get Vacation Policy`. It deliberately stops if
 `pac connection list` does not show the new connector provider. PAC 2.12.2 does
-not expose a command to create a user-consented custom-connector connection;
-that one-time authorization must be created in Power Platform or with the
-supported Power Apps connection CLI where the connector authentication mode is
-eligible. The script then performs the source-controlled binding and refuses to
+not expose a command to create a user-consented custom-connector connection.
+The HR bootstrap uses the separately versioned Microsoft Power Apps CLI
+(`@microsoft/power-apps-cli`, command `pa connection create`) for this step and
+falls back to the Power Platform UI if interactive browser creation cannot
+complete. The script then performs the source-controlled binding and refuses to
 push until the connection exists.
 
 After the connection exists, verify the deployed binding rather than trusting a

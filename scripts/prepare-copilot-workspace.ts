@@ -99,10 +99,19 @@ await writeFile(openApiPath, openApi.replaceAll("${COMPANY_AGENT_API_HOST}", hos
 
 const connectorMetadata = JSON.parse(
   (await readFile(join(connectorRoot, connectorDirectory.name, "metadata.yml"), "utf8")).replace(/^\uFEFF/, ""),
-) as { connectorinternalid?: unknown };
+) as { connectorid?: unknown; connectorinternalid?: unknown };
+const targetConnectorId = process.env.COMPANY_AGENT_CONNECTOR_ID ?? connectorMetadata.connectorid;
+if (typeof targetConnectorId !== "string" || targetConnectorId.length === 0) {
+  throw new Error(`${connectorDirectory.name}/metadata.yml: connectorid or COMPANY_AGENT_CONNECTOR_ID is required to synchronize PAC metadata.`);
+}
 if (typeof connectorMetadata.connectorinternalid !== "string" || connectorMetadata.connectorinternalid.length === 0) {
   throw new Error(`${connectorDirectory.name}/metadata.yml: connectorinternalid is required to synchronize PAC metadata.`);
 }
+const targetMetadata = JSON.parse(
+  (await readFile(join(connectorRoot, connectorDirectory.name, "metadata.yml"), "utf8")).replace(/^\uFEFF/, ""),
+) as Record<string, unknown>;
+targetMetadata.connectorid = targetConnectorId;
+await writeFile(join(connectorRoot, connectorDirectory.name, "metadata.yml"), `${JSON.stringify(targetMetadata, null, 2)}\n`);
 const botDefinitionPath = join(targetDir, ".mcs", "botdefinition.json");
 const botDefinition = JSON.parse(await readFile(botDefinitionPath, "utf8")) as {
   connectorDefinitions?: Array<{ $kind?: string; connectorId?: string }>;

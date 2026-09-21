@@ -1,0 +1,135 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "New Land Administration Intake",
+      "weight": "Bolder",
+      "size": "Large"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Contact",
+      "weight": "Bolder",
+      "size": "Medium",
+      "separator": true
+    },
+    {
+      "type": "FactSet",
+      "facts": [
+        {
+          "title": "Owner Name:",
+          "value": "OWNER_NAME"
+        },
+        {
+          "title": "Owner Number:",
+          "value": "OWNER_NUMBER"
+        },
+        {
+          "title": "Email:",
+          "value": "EMAIL"
+        },
+        {
+          "title": "Phone:",
+          "value": "PHONE"
+        },
+        {
+          "title": "Contact Preference:",
+          "value": "CONTACT_PREFERENCE"
+        },
+        {
+          "title": "Relationship:",
+          "value": "RELATIONSHIP_TO_PROPERTY"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Request",
+      "weight": "Bolder",
+      "size": "Medium",
+      "separator": true
+    },
+    {
+      "type": "FactSet",
+      "facts": [
+        {
+          "title": "Ticket Number:",
+          "value": "TICKET_NUMBER"
+        },
+        {
+          "title": "Purpose:",
+          "value": "PURPOSE_OF_INQUIRY"
+        },
+        {
+          "title": "Property:",
+          "value": "PROPERTY_ADDRESS_OR_LOCATION"
+        },
+        {
+          "title": "Parcel / Title / Lease:",
+          "value": "PARCEL_TITLE_LEASE_REFERENCE"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Request or Concern",
+      "weight": "Bolder",
+      "separator": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "REQUEST_OR_CONCERN",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Requested Outcome / Assistance",
+      "weight": "Bolder",
+      "separator": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "OUTCOME_OR_ASSISTANCE",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "Timing",
+      "weight": "Bolder",
+      "size": "Medium",
+      "separator": true
+    },
+    {
+      "type": "FactSet",
+      "facts": [
+        {
+          "title": "Intake Date:",
+          "value": "INTAKE_DATE"
+        },
+        {
+          "title": "Response Deadline:",
+          "value": "HAS_DEADLINE"
+        },
+        {
+          "title": "Deadline Date:",
+          "value": "DEADLINE_DATE"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Supporting Documents",
+      "weight": "Bolder",
+      "size": "Medium",
+      "separator": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "SUPPORTING_DOCUMENTS",
+      "wrap": true
+    }
+  ]
+}

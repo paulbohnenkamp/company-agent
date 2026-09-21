@@ -1,24 +1,26 @@
 # Company Agent Teams documentation
 
-This is the current documentation surface for the Mountaineer Copilot Studio
-agent and its Company Agent C#/.NET API. Teams is the conversation channel;
-there is no web or administration surface in this branch.
+This is the current documentation surface for Company Agent, its Copilot Studio
+agents, and its Company Agent API. Teams is the conversation channel; there is
+no web or administration surface in this branch.
 
 ## Start here
 
 1. [Session handoff](HANDOFF.md) — current cleanup state and next step.
 2. [Project state](PROJECT_STATE.md) — verified status and next approved work.
-3. [Copilot Studio integration](copilot-studio-integration.md) — native agent,
+3. [Company Agent deployment](company-agent-deployment.md) — PAC source,
+   connector bootstrap, connection authorization, guarded push, and verification.
+4. [Copilot Studio integration](copilot-studio-integration.md) — native agent,
    topic, tool, and Teams boundary.
-4. [Copilot Studio runbook](copilot-studio/README.md) — Mountaineer, Land Agent,
+5. [Copilot Studio runbook](copilot-studio/README.md) — tenant capture, Land Agent,
    REST tool setup, and Preview tests.
-5. [Teams architecture](teams-architecture.md) — API and conversation boundaries.
-6. [Teams development](teams-development.md) — local API run and checks.
-7. [Azure recreation](azure-recreation.md) — current API deployment.
-8. [Product naming](product-naming.md) — current names and compatibility terms.
-9. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
+6. [Teams architecture](teams-architecture.md) — API and conversation boundaries.
+7. [Teams development](teams-development.md) — local API run and checks.
+8. [Azure recreation](azure-recreation.md) — current API deployment.
+9. [Product naming](product-naming.md) — current names and compatibility terms.
+10. [Land agent architecture](land-agent-architecture.md) — end-to-end Land,
    Teams, Copilot Studio, subagent, MCP, and Enertia boundaries.
-9. [Repository guide](repository-guide.md) — local development, verification,
+11. [Repository guide](repository-guide.md) — local development, verification,
    repository structure, and implementation boundaries.
 
 ## Current guides

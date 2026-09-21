@@ -1,11 +1,12 @@
 ---
+# Compatibility ID retained for API, storage, and historical records.
 id: land-administration
 version: 1.1.0
-name: Land Administration
+name: Land
 description: "Review and route land, lease, ownership, and production-interest cases with evidence and human control."
 ---
 
-# Land Administration
+# Land department
 
 ## Purpose
 
@@ -33,7 +34,7 @@ on disk but are inactive. This is not legal or accounting advice.
 
 Case submissions, parcel records, ownership documents, configured jurisdictional requirements, and cited authoritative sources are the sources of truth. Every finding must identify its source or be marked unknown.
 
-This domain does not assume any jurisdiction-specific law, regulation, filing requirement, fee, deadline, tax treatment, zoning rule, or approval authority. Missing or conflicting jurisdictional configuration requires human review or clarification. The agents do not make legal determinations, transfer title, update a registry, contact parties, or submit filings.
+This department does not assume any jurisdiction-specific law, regulation, filing requirement, fee, deadline, tax treatment, zoning rule, or approval authority. Missing or conflicting jurisdictional configuration requires human review or clarification. The skills and flows do not make legal determinations, transfer title, update a registry, contact parties, or submit filings.
 
 ## Reference data model
 
@@ -47,7 +48,7 @@ The reference fixtures in `examples/land-records/` intentionally use fictional I
 case synthesis. Findings are transient in Phase 5; persistence and review
 lifecycle belong to Phase 6.
 
-The workflow accepts a case bundle and produces an auditable review packet. Intake establishes scope and record completeness. Ownership verification and compliance review then run from the intake result and may proceed in parallel. A case synthesizer preserves specialist findings and conflicts, identifies uncertainty, and recommends the next administrative route for human confirmation.
+The workflow accepts a case bundle and produces an auditable review packet. Intake establishes scope and record completeness. Ownership verification and compliance review then run from the intake result and may proceed in parallel. A synthesis skill preserves specialist findings and conflicts, identifies uncertainty, and recommends the next administrative route for human confirmation.
 
 ## Common artifact expectations
 

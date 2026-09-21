@@ -7,11 +7,11 @@ inputs:
   - lease, ownership, and supporting land records
 outputs:
   - auditable land package assessment and proposed route
-agents:
+skills:
   - land-package-triage
-  - lease-obligation-reviewer
-  - interest-reconciliation-reviewer
-  - case-synthesizer
+  - lease-obligation-analysis
+  - ownership-interest-reconciliation
+  - case-synthesis
 ---
 
 # Land Package Review Flow

@@ -1,0 +1,63 @@
+# Compatibility ID retained for API, storage, and historical records.
+id: land-administration
+version: 1.1.0
+description: "Evidence-bounded land, lease, ownership, and production-interest operations."
+
+skills:
+  # This catalog is intentionally declarative. It describes business
+  # capabilities and executable flows; Copilot Studio agent workspaces live
+  # under copilot-studio/.
+
+  - id: assignment-transfer-review
+    file: skills/assignment-transfer-review/SKILL.md
+  - id: case-intake
+    file: skills/case-intake/SKILL.md
+  - id: case-synthesis
+    file: skills/case-synthesis/SKILL.md
+  - id: compliance-review
+    file: skills/compliance-review/SKILL.md
+  - id: division-order-preparation
+    file: skills/division-order-preparation/SKILL.md
+  - id: ownership-interest-reconciliation
+    file: skills/ownership-interest-reconciliation/SKILL.md
+  - id: land-package-triage
+    file: skills/land-package-triage/SKILL.md
+  - id: lease-lifecycle-review
+    file: skills/lease-lifecycle-review/SKILL.md
+  - id: lease-obligation-analysis
+    file: skills/lease-obligation-analysis/SKILL.md
+  - id: ownership-verification
+    file: skills/ownership-verification/SKILL.md
+  - id: parcel-record-analysis
+    file: skills/parcel-record-analysis/SKILL.md
+  - id: title-chain-review
+    file: skills/title-chain-review/SKILL.md
+  - id: well-reconciliation
+    file: skills/well-reconciliation/SKILL.md
+
+flows:
+  - id: assignment-transfer-review
+    file: flows/assignment-transfer-review.flow.md
+    purpose: "Review a lease or interest assignment package before a record update."
+  - id: division-order-preparation
+    file: flows/division-order-preparation.flow.md
+    purpose: "Reconcile ownership evidence and prepare a production-interest draft for approval."
+  - id: land-package-review
+    file: flows/land-package-review.flow.md
+    purpose: "Triage a land package and route bounded lease, interest, and evidence review."
+  - id: lease-lifecycle-review
+    file: flows/lease-lifecycle-review.flow.md
+    purpose: "Extract lease lifecycle obligations and route timing and evidence exceptions."
+  - id: parcel-transfer-review
+    file: flows/parcel-transfer-review.flow.md
+    purpose: "Review a parcel transfer through intake, parallel specialist skills, and human confirmation."
+  - id: wv-land-well-reconciliation
+    file: flows/wv-land-well-reconciliation.flow.md
+    purpose: "Reconcile submitted well clues with independent public evidence and route uncertainty."
+
+human_control:
+  required_before:
+    - "legal interpretation or title certification"
+    - "payment setup or change"
+    - "filing, registry update, or owner communication"
+    - "marking an obligation satisfied, waived, or in default"

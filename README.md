@@ -31,7 +31,7 @@ The same front door can expand to other specialized agents. For example:
 
 > @CompanyAgent What is our vacation policy, and how do I request time off?
 
-The Company Agent routes the question to the **HR Agent**. The HR Agent checks
+The Company Agent routes the question to the **HR Agent**. The HR AgenHR Agentt checks
 authorized HR policies and explains the request process without exposing
 private employee information or making an employment decision.
 

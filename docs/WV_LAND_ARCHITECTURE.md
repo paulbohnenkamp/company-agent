@@ -476,7 +476,8 @@ The exact directory names may follow existing repository conventions, but the ow
 
 - `company-agent` remains the reusable runtime and West Virginia is its flagship application domain.
 - The first workflow is `wv-land-well-reconciliation`.
-- The first topology has three agents: intake, reconciliation, and synthesis.
+- The first topology has three bounded skills: intake, reconciliation, and
+  synthesis, coordinated by the Land department flow.
 - WVDEP and WVGES remain independent sources. Ingestion never silently resolves disagreement.
 - Public evidence is provenance-bearing input, not a title opinion.
 - `Finding` is structured business state. Markdown is presentation.
