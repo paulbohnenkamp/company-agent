@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { createCleanupPlan, createDefaultEnvironmentBinding, createLifecyclePlan, createRollbackPlan, loadEnvironmentBinding, loadProductConfiguration } from "./company-agent-config.js";
+import { buildReleaseCommandPlan, formatPacCommandPlan } from "./power-platform-adapter.js";
 
 function option(name: string): string | undefined {
   const index = process.argv.indexOf(name);
@@ -34,6 +35,17 @@ if (command === "validate") {
 } else if (command === "cleanup-plan") {
   const actions = createCleanupPlan(configuration);
   console.log(JSON.stringify(actions, null, 2));
+} else if (command === "pac-plan") {
+  const commands = buildReleaseCommandPlan({
+    resourceSolutionFolder: option("--resource-folder") ?? ".azure/companyagent-dev/company-agent/solutions/resources",
+    resourceSolutionZip: option("--resource-zip") ?? ".azure/companyagent-dev/company-agent/solutions/resources.zip",
+    agentSolutionFolder: option("--agent-folder") ?? ".azure/companyagent-dev/company-agent/solutions/agents",
+    agentSolutionZip: option("--agent-zip") ?? ".azure/companyagent-dev/company-agent/solutions/agents.zip",
+    resourceSettingsFile: option("--resource-settings") ?? ".azure/companyagent-dev/company-agent/settings/resources.json",
+    agentSettingsFile: option("--agent-settings") ?? ".azure/companyagent-dev/company-agent/settings/agents.json",
+    environment: option("--environment-url") ?? "${COPILOT_ENVIRONMENT_ID}",
+  });
+  console.log(formatPacCommandPlan(commands));
 } else {
-  throw new Error("Usage: company-agent-config <validate|plan|status|rollback-plan|cleanup-plan> [options]");
+  throw new Error("Usage: company-agent-config <validate|plan|status|rollback-plan|cleanup-plan|pac-plan> [options]");
 }

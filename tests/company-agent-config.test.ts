@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import { ConfigurationError, createCleanupPlan, createDefaultEnvironmentBinding, createDeploymentPlan, createDeploymentState, createLifecyclePlan, createRollbackPlan, loadProductConfiguration } from "../scripts/company-agent-config.js";
+import { buildReleaseCommandPlan, executePacCommand, type PacCommand, type PacRunner } from "../scripts/power-platform-adapter.js";
 
 const catalogPath = "copilot-studio/company-agent/catalog.yaml";
 
@@ -239,4 +240,31 @@ test("creates a rollback selection without changing the current plan", async () 
   assert.equal(action.kind, "rollback-selection");
   assert.equal(action.mutation, "none");
   assert.equal(plan.planHash.startsWith("sha256:"), true);
+});
+
+test("builds ordered PAC commands with an explicit mutation boundary", () => {
+  const commands = buildReleaseCommandPlan({
+    resourceSolutionFolder: "resources",
+    resourceSolutionZip: "resources.zip",
+    agentSolutionFolder: "agents",
+    agentSolutionZip: "agents.zip",
+    resourceSettingsFile: "resource-settings.json",
+    agentSettingsFile: "agent-settings.json",
+    environment: "environment-id",
+  });
+  const resourceImport = commands.find((entry) => entry.id === "import:resources");
+  const agentImport = commands.find((entry) => entry.id === "import:agents");
+  assert.equal(resourceImport?.mutation, "requires-apply");
+  assert.ok(agentImport?.dependsOn.includes("import:resources"));
+  assert.ok(commands.find((entry) => entry.id === "pack:resources")?.args.includes("resources.zip"));
+});
+
+test("prevents mutation commands from reaching the PAC runner without apply", async () => {
+  const calls: PacCommand[] = [];
+  const runner: PacRunner = { run: async (command) => { calls.push(command); return { exitCode: 0, stdout: "", stderr: "" }; } };
+  const command: PacCommand = { id: "import:test", kind: "import", args: ["solution", "import"], mutation: "requires-apply", dependsOn: [] };
+  await assert.rejects(() => executePacCommand({ command, runner, apply: false }), /requires --apply/);
+  assert.deepEqual(calls, []);
+  await executePacCommand({ command, runner, apply: true });
+  assert.deepEqual(calls.map((entry) => entry.id), ["import:test"]);
 });
