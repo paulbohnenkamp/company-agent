@@ -1,0 +1,56 @@
+schemaVersion: 1
+product:
+  key: company-agent
+  version: 1.0.0
+  displayName: Company Agent
+  rootAgent: root
+
+packages:
+  hr:
+    path: ../../departments/hr
+  land:
+    path: ../../departments/land
+
+agents:
+  root:
+    source: .
+    children: [hr, land]
+  hr:
+    package: hr
+    source: agents/HR Agent
+  land:
+    package: land
+    source: agents/Land Agent
+
+contracts:
+  company-agent-api:
+    version: 1.0.0
+    source: ../../contracts/company-agent-api/v1.yaml
+
+resources:
+  companyAgentApi:
+    contract: company-agent-api
+    implementation:
+      kind: product-managed
+      source: connectors/new_land-20read-20api-20preview-20v5-6f9cfa63-1bb1-f111-aaac-7ced8d05c994
+
+operations:
+  vacationPolicy:
+    package: hr
+    capability: vacation-policy
+    resource: companyAgentApi
+    contractOperation: getVacationPolicy
+  landCaseDataRoom:
+    package: land
+    capability: case-intake
+    resource: companyAgentApi
+    contractOperation: getCaseDataRoom
+
+solutions:
+  resources:
+    key: company-agent-resources
+    kind: resource
+  agents:
+    key: company-agent-agents
+    kind: agent
+    dependsOn: [company-agent-resources]

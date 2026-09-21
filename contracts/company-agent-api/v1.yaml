@@ -1,0 +1,8 @@
+schemaVersion: 1
+operations:
+  getCaseDataRoom:
+    request: CaseDataRoomRequest
+    response: CaseDataRoomResponse
+  getVacationPolicy:
+    request: VacationPolicyRequest
+    response: VacationPolicyResponse
