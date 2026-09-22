@@ -1,5 +1,16 @@
 # Session handoff
 
+## Closeout status — 2026-09-22
+
+The repository is clean and `main` is pushed to `origin/main`. The latest
+documentation commits restored and consolidated the simple Company Agent
+README. No further implementation or tenant mutation was performed after the
+deployment investigation below.
+
+The next agent should begin by reading `AGENTS.md`, this handoff, and
+`specs/063-company-agent-thin-vertical-slice.md`. The next work is a new
+approved correction spec, not another deployment retry.
+
 ## Current takeover state — 2026-09-21
 
 ### Immediate instruction
