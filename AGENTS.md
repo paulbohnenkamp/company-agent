@@ -54,6 +54,23 @@ The customer integration remains:
 Customer Agent -> customer MCP server -> existing customer API
 ```
 
+## Pre-commit data review
+
+Before every commit, inspect the staged diff for accidental tenant or secret
+disclosure. Check all staged files for:
+
+- public or tenant-specific endpoints, hostnames, resource names, registry
+  names, subscription IDs, tenant IDs, and image references;
+- credentials, API keys, access tokens, client secrets, private keys, and
+  connection strings;
+- local `.env` files, tenant-specific parameter files, deployment transcripts,
+  and generated PAC artifacts.
+
+Keep real deployment values in ignored local configuration such as `.env` and
+use sanitized examples in tracked files. Review both `git diff --cached` and
+the staged file list before committing; a clean build does not prove that the
+staged content is safe to publish.
+
 ## Verification
 
 Before claiming a local feature is complete, run:
