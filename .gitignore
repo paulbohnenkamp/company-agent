@@ -1,0 +1,38 @@
+node_modules/
+
+# TypeScript and test output
+dist/
+coverage/
+
+# .NET build output
+bin/
+obj/
+TestResults/
+
+# Local IDE and operating-system files
+.DS_Store
+.vscode/
+.idea/
+*.user
+*.suo
+*.bak
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Copilot Studio/PAC generated workspaces, local sync metadata, and packages.
+# Recreate these with the PAC scripts; do not publish tenant-bound artifacts.
+deployment/pac/
+.mcs/
+*.zip
+
+# Keep exact local tenant transcripts out of public history if needed.
+docs/deployment-log.local.md
+docs/deployment-log.md
+
+# Local project planning and working notes
+docs/
+prompts/
+specs/

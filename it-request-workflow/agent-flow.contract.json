@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "copilot-studio-agent-flow-contract",
+  "name": "Northstar IT Request Agent flow",
+  "purpose": "Conversational entry point for the existing Northstar IT service-request business process.",
+  "trigger": {
+    "type": "copilotStudioAgentFlow",
+    "inputs": {
+      "employeeName": { "type": "string", "required": true },
+      "requestType": { "type": "string", "allowedValues": ["Hardware", "Software", "Access", "Other"], "required": true },
+      "description": { "type": "string", "required": true },
+      "isUrgent": { "type": "boolean", "required": true }
+    }
+  },
+  "steps": [
+    "Normalize and validate the four agent inputs",
+    "SharePoint Create item in the existing Northstar / IT Service Requests list",
+    "SharePoint Update item with concat('SR-', formatNumber(Create item ID, '000'))",
+    "Microsoft Teams Post card in a chat or channel using the existing request card shape"
+  ],
+  "outputs": {
+    "serviceRequestId": { "type": "string", "example": "SR-004" },
+    "status": { "type": "string", "example": "New" },
+    "result": { "type": "string" }
+  },
+  "resourcePolicy": {
+    "doNotModifyFormsFlow": true,
+    "formsFlowName": "Northstar IT Service Request - Inspect Response",
+    "sharePointSite": "Northstar",
+    "sharePointList": "IT Service Requests",
+    "teamsDestination": "Northstar / IT Service Requests"
+  },
+  "verification": {
+    "tenantStatus": "not-verified",
+    "requiredEvidence": "Copilot Studio Preview or a controlled Teams channel showing the Agent flow run, returned request ID, status, and downstream activity."
+  }
+}
