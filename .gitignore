@@ -22,6 +22,9 @@ TestResults/
 .env.*
 !.env.example
 
+# Tenant-specific infrastructure parameters
+infra/**/*.bicepparam
+
 # Copilot Studio/PAC generated workspaces, local sync metadata, and packages.
 # Recreate these with the PAC scripts; do not publish tenant-bound artifacts.
 deployment/pac/

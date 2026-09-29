@@ -6,18 +6,20 @@ strings.
 
 ## Customer MCP Azure boundary
 
-Preview the existing foundation and app deployment:
+Create a local `.env` from `.env.example` and fill in the Azure resource names,
+image references, and MCP URL. Keep `.env` local; do not put tenant-specific
+values in this runbook.
+
+Preview the configured foundation and app deployment:
 
 ```bash
-scripts/deploy-customer-mcp.sh --what-if \
-  --api-image acrnorthstarcust.azurecr.io/customer-api:20260929 \
-  --mcp-image acrnorthstarcust.azurecr.io/customer-mcp:20260929-3
+scripts/deploy-customer-mcp.sh --what-if
 ```
 
 Deploy immutable images:
 
 ```bash
-scripts/deploy-customer-mcp.sh --image-tag 20260929-4
+scripts/deploy-customer-mcp.sh --image-tag YYYYMMDDHHMMSS
 ```
 
 Verify the hosted endpoint:
@@ -26,8 +28,9 @@ Verify the hosted endpoint:
 scripts/verify-customer-mcp.sh
 ```
 
-The script prints the actual MCP URL for Copilot Studio. Record the observed
-URL and verification output in `docs/deployment-log.md`, excluding secrets.
+The verification script uses `CUSTOMER_MCP_URL` from `.env`. Record observed
+verification output locally, excluding secrets and tenant-specific values from
+committed documentation.
 
 ## Copilot Studio
 

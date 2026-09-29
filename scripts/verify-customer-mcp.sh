@@ -6,12 +6,25 @@ usage() {
 Usage: scripts/verify-customer-mcp.sh [MCP_URL]
 
 Verify health, MCP initialization, tools, known/missing lookups, and mutation refusal.
+Provide the URL as the first argument or CUSTOMER_MCP_URL in the local .env file.
 The URL may include or omit the /mcp suffix.
 EOF
 }
 
 if [[ "${1:-}" == '--help' ]]; then usage; exit 0; fi
-mcp_url="${1:-https://ca-northstar-customer-mcp.bravepebble-b1569bcb.westus.azurecontainerapps.io/mcp}"
+env_file="${CUSTOMER_MCP_ENV_FILE:-.env}"
+if [[ -f "$env_file" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$env_file"
+  set +a
+fi
+
+mcp_url="${1:-${CUSTOMER_MCP_URL:-}}"
+if [[ -z "$mcp_url" ]]; then
+  echo "Provide the MCP URL as an argument or set CUSTOMER_MCP_URL in .env." >&2
+  exit 2
+fi
 mcp_url="${mcp_url%/}"
 if [[ "$mcp_url" != */mcp ]]; then mcp_url="${mcp_url}/mcp"; fi
 health_url="${mcp_url%/mcp}/health"

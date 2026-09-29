@@ -6,8 +6,8 @@ connections, or tools.
 
 ```text
 Container Apps environment
-  -> ca-northstar-customer-api   internal boundary, port 8080
-  -> ca-northstar-customer-mcp   external HTTPS MCP endpoint, port 3000
+  -> private customer API   internal boundary, port 8080
+  -> customer MCP          external HTTPS MCP endpoint, port 3000
 ```
 
 The API and MCP apps use system-assigned managed identities to pull from ACR;
@@ -22,18 +22,19 @@ new foundation. When adopting an existing environment, Azure's previously
 created pull assignments are preserved. Images are built outside Bicep with
 ACR Tasks and passed as immutable tags.
 
-Preview the current deployment:
+Deployment values are local configuration. Copy `.env.example` to `.env`, set
+the Azure resource names, image references, and MCP URL locally, and keep the
+`.env` file out of source control. The wrapper script reads those values and
+passes them to Bicep; no tenant-specific parameter file is committed.
 
 ```bash
-scripts/deploy-customer-mcp.sh --what-if \
-  --api-image acrnorthstarcust.azurecr.io/customer-api:20260929 \
-  --mcp-image acrnorthstarcust.azurecr.io/customer-mcp:20260929-3
+scripts/deploy-customer-mcp.sh --what-if
 ```
 
-Deploy images and apps:
+Deploy images and apps after reviewing the what-if output:
 
 ```bash
-scripts/deploy-customer-mcp.sh --image-tag 20260929-4
+scripts/deploy-customer-mcp.sh --image-tag YYYYMMDDHHMMSS
 ```
 
 Verify the endpoint:
@@ -42,7 +43,7 @@ Verify the endpoint:
 scripts/verify-customer-mcp.sh
 ```
 
-The script prints the exact values for Copilot Studio. The tenant step remains
-manual: reuse or create the Customer MCP connection, attach it to Customer
-Agent, approve the read-only permission in Preview, publish, and verify the
-activity trace.
+The verification script reads `CUSTOMER_MCP_URL` from the local `.env` file or
+accepts the URL as an argument. The tenant step remains manual: reuse or
+create the Customer MCP connection, attach it to Customer Agent, approve the
+read-only permission in Preview, publish, and verify the activity trace.

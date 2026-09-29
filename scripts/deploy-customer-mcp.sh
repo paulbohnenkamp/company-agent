@@ -5,12 +5,12 @@ usage() {
   cat <<'EOF'
 Usage: scripts/deploy-customer-mcp.sh [options]
 
-Deploy the Customer MCP Azure boundary in the existing rg-northstar resource group.
+Deploy the Customer MCP Azure boundary using values from the local .env file.
 
 Options:
   --subscription ID       Azure subscription ID (default: current account)
-  --resource-group NAME   Must be rg-northstar (default: rg-northstar)
-  --location NAME         Azure location (default: westus)
+  --resource-group NAME   Override AZURE_RESOURCE_GROUP from .env
+  --location NAME         Override AZURE_LOCATION from .env
   --image-tag TAG         Build and deploy both images with TAG
   --api-image IMAGE       Use an existing API image and skip its build
   --mcp-image IMAGE       Use an existing MCP image and skip its build
@@ -21,12 +21,20 @@ Options:
 EOF
 }
 
-subscription=''
-resource_group='rg-northstar'
-location='westus'
+env_file="${CUSTOMER_MCP_ENV_FILE:-.env}"
+if [[ -f "$env_file" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$env_file"
+  set +a
+fi
+
+subscription="${AZURE_SUBSCRIPTION_ID:-}"
+resource_group="${AZURE_RESOURCE_GROUP:-}"
+location="${AZURE_LOCATION:-}"
 image_tag="$(date +%Y%m%d%H%M%S)"
-api_image=''
-mcp_image=''
+api_image="${CUSTOMER_MCP_API_IMAGE:-}"
+mcp_image="${CUSTOMER_MCP_IMAGE:-}"
 api_image_provided=false
 mcp_image_provided=false
 create_foundation=false
@@ -50,23 +58,32 @@ while (($# > 0)); do
   esac
 done
 
-if [[ "$resource_group" != 'rg-northstar' ]]; then
-  echo "Refusing resource group '$resource_group'; this solution only permits rg-northstar." >&2
-  exit 2
-fi
-
 if [[ -n "$subscription" ]]; then
   az account set --subscription "$subscription"
 fi
 
+for required in resource_group location; do
+  if [[ -z "${!required}" ]]; then
+    echo "Missing $required. Set it in .env or pass the corresponding option." >&2
+    exit 2
+  fi
+done
+
 az group show --name "$resource_group" --output none
 
-registry_name='acrnorthstarcust'
-environment_name='cae-northstar-customer'
-workspace_name='law-northstar-customer'
-api_app_name='ca-northstar-customer-api'
-mcp_app_name='ca-northstar-customer-mcp'
+registry_name="${CUSTOMER_MCP_REGISTRY_NAME:-}"
+environment_name="${CUSTOMER_MCP_ENVIRONMENT_NAME:-}"
+workspace_name="${CUSTOMER_MCP_WORKSPACE_NAME:-}"
+api_app_name="${CUSTOMER_MCP_API_APP_NAME:-}"
+mcp_app_name="${CUSTOMER_MCP_APP_NAME:-}"
 registry_server="${registry_name}.azurecr.io"
+
+for required in registry_name environment_name workspace_name api_app_name mcp_app_name; do
+  if [[ -z "${!required}" ]]; then
+    echo "Missing $required. Set the matching CUSTOMER_MCP_* value in .env." >&2
+    exit 2
+  fi
+done
 
 if [[ "$skip_build" == true && ( -z "$api_image" || -z "$mcp_image" ) ]]; then
   echo "--skip-build requires both --api-image and --mcp-image." >&2
