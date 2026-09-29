@@ -90,14 +90,23 @@ Run the workflow contract directly with:
 npm run workflow
 ```
 
+## Teams usage
+
+In Teams, employees invoke the agent with its configurable mention tag,
+followed by the request. The default Teams mention tag is `@Northstar`.
+The repository and architecture name for this front door remains **Company
+Agent**.
+
+For example:
+
+```text
+@Northstar Look up customer CUST-1001
+```
+
 ## Example prompts
 
 These are the example prompts used to verify the composition and its
-boundaries in Copilot Studio Preview. In Teams, employees invoke the agent
-with its configurable mention tag, followed by the request. The default Teams
-mention tag is `@Northstar`; for example,
-use `@Northstar Look up customer CUST-1001`. The repository and architecture
-name for this front door remains **Company Agent**.
+boundaries in Copilot Studio Preview:
 
 Customer lookup:
 
