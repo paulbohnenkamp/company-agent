@@ -93,7 +93,9 @@ npm run workflow
 ## Example prompts
 
 These are the example prompts used to verify the composition and its
-boundaries in Copilot Studio Preview:
+boundaries in Copilot Studio Preview. In Teams, employees invoke the agent
+with its configurable mention tag; the default is `@Company Agent`, followed
+by the request. For example, use `@Company Agent Look up customer CUST-1001`.
 
 Customer lookup:
 
