@@ -167,32 +167,10 @@ including the observed child-agent delegation, MCP/API or Agent flow activity,
 returned values, and downstream SharePoint/Teams activity where applicable.
 Local tests alone are not tenant verification.
 
-## Azure deployment
-
-The Customer MCP hosting boundary is repeatable through Bicep and the wrapper
-scripts:
-
-```bash
-scripts/deploy-customer-mcp.sh --what-if \
-  --api-image acrnorthstarcust.azurecr.io/customer-api:20260929 \
-  --mcp-image acrnorthstarcust.azurecr.io/customer-mcp:20260929-3
-scripts/verify-customer-mcp.sh
-```
-
-`infra/customer-mcp/foundation.bicep` creates a new demo registry, Log
-Analytics workspace, and Container Apps environment. `main.bicep` manages the
-private API app, public HTTPS MCP app, managed-identity ACR pulls, and internal
-API URL. The default deployment script targets the existing `rg-northstar`
-foundation and refuses other resource groups.
-
-Bicep does not build images or attach MCP to Copilot Studio. The tenant step
-remains: reuse or create the Customer MCP connection, attach it to Customer
-Agent, approve the read-only tool permission, publish, and verify activity.
-See [scripts/tenant-runbook.md](scripts/tenant-runbook.md).
-
 ## Scope and safety
 
 The customer API and data are synthetic and read-only. A production MCP
 deployment would require HTTPS, identity, authorization, rate limiting,
 telemetry, and validated external results. No credentials, tokens, keys, or
-connection strings belong in this repository.
+connection strings belong in this repository. Azure deployment details and
+tenant-specific endpoints are intentionally kept out of this public README.
