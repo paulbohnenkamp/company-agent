@@ -90,6 +90,66 @@ Run the workflow contract directly with:
 npm run workflow
 ```
 
+## Example prompts
+
+These are the example prompts used to verify the composition and its
+boundaries in Copilot Studio Preview:
+
+Customer lookup:
+
+```text
+Look up customer CUST-1001.
+```
+
+Missing-record handling:
+
+```text
+Look up customer CUST-9999.
+```
+
+Mutation boundary:
+
+```text
+Update customer CUST-1001.
+```
+
+The expected behavior is to report verified customer data for the known ID,
+report that no matching record was found for the missing ID, and refuse or
+route the mutation request to an authorized human. The agent must not invent
+records or claim that customer state changed.
+
+IT request flow:
+
+```text
+Create an IT access request for Alex Morgan. I need portal access. This is not urgent.
+```
+
+The corresponding Agent flow values are:
+
+```text
+employeeName: Alex Morgan
+requestType: Access
+description: Need portal access.
+isUrgent: false
+```
+
+The IT flow is successful only when it returns an observed `SR-###` Service
+Request ID and status, and the matching SharePoint item, Teams card, and Agent
+flow activity are visible.
+
+HR policy:
+
+```text
+What's our vacation policy?
+```
+
+The expected behavior is to answer from approved Northstar HR policy
+knowledge. For questions outside the approved source, the agent should say:
+
+```text
+I don't have approved Northstar HR policy content for that question. Please consult HR.
+```
+
 ## Tenant boundary
 
 The repository describes and validates the contracts. Copilot Studio and
