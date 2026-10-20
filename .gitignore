@@ -1,6 +1,10 @@
-node_modules/
+# Python environments and generated metadata
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
 
-# TypeScript and test output
+# Test output
 dist/
 coverage/
 
@@ -31,11 +35,6 @@ deployment/pac/
 .mcs/
 *.zip
 
-# Keep exact local tenant transcripts out of public history if needed.
-docs/deployment-log.local.md
-docs/deployment-log.md
-
-# Local project planning and working notes
-docs/
+private-docs/
 prompts/
 specs/

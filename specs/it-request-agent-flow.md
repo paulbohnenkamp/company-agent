@@ -11,7 +11,7 @@ an observed Service Request ID and status.
 - Create or configure one Agent flow callable by IT Request Agent.
 - Accept `employeeName`, `requestType`, `description`, and `isUrgent`.
 - Normalize and validate those values according to
-  `it-request-workflow/src/normalize.ts`.
+  `it_request_workflow/normalize.py`.
 - Create an item in the existing `Northstar / IT Service Requests` SharePoint
   list.
 - Update the item with the existing `SR-###` convention.

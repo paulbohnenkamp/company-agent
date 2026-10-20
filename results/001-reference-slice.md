@@ -7,7 +7,7 @@ Implemented the small reference solution described in the approved spec.
   the existing Copilot Studio artifacts in the companion `company-agent`
   repository; those artifacts remain the tenant-facing source to project into.
 - Added a synthetic C# customer API with a health endpoint and customer lookup.
-- Added a TypeScript MCP adapter exposing `find_customer` and
+- Added a Python FastMCP adapter exposing `find_customer` and
   `get_customer_summary`.
 - Added a deterministic IT request normalization reference based on the
   cookbook's verified Forms -> Power Automate -> SharePoint -> Teams arc.
@@ -16,7 +16,6 @@ Implemented the small reference solution described in the approved spec.
 Verification:
 
 ```text
-npm run build — passed
-npm test — passed
+.venv/bin/python -m pytest -q — passed
 dotnet build customer-app/CustomerApp.csproj — passed
 ```

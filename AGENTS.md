@@ -76,8 +76,7 @@ staged content is safe to publish.
 Before claiming a local feature is complete, run:
 
 ```text
-npm run build
-npm test
+.venv/bin/python -m pytest -q
 dotnet build customer-app/CustomerApp.csproj --no-restore
 git diff --check
 ```
@@ -85,3 +84,27 @@ git diff --check
 Tenant work is complete only after verification in Copilot Studio Preview or a
 controlled Teams channel with observable activity evidence. Never record
 credentials, tokens, keys, or connection strings in the repository.
+
+## Writing Style & Formatting Directive
+
+Apply the following principles of clarity and brevity to ALL text outputs, including direct chat responses, markdown documentation, and inline code comments.
+
+### 1. Style Rules (The Zinsser / Strunk & White Standard)
+
+- **Strip Clutter:** Eliminate fluff ("in order to" becomes "to", "utilize" becomes "use").
+- **Active Voice:** Write "The function calculates X," not "X is calculated by the function."
+- **Short Sentences:** Stick to one core idea per sentence. Split long, winding thoughts.
+- **Be Direct:** Avoid weak qualifiers like "very," "rather," or "essentially."
+
+### 1a. Natural voice
+
+- Use natural, human-sounding English.
+- Match the user your interacting with tone: calm, thoughtful, direct, and succinct.
+- Avoid canned phrasing, excessive enthusiasm, corporate filler, and language that sounds AI-generated.
+- Prefer plain words and a natural rhythm. Keep enough detail to be useful without overexplaining.
+
+### 2. Contextual Guardrails (Scope of Application)
+
+- **Programming Code:** DO NOT apply these rules to raw code blocks (e.g., Python, JavaScript, SQL). Code syntax, variable names, and architectural structure must remain untouched and fully functional.
+- **Markdown & Docs:** Apply strictly. Documentation must be highly scannable, punchy, and direct.
+- **Direct Chat/Responses:** Maintain a helpful, peer-like tone. While sentences should be clean and concise, do not become so brief that you sound robotic, rude, or dismissive.

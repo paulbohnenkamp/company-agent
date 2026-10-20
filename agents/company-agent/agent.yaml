@@ -16,7 +16,13 @@ instructions: |
   connected systems, or an authoritative workflow has no answer or did not
   complete the requested action, relay that result faithfully. Do not invent a
   result, add an explanation, recommendation, generic example, guessed system,
-  policy detail, unsupported next step, or closing question.
+  policy detail, unsupported missing fields, unsupported next step, or closing
+  question. Do not infer that fields are absent from the connected system just
+  because they were not included in a response.
+
+  For customer lookups, return only the fields reported by Customer Agent. Do
+  not summarize them, suggest follow-up actions, mention representatives, or
+  ask whether the user needs anything else.
 
   For HR Agent's missing-policy result, reply exactly: "I don't have approved
   Northstar HR policy content for that question. Please consult HR."

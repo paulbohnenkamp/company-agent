@@ -33,7 +33,7 @@ The specialists are bounded capabilities:
 
 - Native Copilot Studio agent composition using connected agents.
 - Declarative agent contracts in `agents/*/agent.yaml`.
-- A synthetic C# customer API behind a TypeScript MCP adapter.
+- A synthetic C# customer API behind a Python FastMCP adapter.
 - A deterministic IT request normalization contract.
 - Reuse of an existing Forms -> Power Automate -> SharePoint -> Teams
   business process without replacing the Forms-triggered flow.
@@ -44,7 +44,8 @@ The specialists are bounded capabilities:
 ```text
 agents/                       Local agent contracts
 customer-app/                 Synthetic read-only C# customer API
-customer-mcp/                 MCP adapter for the customer API
+customer-mcp/                 FastMCP service container definition
+customer_mcp/                 FastMCP Python package
 it-request-workflow/          IT Agent flow contract and normalization
 scripts/                      PAC generation and bootstrap helpers
 infra/customer-mcp/           Bicep for the Azure customer API and MCP boundary
@@ -59,12 +60,12 @@ tenant.
 
 ## Quick start
 
-Install dependencies and run the local checks:
+Create a virtual environment, install dependencies, and run the local checks:
 
 ```bash
-npm install
-npm run build
-npm test
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[test]'
+.venv/bin/python -m pytest -q
 dotnet build customer-app/CustomerApp.csproj --no-restore
 git diff --check
 ```
@@ -78,7 +79,7 @@ dotnet run --project customer-app/CustomerApp.csproj --urls http://localhost:508
 In another terminal, start the MCP adapter:
 
 ```bash
-CUSTOMER_API_URL=http://localhost:5080 npm run mcp
+CUSTOMER_API_URL=http://localhost:5080 MCP_TRANSPORT=http .venv/bin/customer-mcp
 ```
 
 The MCP adapter defaults to `http://localhost:5080` when
@@ -87,15 +88,17 @@ The MCP adapter defaults to `http://localhost:5080` when
 Run the workflow contract directly with:
 
 ```bash
-npm run workflow
+.venv/bin/python -m it_request_workflow.normalize
 ```
 
 ## Teams usage
 
-In Teams, employees invoke the agent with its configurable mention tag,
-followed by the request. The default Teams mention tag is `@Northstar`.
-The repository and architecture name for this front door remains **Company
-Agent**.
+In Teams, publish Company Agent to **Microsoft 365 and Microsoft Teams**, use
+**View in Teams** to install it for the signed-in user, and select the
+published agent from Teams' mention picker. Set the agent name to `Northstar`
+with **Edit** next to **Details** on the agent's Overview page before
+publishing if the desired channel mention is `@Northstar`. The repository and
+architecture name for this front door remains **Company Agent**.
 
 For example:
 

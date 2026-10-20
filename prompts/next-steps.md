@@ -16,8 +16,23 @@ created or changed and why.
 
 Complete the smallest useful next unit, in this order:
 
-1. Create or configure the separate Copilot Studio Agent flow callable by IT
-   Request Agent. It must accept `employeeName`, `requestType`, `description`,
+1. Set the Teams app display name to `Northstar` under Company Agent's
+   **Settings -> Details**, publish it, and verify specialist delegation
+   through the Teams mention picker. Start with these tests in a new Teams
+   conversation:
+
+   ```text
+   @Northstar What's our vacation policy?
+   @Northstar Look up customer CUST-1001.
+   ```
+
+   Require activity evidence showing Company Agent calling HR Agent and
+   Customer Agent. Do not treat the Build view or a personal installation as
+   proof until a Teams message produces the specialist activity.
+2. Treat the separate IT Request Agent flow as a known broken/deferred step.
+   Do not claim it works or return a Service Request ID until it is repaired.
+3. After Teams specialist wiring is verified, return to the IT flow. The IT
+   Request Agent flow must accept `employeeName`, `requestType`, `description`,
    and `isUrgent`, reuse the existing Northstar SharePoint list and Teams
    destination, and return the observed Service Request ID and status.
    Use Copilot Studio Preview for the first controlled test:
@@ -31,14 +46,14 @@ Complete the smallest useful next unit, in this order:
 
    Require Agent flow activity, a returned `SR-###` ID and status, a
    SharePoint item, and a Teams card as evidence.
-2. Keep the existing Forms-triggered flow unchanged. Do not create a new
+4. Keep the existing Forms-triggered flow unchanged. Do not create a new
    Forms flow, SharePoint list, Teams team, or replacement workflow.
-3. Preview-test IT delegation through Company Agent after the flow succeeds,
+5. Preview-test IT delegation through Company Agent after the flow succeeds,
    then publish the final composition after specialist verification.
-4. Add the approved HR SharePoint knowledge source only as a separate,
+6. Add the approved HR SharePoint knowledge source only as a separate,
    documented follow-up. Test both a grounded policy question and an
    out-of-scope question.
-5. Add local contract checks for agent descriptions, instructions,
+7. Add local contract checks for agent descriptions, instructions,
    no-invention boundaries, success criteria, and failure behavior.
 
 The Customer MCP integration is already deployed and verified. Reuse the
@@ -56,8 +71,7 @@ After each completed unit, run the relevant local checks. Before claiming the
 overall feature is complete, run:
 
 ```text
-npm run build
-npm test
+.venv/bin/python -m pytest -q
 dotnet build customer-app/CustomerApp.csproj --no-restore
 git diff --check
 ```

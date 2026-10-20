@@ -38,12 +38,22 @@ committed documentation.
 2. Under **Build -> Tools**, find the existing `Customer MCP` server.
 3. Create or reuse its connection. Leave the optional display name blank.
 4. Add the connection to Customer Agent.
-5. Publish Customer Agent.
-6. Preview Company Agent with `Look up customer CUST-1001`.
-7. Approve the read-only tool permission when prompted.
-8. Confirm the activity trace shows `Company Agent -> Customer Agent -> Customer MCP` and the returned account values.
+5. Edit the MCP tool and select **Shared account** under **Authentication**.
+   This avoids the first-use end-user authorization prompt for the synthetic
+   read-only demo. Use end-user authentication when the MCP boundary supports
+   validated caller identity and customer authorization.
+6. Click **Done**, then publish Customer Agent and Company Agent.
+7. Preview Company Agent with `Look up customer CUST-1001`.
+8. Confirm the activity trace shows `Company Agent -> Customer Agent ->
+Customer MCP` and the returned account values without an approval prompt.
 9. Test a missing ID such as `CUST-9999` and confirm no record is invented.
 10. Test a mutation request and confirm the agent refuses it.
+
+The expected demo summary contains only the fields returned by the API:
+customer ID, company name, account status, and open-request count. Text such as
+"No additional contact details ..." is model-generated narration, not MCP data,
+and indicates that the agent added unsupported information. Treat the table and
+activity trace as the source of truth.
 
 If the Add MCP dialog reports a conflict, inspect existing tools and custom
 connectors before creating another one. A failed-looking first attempt can

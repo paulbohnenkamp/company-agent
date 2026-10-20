@@ -14,8 +14,8 @@ The cookbook's verified path is:
 Forms -> Power Automate -> normalized request -> SharePoint -> Teams
 ```
 
-The local TypeScript functions in `src/normalize.ts` are deterministic contract
-tests for the input boundary and the `SR-###` identifier convention. The
+The local Python functions in `normalize.py` are deterministic contract tests
+for the input boundary and the `SR-###` identifier convention. The
 operational record, service-request ID, status, priority, and Teams card remain
 owned by the Power Automate steps.
 
