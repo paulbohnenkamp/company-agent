@@ -95,3 +95,11 @@ Run the workflow contract directly with:
 The repository contracts describe the four agents, but the tenant still needs
 agent creation, specialist connections, Company Agent delegation, validation,
 and Teams publishing. Follow the complete [Copilot Studio setup guide](docs/copilot-studio-setup.md).
+
+After publishing Company Agent to Teams as `Northstar`, validate the front door
+with prompts such as:
+
+```text
+@Northstar What's our vacation policy?
+@Northstar Look up customer CUST-1001.
+```
