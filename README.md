@@ -66,22 +66,9 @@ tenant.
 
 ## Quick start
 
-Set up the virtual environment and run the offline checks:
-
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -e '.[test]'
-.venv/bin/python -m pytest -q
-```
-
-Start the complete local aggregate:
-
-```bash
-./scripts/start-local.sh
-```
-
-See [Local Development](docs/local-development.md) for aggregate startup,
-service-specific commands, the external LLM harness, and local scope.
+See [Local Development](docs/local-development.md) for one-time setup,
+aggregate startup, service-specific commands, the external LLM harness, and
+local scope.
 
 ## Agent and Teams setup
 

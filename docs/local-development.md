@@ -4,16 +4,17 @@ This repository includes a local aggregate for the Company Agent reference
 solution. It starts the synthetic customer API, Customer MCP, Pipeline MCP,
 and Land Administration MCP together.
 
-## Setup
+## One-time Setup
 
-Create the virtual environment and install the test dependencies:
+Create the virtual environment and install the test dependencies once per
+working copy:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -e '.[test]'
 ```
 
-Install the external LLM clients once before running the live harness:
+If you will run the external LLM harness, install its clients once as well:
 
 ```bash
 .venv/bin/pip install -e '.[orchestration]'
