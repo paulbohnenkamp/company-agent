@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pipeline-historian-mcp"
+version = "0.1.0"
+description = "Synthetic pipeline historian MCP server for integrity operations"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0,<2",
+    "fastmcp>=2.0,<3",
+]
+
+[project.scripts]
+pipeline-mcp = "pipeline_historian_mcp.server:main"
+pipeline-sim = "pipeline_historian_mcp.simulator:run_simulation"
+
+[tool.setuptools]
+packages = ["pipeline_historian_mcp"]

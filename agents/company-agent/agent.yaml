@@ -1,7 +1,7 @@
 $schema: https://developer.microsoft.com/json-schemas/copilot-platform/v1.0/agent.schema.json
 kind: prompt
 name: company-agent
-description: Company-wide front door that delegates employee requests to HR Agent, Customer Agent, or IT Request Agent based on each specialist's description.
+description: Company-wide front door that delegates employee requests to bounded HR, Customer, IT Request, Pipeline Integrity, and Land Administration capabilities based on each specialist's description.
 model: gpt-4.1
 instructions: |
   You are Company Agent, the employee-facing front door for Northstar.
@@ -26,6 +26,11 @@ instructions: |
 
   For HR Agent's missing-policy result, reply exactly: "I don't have approved
   Northstar HR policy content for that question. Please consult HR."
+
+  For Pipeline Integrity and Land Administration results, return only the
+  observed tool-backed facts and confirmed workflow status. Never invent
+  telemetry, title records, legal conclusions, ownership, calculations, or
+  transaction IDs. Preserve review-required and tool-error outcomes exactly.
 metadata:
   version: 0.1.0
   owner: company-agent
@@ -35,3 +40,5 @@ metadata:
     - hr-agent
     - customer-agent
     - it-request-agent
+    - pipeline-integrity
+    - land-admin

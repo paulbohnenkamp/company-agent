@@ -1,0 +1,7 @@
+Lease ID: LEASE-TX-HOU-04
+Tract ID: TX-HOU-04
+Effective Date: 2026-01-01
+Primary Owner: Northstar Minerals LLC
+Royalty: 0.1875
+Tract Share: 0.5000
+Bonus: 125000.00
