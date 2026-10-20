@@ -14,7 +14,7 @@ not implement a second router or a central orchestration service.
 ```text
 Teams
   -> Company Agent
-       -> HR Agent
+  -> HR Agent -> Copilot Studio knowledge source backed by approved HR SharePoint content
        -> Customer Agent -> Customer MCP -> existing customer C# API
        -> IT Request Agent -> Copilot Studio Agent flow
 ```
@@ -50,7 +50,6 @@ it-request-workflow/          IT Agent flow contract and normalization
 scripts/                      PAC generation and bootstrap helpers
 infra/customer-mcp/           Bicep for the Azure customer API and MCP boundary
 tests/                        Local contract tests
-results/                      Reference implementation result
 ```
 
 PAC workspaces, solution ZIPs, tenant synchronization metadata, and local
@@ -91,102 +90,20 @@ Run the workflow contract directly with:
 .venv/bin/python -m it_request_workflow.normalize
 ```
 
-## Teams usage
+## Agent and Teams setup
 
-In Teams, publish Company Agent to **Microsoft 365 and Microsoft Teams**, use
-**View in Teams** to install it for the signed-in user, and select the
-published agent from Teams' mention picker. Set the agent name to `Northstar`
-with **Edit** next to **Details** on the agent's Overview page before
-publishing if the desired channel mention is `@Northstar`. The repository and
-architecture name for this front door remains **Company Agent**.
+The repository contracts describe the four agents, but the tenant still needs
+agent creation, specialist connections, Company Agent delegation, validation,
+and Teams publishing. Follow the complete [Copilot Studio setup guide](docs/copilot-studio-setup.md).
 
-For example:
+After publishing Company Agent to Teams as `Northstar`, validate the front door
+with prompts such as:
 
 ```text
-@Northstar Look up customer CUST-1001
+@Northstar What's our vacation policy?
+@Northstar Look up customer CUST-1001.
 ```
 
-## Example prompts
-
-These are the example prompts used to verify the composition and its
-boundaries in Copilot Studio Preview:
-
-Customer lookup:
-
-```text
-Look up customer CUST-1001.
-```
-
-Missing-record handling:
-
-```text
-Look up customer CUST-9999.
-```
-
-Mutation boundary:
-
-```text
-Update customer CUST-1001.
-```
-
-The expected behavior is to report verified customer data for the known ID,
-report that no matching record was found for the missing ID, and refuse or
-route the mutation request to an authorized human. The agent must not invent
-records or claim that customer state changed.
-
-IT request flow:
-
-```text
-Create an IT access request for Alex Morgan. I need portal access. This is not urgent.
-```
-
-The corresponding Agent flow values are:
-
-```text
-employeeName: Alex Morgan
-requestType: Access
-description: Need portal access.
-isUrgent: false
-```
-
-The IT flow is successful only when it returns an observed `SR-###` Service
-Request ID and status, and the matching SharePoint item, Teams card, and Agent
-flow activity are visible.
-
-HR policy:
-
-```text
-What's our vacation policy?
-```
-
-The expected behavior is to answer from approved Northstar HR policy
-knowledge. For questions outside the approved source, the agent should say:
-
-```text
-I don't have approved Northstar HR policy content for that question. Please consult HR.
-```
-
-## Tenant boundary
-
-The repository describes and validates the contracts. Copilot Studio and
-Power Automate remain the tenant-owned runtime:
-
-- Connected agents are configured on Company Agent in Copilot Studio.
-- Customer Agent connects to the MCP server through the tenant's supported
-  tool configuration.
-- IT Request Agent calls a separate Agent flow with
-  `employeeName`, `requestType`, `description`, and `isUrgent`.
-- The existing Forms-triggered flow remains unchanged.
-
-Tenant success requires Copilot Studio Preview or controlled Teams evidence,
-including the observed child-agent delegation, MCP/API or Agent flow activity,
-returned values, and downstream SharePoint/Teams activity where applicable.
-Local tests alone are not tenant verification.
-
-## Scope and safety
-
-The customer API and data are synthetic and read-only. A production MCP
-deployment would require HTTPS, identity, authorization, rate limiting,
-telemetry, and validated external results. No credentials, tokens, keys, or
-connection strings belong in this repository. Azure deployment details and
-tenant-specific endpoints are intentionally kept out of this public README.
+The guide includes the full Preview and Teams validation prompts, expected
+results, MCP and Agent flow setup, and the boundary that the existing
+Forms-triggered workflow remains unchanged.

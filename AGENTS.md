@@ -20,7 +20,7 @@ The intended composition is:
 
 ```text
 Company Agent
-  -> HR Agent
+  -> HR Agent -> Copilot Studio knowledge source backed by approved HR SharePoint content
   -> Customer Agent -> Customer MCP -> existing customer API
   -> IT Request Agent -> agent-callable workflow
 ```
