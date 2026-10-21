@@ -5,9 +5,9 @@ bounded Copilot Studio agents around existing applications and deterministic
 business workflows.
 
 It demonstrates a Teams-oriented employee front door, specialist-agent
-delegation, a read-only MCP integration, and an agent-callable IT request
-workflow. Copilot Studio owns discovery and delegation; this repository does
-not implement a second router or a central orchestration service.
+delegation, MCP integrations, and agent-callable workflows. Copilot Studio
+owns discovery and delegation; this repository does not implement a second
+router or a central orchestration service.
 
 For Teams presentation, use the reusable [Adaptive Cards for Agent Responses](docs/adaptive-cards.md)
 pattern: specialist tools return structured data, and Copilot Studio renders it
