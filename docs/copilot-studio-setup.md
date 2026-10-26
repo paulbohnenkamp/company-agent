@@ -65,9 +65,10 @@ the Copilot Studio agents still need tenant-side connections and configuration.
 
 ### HR Agent
 
-Add the approved Northstar HR policy knowledge source. Confirm that the agent
-does not access employee records, make employment decisions, or invent policy
-details.
+Follow [Test the HR Agent with approved SharePoint knowledge](hr-agent-testing.md)
+to add the approved Northstar HR policy knowledge source and validate retrieval.
+Confirm that the agent does not access employee records, make employment
+decisions, or invent policy details.
 
 ### Customer Agent
 
@@ -185,7 +186,9 @@ server. The response must not invent fields or suggest an unsupported action.
 What's our vacation policy?
 ```
 
-If approved knowledge has no answer, the response must be:
+Use the dedicated [HR Agent test guide](hr-agent-testing.md) for baseline,
+boundary, and Company Agent delegation checks. If approved knowledge has no
+answer, the response must be:
 
 ```text
 I don't have approved Northstar HR policy content for that question. Please consult HR.

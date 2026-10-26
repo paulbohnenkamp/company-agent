@@ -1,0 +1,25 @@
+flowchart LR
+    U[Employee in Teams] --> C[Company Agent]
+    C --> H[HR Agent]
+    C --> CU[Customer Agent]
+    C --> IT[IT Request Agent]
+    C --> PI[Pipeline Integrity Agent]
+    C --> LA[Land Administration Cluster]
+
+    H --> HK[Copilot Studio knowledge source]
+    CU --> CM[Customer MCP]
+    CM --> CA[Existing customer API]
+    IT --> WF[Agent flow contract]
+    WF --> SP[Existing SharePoint list]
+    WF --> T[Existing Teams destination]
+    PI --> PM[Pipeline Historian MCP]
+    PM --> TD[Read-only telemetry data]
+    LA --> LM[Land Admin MCP]
+    LM --> LD[Lease, title, and ledger tools]
+
+    X[Copilot Studio generative orchestration] -. owns discovery and delegation .-> C
+    B[Boundaries: approved knowledge, tools, and workflows] -. constrain .-> H
+    B -. constrain .-> CU
+    B -. constrain .-> IT
+    B -. constrain .-> PI
+    B -. constrain .-> LA

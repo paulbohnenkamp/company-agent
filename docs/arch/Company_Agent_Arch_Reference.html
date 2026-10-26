@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Company_Agent_Arch_Reference</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Company_Agent_Arch_Reference</h1>
+</header>
+<h1 id="company-agent-architecture-reference">Company Agent architecture
+reference</h1>
+<p>This repository is a small reference solution for composing bounded
+Copilot Studio agents around existing applications and deterministic
+workflows.</p>
+<p><img src="Company_Agent_Arch_Reference.png" alt="Company Agent architecture" style="max-width: 100%; height: auto;" /></p>
+<h2 id="composition-boundary">Composition boundary</h2>
+<ul>
+<li><strong>Company Agent</strong> is the employee-facing front door.
+Copilot Studio owns agent discovery, delegation, and conversation
+orchestration.</li>
+<li><strong>HR Agent</strong> answers general policy questions from
+approved Copilot Studio knowledge. It does not access employee records
+or make employment decisions.</li>
+<li><strong>Customer Agent</strong> uses the read-only Customer MCP
+server. The MCP server calls the existing customer API and reports only
+the fields that API returns.</li>
+<li><strong>IT Request Agent</strong> gathers <code>employeeName</code>,
+<code>requestType</code>, <code>description</code>, and
+<code>isUrgent</code>, then calls the approved Agent flow. The flow
+reuses the existing SharePoint list and Teams destination.</li>
+<li><strong>Pipeline Integrity Agent</strong> uses the Pipeline
+Historian MCP server for read-only telemetry and sequential compliance
+screening.</li>
+<li><strong>Land Administration Cluster</strong> uses the Land Admin MCP
+server for lease extraction, title review, and confirmed ledger
+posting.</li>
+</ul>
+<h2 id="repository-contracts">Repository contracts</h2>
+<p>The repository is the source of truth for local agent and workflow
+contracts.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Contract or implementation</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Front door</td>
+<td><code>agents/company-agent/agent.yaml</code></td>
+<td>Native Copilot Studio delegation</td>
+</tr>
+<tr>
+<td>HR</td>
+<td><code>agents/hr-agent/agent.yaml</code></td>
+<td>Approved policy guidance</td>
+</tr>
+<tr>
+<td>Customer</td>
+<td><code>agents/customer-agent/agent.yaml</code>,
+<code>customer_mcp/server.py</code></td>
+<td>Read-only customer lookup</td>
+</tr>
+<tr>
+<td>IT request</td>
+<td><code>agents/it-request-agent/agent.yaml</code>,
+<code>it-request-workflow/agent-flow.contract.json</code></td>
+<td>Service Request ID and status</td>
+</tr>
+<tr>
+<td>Pipeline</td>
+<td><code>agents/pipeline-integrity/agent.yaml</code>,
+<code>pipeline_historian_mcp/</code></td>
+<td>Observed telemetry and screening result</td>
+</tr>
+<tr>
+<td>Land administration</td>
+<td><code>agents/land-admin/agent.yaml</code>,
+<code>land_admin_mcp/</code></td>
+<td>Extracted facts and confirmed ledger result</td>
+</tr>
+</tbody>
+</table>
+<h2 id="workflow-boundary">Workflow boundary</h2>
+<p>The IT Agent flow is an agent-callable entry point to the existing
+business process. It does not replace the Forms-triggered flow.</p>
+<pre class="text"><code>Agent inputs
+  -&gt; normalize and validate
+  -&gt; SharePoint Create item in the existing list
+  -&gt; SharePoint Update item with SR-###
+  -&gt; Teams Post card to the existing destination
+  -&gt; serviceRequestId, status, and result</code></pre>
+<p>The flow must return the observed Service Request ID and status
+before the agent reports that the request succeeded. The flow must not
+create a new Forms flow, SharePoint list, Teams team, or replacement
+workflow.</p>
+<h2 id="data-and-authority-boundaries">Data and authority
+boundaries</h2>
+<ul>
+<li>Approved HR knowledge is authoritative for general policy
+guidance.</li>
+<li>The existing customer API is authoritative for customer lookup
+results.</li>
+<li>MCP tools expose narrow, read-only or explicitly confirmed
+operations.</li>
+<li>The existing SharePoint and Teams process remains authoritative for
+IT request creation and notification.</li>
+<li>Pipeline and land-admin results remain tool-backed observations.
+Compliance, title, ownership, and approval decisions remain with
+qualified humans.</li>
+<li>PAC workspaces and tenant deployment artifacts are local outputs.
+They are not repository source files.</li>
+</ul>
+<h2 id="what-this-reference-does-not-add">What this reference does not
+add</h2>
+<p>This architecture does not add a repository-side router, a central
+orchestration API, a generalized department framework, or unrestricted
+database access. It keeps discovery and delegation in Copilot Studio and
+keeps deterministic workflows and existing APIs authoritative.</p>
+</body>
+</html>

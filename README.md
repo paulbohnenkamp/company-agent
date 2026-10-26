@@ -13,6 +13,9 @@ For Teams presentation, use the reusable [Adaptive Cards for Agent Responses](do
 pattern: specialist tools return structured data, and Copilot Studio renders it
 with a Send a message node.
 
+Use [Test the HR Agent with approved SharePoint knowledge](docs/hr-agent-testing.md)
+to configure and test the HR policy knowledge source.
+
 ## Architecture
 
 ```text

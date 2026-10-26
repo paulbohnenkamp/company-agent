@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Enterprise_AI_Architecture_Reference</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../../../resume.css" />
+</head>
+<body>
+<h1 id="enterprise-ai-architecture-reference">Enterprise AI Architecture
+Reference</h1>
+<p>The role describes a <strong>production enterprise AI
+platform</strong>, not a single chatbot.</p>
+<p><img src="Enterprise_AI_Architecture_Reference.png" alt="Enterprise AI reference architecture" style="max-width: 100%; height: auto;" /></p>
+<h2 id="how-the-pieces-fit">How the Pieces Fit</h2>
+<ul>
+<li><strong>Copilot Studio</strong> provides governed conversational
+experiences, agent authoring, and low-code workflow automation.</li>
+<li><strong>Microsoft Foundry</strong> is a complementary engineering
+and operations platform for custom code-based agents, model management,
+testing, evaluation, tracing, deployment, and lifecycle governance. It
+is not required for agents authored in Copilot Studio.</li>
+<li><strong>Azure OpenAI</strong> supplies language, reasoning,
+embedding, and possibly multimodal models.</li>
+<li><strong>RAG solutions</strong> retrieve approved enterprise
+knowledge before generating answers. Azure AI Search would typically
+provide indexing, hybrid or vector search, filtering, and
+citations.</li>
+<li><strong>Microsoft Fabric</strong> provides the data foundation:
+lakehouse data, warehouse data, pipelines, semantic models, and
+analytics.</li>
+<li><strong>Workflow automation</strong> connects agents to systems such
+as CRM, ERP, ticketing, HR, or field operations platforms. Agents should
+call controlled APIs and tools rather than receive unrestricted database
+access.</li>
+<li><strong>API Management or an AI gateway</strong> centralizes
+authentication, rate limits, logging, prompt and model controls, content
+filtering, and cost management.</li>
+<li><strong>Entra ID, managed identities, Key Vault, private networking,
+and RBAC</strong> provide identity and security boundaries.</li>
+<li><strong>Application Insights, platform evaluations, audit logs, and
+dashboards</strong> monitor quality, latency, failures, token usage,
+security events, and business outcomes. Foundry evaluations are
+especially relevant when custom Foundry agents or model workflows are
+part of the solution.</li>
+<li><strong>CI/CD and governance</strong> move agents and prompts
+through development, evaluation, approval, and production with
+versioning and rollback.</li>
+</ul>
+<h2 id="managerial-architecture-responsibility">Managerial Architecture
+Responsibility</h2>
+<p>The manager’s responsibility is to make this platform reliable at
+enterprise scale:</p>
+<ul>
+<li>Define reusable patterns for agents, RAG, tools, workflows, and
+integrations.</li>
+<li>Establish security, compliance, responsible-AI, and data-access
+controls.</li>
+<li>Ensure retrieval is permission-aware and answers are grounded in
+approved sources.</li>
+<li>Create engineering standards for testing, evaluation, observability,
+deployment, and rollback.</li>
+<li>Lead teams that deliver agents across multiple business
+workflows.</li>
+<li>Connect the technical roadmap to business value, adoption, operating
+ownership, and delivery feasibility.</li>
+</ul>
+<h2 id="interview-framing">Interview Framing</h2>
+<p>A concise way to explain the architecture is:</p>
+<blockquote>
+<p>I see this as a governed enterprise AI platform. I built the agents
+in Copilot Studio because it was the right platform for governed
+conversational experiences and workflow automation. Microsoft Foundry is
+the complementary engineering platform for scenarios requiring custom
+orchestration, deeper evaluation, tracing, or advanced model operations.
+Azure OpenAI provides the models, Azure AI Search grounds responses in
+approved knowledge, and Fabric supplies the enterprise data foundation.
+API, identity, security, evaluation, and observability layers make the
+solutions production-ready. The manager’s job is to choose the right
+platform and turn these capabilities into repeatable engineering
+patterns and business workflows rather than isolated prototypes.</p>
+</blockquote>
+<p>This is an inferred reference architecture based on the role
+description. The position may use different Azure services or have some
+layers already established.</p>
+</body>
+</html>
